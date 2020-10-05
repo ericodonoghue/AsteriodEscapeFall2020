@@ -6,11 +6,16 @@ using UnityEngine.UI;
 
 public class PlayerCollisionO2 : MonoBehaviour
 {
-    public int timer = 0;
-    Color warn;
-    Color reg;
+    Color warnOxygen;
+    Color regOxygen;
+
+    Color warnFuel;
+    Color regFuel;
+
     public Text oxygenDisplay;
     public Slider oxygenBar;
+    public Text fuelDisplay;
+    public Slider fuelBar;
     public Canvas canvas;
     public GameObject PlayerModelTest;
 
@@ -28,6 +33,9 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     public float fuelRate = 0.0f;
 
+    public int warnTimerOxygen = 0;
+    public int warnTimerFuel = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,10 +44,10 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     private void Awake()
     {
-        reg = oxygenDisplay.color;
-        Debug.Log(reg);
-        warn = new Color(1 - reg.r, 1 - reg.g, reg.b);
-        Debug.Log(warn);
+        regOxygen = oxygenDisplay.color;
+        warnOxygen = new Color(1 - regOxygen.r, 1 - regOxygen.g, regOxygen.b);
+        regFuel = fuelDisplay.color;
+        warnFuel = new Color(regFuel.r, 1 - regFuel.g, regFuel.b);
     }
 
     // Update is called once per frame
@@ -49,33 +57,54 @@ public class PlayerCollisionO2 : MonoBehaviour
         {
             Destroy(PlayerModelTest);
         }
-
         oxygenDisplay.text = (Mathf.RoundToInt(oxygen)).ToString();
-
-        //holding breath?
-
-        //if (oxygen <= -60)
-        //{
-        //    Destroy(PlayerModelTest);
-        //}
+        fuelDisplay.text = (Mathf.RoundToInt(fuel)).ToString();
     }
 
+    //fifty times per second
     void FixedUpdate()
     {
         oxygen -= (oxygenLoseRate * suitDamage) / 50.0f;
         oxygen -= oxygenJetRate / 50.0f;
         fuel -= fuelRate / 50.0f;
         oxygenBar.value = oxygen;
+        fuelBar.value = fuel;
 
         if (oxygen <= 10)
         {
-            int oxygenRound = Mathf.RoundToInt(oxygen);
-            if (oxygenRound % 2 == 0)
-                oxygenDisplay.color = warn;
-            else if (oxygenRound % 2 == 1)
-                oxygenDisplay.color = reg;
+            warnTimerOxygen++;
+            if (warnTimerOxygen >= 25)
+            {
+                if (oxygenDisplay.color == regOxygen)
+                {
+                    oxygenDisplay.color = warnOxygen;
+                    warnTimerOxygen = 0;
+                }
+                else if(oxygenDisplay.color == warnOxygen)
+                {
+                    oxygenDisplay.color = regOxygen;
+                    warnTimerOxygen = 0;
+                }
+            }
         }
-    
+
+        if (fuel <= 10)
+        {
+            warnTimerFuel++;
+            if (warnTimerFuel >= 25)
+            {
+                if (fuelDisplay.color == regFuel)
+                {
+                    fuelDisplay.color = warnFuel;
+                    warnTimerFuel = 0;
+                }
+                else if(fuelDisplay.color == warnFuel)
+                {
+                    fuelDisplay.color = regFuel;
+                    warnTimerFuel = 0;
+                }
+            }
+        }
 
     }
 
