@@ -20,6 +20,11 @@ public class CameraPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Application.Quit();
+        }
+
         Vector3 pos = player.transform.position;
         pos.y = player.transform.position.y + 1f;
         pos.z = player.transform.position.z - 10f;
