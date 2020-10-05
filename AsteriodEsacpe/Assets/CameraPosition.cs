@@ -20,6 +20,12 @@ public class CameraPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // quits game when player presses Q
+        if (Input.GetKeyDown(KeyCode.Q))  
+        {
+            Application.Quit();
+        }
+
         Vector3 pos = player.transform.position;
         pos.y = player.transform.position.y + 1f;
         pos.z = player.transform.position.z - 10f;
