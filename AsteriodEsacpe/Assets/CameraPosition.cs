@@ -30,5 +30,8 @@ public class CameraPosition : MonoBehaviour
         pos.y = player.transform.position.y + 1f;
         pos.z = player.transform.position.z - 10f;
         Camera.main.transform.position = pos;
+
+        // TODO: figure out how to rotate camera with player
+        //Camera.main.transform.rotation = player.transform.rotation;
     }
 }
