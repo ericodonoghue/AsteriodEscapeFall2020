@@ -8,6 +8,7 @@ TagManager:
   - GUI
   - Canvas
   - OxygenBar
+  - AirTank
   layers:
   - Default
   - TransparentFX

@@ -117,12 +117,14 @@ public class PlayerCollisionO2 : MonoBehaviour
             //TODO: add impulse to player depending on speed
         }
 
-        if(collided.tag == "OxygenTank")
+        if(collided.tag == "AirTank")
         {
             if (oxygen <= 74)
                 oxygen += 25;
             else
                 oxygen = 99;
+
+            Destroy(collided);
         }
 
         if (collided.tag == "FuelTank")
@@ -131,6 +133,7 @@ public class PlayerCollisionO2 : MonoBehaviour
                 fuel += 25;
             else
                 fuel = 99;
+            Destroy(collided);
         }
         if (collided.tag == "Monster")
             Destroy(PlayerModelTest);
