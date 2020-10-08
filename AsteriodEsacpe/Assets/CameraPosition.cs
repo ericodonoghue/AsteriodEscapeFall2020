@@ -29,6 +29,6 @@ public class CameraPosition : MonoBehaviour
         Vector3 pos = player.transform.position;
         pos.y = player.transform.position.y + 1f;
         pos.z = player.transform.position.z - 10f;
-        Camera.main.transform.position = pos;;
+        Camera.main.transform.position = pos;
     }
 }
