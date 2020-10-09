@@ -7,13 +7,14 @@ public class DumbyMovementScript : MonoBehaviour
     public GameObject player;
     public Rigidbody playerRB;
     public Vector3 force;
-
+    public PlayerCollisionO2 CollOxScript;
     readonly float thrust = 10f;
-
+    public float vertRot = 0f;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        CollOxScript = player.GetComponent<PlayerCollisionO2>();
         playerRB = GetComponent<Rigidbody>();
         force = new Vector3(0f, 0f, 0f);
     }
@@ -27,7 +28,9 @@ public class DumbyMovementScript : MonoBehaviour
     void Update()
     {
         SetForceVector();
-        RotatePlayer();
+        if(!CollOxScript.hasCollided)
+            RotatePlayer();
+        //do rotation back to 0,0,0, here
     }
 
     // Called 50 times per second
@@ -40,48 +43,146 @@ public class DumbyMovementScript : MonoBehaviour
     void ApplyForce()
     {
         playerRB.AddRelativeForce(force * thrust);
+        //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
     }
     /** Rotates the player object according to mouse position on screen */
     void RotatePlayer()
     {
         Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
-        player.transform.rotation = Quaternion.Euler(new Vector3(0f, angle, 0f));
+        float angleY = AngleBetweenTwoPointsY(positionOnScreen, mouseOnScreen);
+        //float angleX = AngleBetweenTwoPointsX(positionOnScreen, mouseOnScreen);
+        //playerRB.AddRelativeTorque(new Vector3(0f, angle, 0f));
+
+        //Quaternion playerRot = player.transform.rotation;
+        //player.transform.rotation = Quaternion.Euler(new Vector3(playerRot.x, angleY, playerRot.z));
+        player.transform.rotation = Quaternion.Euler(new Vector3(vertRot, angleY, 0f));
+        //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
     }
 
     /** Sets the force vector based on WASD input */
     void SetForceVector()
     {
-        // Key down
-        if (Input.GetKeyDown(KeyCode.D))
-            force.x = 1;
-        if (Input.GetKeyDown(KeyCode.A))
-            force.x = -1;
-        if (Input.GetKeyDown(KeyCode.S))
-            force.y = -1;
-        if (Input.GetKeyDown(KeyCode.W))
-            force.y = 1;
-        if (Input.GetMouseButtonDown(0))
-            force.z = 1;
-        // Key up
-        if (Input.GetKeyUp(KeyCode.D))
-            force.x = 0;
-        if (Input.GetKeyUp(KeyCode.A))
-            force.x = 0;
-        if (Input.GetKeyUp(KeyCode.S))
-            force.y = 0;
-        if (Input.GetKeyUp(KeyCode.W))
-            force.y = 0;
-        if (Input.GetMouseButtonUp(0))
-            force.z = 0;
+        float fuelRateValue = 1f;
+
+        if (CollOxScript.fuel > 0)
+        {
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll > 0f)
+            {
+                Debug.Log("up");
+                //Quaternion playerRot = player.transform.rotation;
+                //player.transform.rotation = Quaternion.Euler(playerRot.x+10, playerRot.y, playerRot.z);
+                vertRot+= 1;
+                //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
+                CollOxScript.fuel -= fuelRateValue/10;
+            }
+
+            else if (scroll < 0f)
+            {
+                Debug.Log("down");
+                //Quaternion playerRot = player.transform.rotation;
+                //player.transform.rotation = Quaternion.Euler(playerRot.x-10, playerRot.y, playerRot.z);
+                vertRot-=1;
+                //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
+                CollOxScript.fuel -= fuelRateValue/10;
+            }
+
+
+            // Key down
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                force.x = 1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                force.x = -1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                force.y = -1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                force.y = 1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                force.z = 1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
+
+            // Key up
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                force.x = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                force.x = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                force.y = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                force.y = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                force.z = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+        }
+
+        if (CollOxScript.fuel <= 0)
+        {
+            CollOxScript.fuel = 0;
+            CollOxScript.fuelRate = 0;
+        }
+
+        //reset button - should be smoother and automatic
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (player.transform.rotation.x != 0f && player.transform.rotation.y != 0f && player.transform.rotation.z != 0f && CollOxScript.fuel >= 5)
+            {
+                Quaternion initialRot = player.transform.rotation;
+                player.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+                CollOxScript.fuel -= 5;
+                CollOxScript.fuelRate = 0;
+                CollOxScript.hasCollided = false;
+                vertRot = 0;
+            }
+        }
     }
 
     /** Computes the angles between 2 Vectors */
-    float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
+    float AngleBetweenTwoPointsY(Vector2 a, Vector2 b)
     {
-        return Mathf.Atan2(b.x - a.x, b.y - a.y) * Mathf.Rad2Deg;
+        // definitely not it //float angle = Mathf.Atan2(b.x - a.x, 0) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(b.x - a.x, b.y - a.y) * Mathf.Rad2Deg;//working fine
+        //Debug.Log("horizontal angle: " + angle);
+        return angle;     
     }
+
+    //added - don't change original
+    float AngleBetweenTwoPointsX(Vector2 a, Vector2 b)
+    {
+        //definitely not it //float angle = Mathf.Atan2(0, b.y - a.y) * Mathf.Rad2Deg;
+        float angle =  Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;//not working except top-left corner
+        //Debug.Log("vertical angle: " + angle);
+        return angle;
+    }
+
 
     // Code we want to save
     /*D and S do not function; W and A do not in other configuration

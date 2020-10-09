@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerCollisionO2 : MonoBehaviour
 {
+    public bool hasCollided = false;
+
     Color warnOxygen;
     Color regOxygen;
 
@@ -113,6 +115,7 @@ public class PlayerCollisionO2 : MonoBehaviour
         GameObject collided = c.gameObject;
         if(collided.tag == "Cave")
         {
+            hasCollided = true;
             suitDamage++;
             //TODO: add impulse to player depending on speed
         }
