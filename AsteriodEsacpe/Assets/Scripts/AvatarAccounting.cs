@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,11 +12,72 @@ using UnityEngine.UI;
     private void Start()
     {
       // Get a reference to the AvatarAccounting component of Main Camera
-      AvatarAccounting avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
+      this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
     }   
 
-    // Sample method call:
-    avatarAccounting.FireJet(JetType.MainThruster);
+
+
+    //
+    // Sample method calls:
+    //
+
+    // Fire a specific jet. NOTE: the jet will continue burning oxygen until you call TerminateJet() on that same jet
+    USES enum JetType { MainThruster, AttitudeJetLeft, AttitudeJetRight, AttitudeJetUp, AttitudeJetDown }
+    avatarAccounting.FireJet(JetType.MainThruster);       // on KeyDown
+    avatarAccounting.TerminateJet(JetType.MainThruster);  // on KeyUp
+    avatarAccounting.TerminateAllJets();                  // Called with out of air, but could be used externally to shut all off
+
+    // Normal oxygen refill
+    USES enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }  
+    avatarAccounting.AddOxygen(OxygenTankRefillAmount.FivePercent);   // Called repeatedly to simulate slow filling
+    avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks); // Called once to simulate replacing tanks
+
+    // Adds an extra tank buff called a "Pony Bottle" that will disappear at expiration (empty)
+    avatarAccounting.AddOxygenExtraTank();
+
+    // Add damage to the avatar's spacesuit
+    USES enum InjuryType { WallStrikeGlancingBlow, WallStrikeDirect, WallStrikeNearMiss, SharpObject, SharpObjectNearMiss, EnemyAttack, EnemyAttackNearMiss }
+    avatarAccounting.AddInjury(InjuryType injuryType, float velocity);
+
+    // Just what it says, O2 is low, find a "gas" station
+    USES enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }
+    avatarAccounting.AddOxygen(OxygenTankRefillAmount oxygenTankRefillAmount)
+
+    // Adds a pony bottle, once it's used up, it should be removed (has no further affect here)
+    avatarAccounting.AddOxygenExtraTank()
+
+
+
+    //
+    // Public Properties (read only)
+    //
+
+    // Monitor this boolean property to know when the avatar blacks out (as good as dead)
+    avatarAccounting.PlayerBlackout
+
+    // Values used to drive UX gauges, etc.
+    avatarAccounting.CurrentBloodOxygenPercent
+    avatarAccounting.CurrentHeartRatePerMinute
+    avatarAccounting.CurrentJetBurnRatePerSecond
+    avatarAccounting.CurrentOxygenAllTanksContent
+    avatarAccounting.CurrentOxygenBurnRatePerSecond
+    avatarAccounting.CurrentRespirationRatePerMinute
+    avatarAccounting.CurrentSuitIntegrity
+
+    // Secondary properties used internally, but available for detail
+    avatarAccounting.CurrentOxygenPonyBottleContent
+    avatarAccounting.CurrentOxygenTankContent
+    avatarAccounting.CurrentRespirationCostPerSecond
+    avatarAccounting.CurrentSuitIntegrityDamageCostPerSecond
+
+
+    //
+    // UNDER CONSTRUCTION
+    //
+
+    avatarAccounting.RepairInjury(float suitIntegrityIncrease) { this.RepairInjury(suitIntegrityIncrease, false); }
+    avatarAccounting.RepairInjury(float suitIntegrityIncrease, bool allowIncreaseOverBase)
+    avatarAccounting.CalmDown(CalmingType calmingType)
 
 */
 
@@ -55,19 +115,18 @@ Thruster\Jet Usage:
 public enum JetType { MainThruster, AttitudeJetLeft, AttitudeJetRight, AttitudeJetUp, AttitudeJetDown }
 public enum InjuryType { WallStrikeGlancingBlow, WallStrikeDirect, WallStrikeNearMiss, SharpObject, SharpObjectNearMiss, EnemyAttack, EnemyAttackNearMiss }
 public enum CalmingType { ControlBreathing, Rest, MedicalInducement }
-
+public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }
 
 public class AvatarAccounting : MonoBehaviour
 {
   #region Private Variables
-
+  
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Local variables for internal tracking and processing
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   private bool buffPresentExtraTank = false;              // place holder for future addition of buffs like "Extra Tank"
   private bool buffPresentExtraSuitIntegrity = false;     // place holder for future addition of buffs
   private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
-  private int tickCountPerMillisecond = 0;                // Used to calculate fractional time costs
 
   // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
   private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
@@ -78,7 +137,6 @@ public class AvatarAccounting : MonoBehaviour
 
   // How much is suit damage costing?
   private float currentSuitIntegrity = 10.0f;             // Base integrity, does not change with damage (starts at 10, but could be buffed to max)
-  ///////private float currentSuitIntegrityDamage = 0.0f; // Percentage of damage to ability to retain air
   private float currentSuitIntegrityCostPerSecond = 0.0f; // Milliliters per second leaking
 
   // Jets are currently burning...
@@ -87,6 +145,7 @@ public class AvatarAccounting : MonoBehaviour
 
   // Overall Oxygen burn rate, and Oxygen remaining
   private float currentOxygenTankContent = 0.0f;
+  private float currentOxygenPonyBottleContent = 0.0f;    // Extra tank "buff"
 
   // Current Blood Oxygen Level (this is character health determinant: 80% = brain death)
   private float currentBloodOxygenPercent = 95.0f;
@@ -125,7 +184,7 @@ public class AvatarAccounting : MonoBehaviour
   public float baseOxygenTankContent = 6000.0f;       // Default value, full tank
   public float minOxygenTankContent = 0.0f;           // Out of air...
   public float maxOxygenTankContent = 6000.0f;        // This is actually days worth of air...without using jets
-  public float maxOxygenWithExtraTank = 9000.0f;      // This is actually days worth of air...without using jets
+  public float fullOxygenPonyBottle = 1000.0f;        // This is a buff that expires, can only have one at a time
 
   public float baseBloodOxygenPercent = 95.0f;        // Default
   public float minBloodOxygenPercent = 80.0f;         // Min level (brain death occurs below this point)
@@ -157,7 +216,7 @@ public class AvatarAccounting : MonoBehaviour
   public float injuryEffectWallStrikeDirect_HeartRateIncrease = 10.0f;        // Up to 40 bpm pulse increase (see calculation)
   public float injuryEffectWallStrikeNearMiss_HeartRateIncrease = 20.0f;      // Up to 20 bpm pulse increase (see calculation)
   public float injuryEffectSharpObject_SuitIntegrityDamage = 30.0f;           // Up to 30% Suit Integrity loss (see calculation)
-  public float injuryEffectSharpObject_HeartRateIncrease = 70.0f;             // Up to 20 bpm pulse increase (see calculation)
+  public float injuryEffectSharpObject_HeartRateIncrease = 70.0f;             // Up to 70 bpm pulse increase (see calculation)
   public float injuryEffectSharpObjectNearMiss_HeartRateIncrease = 40.0f;     // Up to 40 bpm pulse increase (see calculation)
   public float injuryEffectEnemyAttack_SuitIntegrityDamage = 50.0f;           // Up to 50% Suit Integrity loss (see calculation)
   public float injuryEffectEnemyAttack_HeartRateIncrease = 120.0f;            // Up to 20 bpm pulse increase (see calculation)
@@ -166,6 +225,10 @@ public class AvatarAccounting : MonoBehaviour
   // How does not having oxygen affect the human brain?  Hypoxemia - low blood oxygen, which leads to brain and tissue death
   public float oxygenTankEmptyHypoxemiaDamagePerSecond = 0.5f;                // Percent of blood oxygen lost per second when the O2 runs out
   public float oxygenTankEmptyRespirationRatePerMinute = 0.0f;                // Can't breathe if you have nothing left in the tank
+
+  // Tank refill and buff values
+  public float oxygenTankRefillSingleTank = 0.5f;                            // Percent of MAX oxygen to restore (will be cut off at max when set)
+  public float oxygenTankRefillBothTanks = 1.0f;                             // Percent of MAX oxygen to restore (will be cut off at max when set)
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,10 +264,6 @@ public class AvatarAccounting : MonoBehaviour
     // Indicate that the player character is alive (for now)
     this.PlayerBlackout = false;
 
-    // Used to calculate fractional time costs
-    DateTime now = DateTime.Now;
-    tickCountPerMillisecond = ((int)((TimeSpan)((now.AddMilliseconds(1)) - now)).Ticks);
-
     // Set internal tracking vars to "base" (default) values
     this.CurrentHeartRatePerMinute = this.baseHeartRatePerMinute;
     this.CurrentRespirationRatePerMinute = this.CurrentRespirationRatePerMinute;
@@ -216,7 +275,7 @@ public class AvatarAccounting : MonoBehaviour
     // Initialize jet cost tracking
     this.TerminateAllJets();
 
-    this.UpdateUXData();
+    ////this.UpdateUXData();
 
     this.nextUpdate = Mathf.FloorToInt(Time.time);
   }
@@ -232,37 +291,35 @@ public class AvatarAccounting : MonoBehaviour
 
 
 
-    // Test code only
-#if DEBUG
-    DateTime now = DateTime.Now;
+//    // Test code only
+//#if DEBUG
+//    // Key down
+//    if (Input.GetKeyDown(KeyCode.Space))
+//      this.FireJet(JetType.MainThruster);
+//    if (Input.GetKeyUp(KeyCode.Space))
+//      this.TerminateJet(JetType.MainThruster);
 
-    // Key down
-    if (Input.GetKeyDown(KeyCode.Space))
-      this.FireJet(JetType.MainThruster);
-    if (Input.GetKeyUp(KeyCode.Space))
-      this.TerminateJet(JetType.MainThruster);
+//    if (Input.GetKeyDown(KeyCode.W))
+//      this.FireJet(JetType.AttitudeJetUp);
+//    if (Input.GetKeyUp(KeyCode.W))
+//      this.TerminateJet(JetType.AttitudeJetUp);
 
-    if (Input.GetKeyDown(KeyCode.W))
-      this.FireJet(JetType.AttitudeJetUp);
-    if (Input.GetKeyUp(KeyCode.W))
-      this.TerminateJet(JetType.AttitudeJetUp);
+//    if (Input.GetKeyDown(KeyCode.S))
+//      this.FireJet(JetType.AttitudeJetDown);
+//    if (Input.GetKeyUp(KeyCode.S))
+//      this.TerminateJet(JetType.AttitudeJetDown);
 
-    if (Input.GetKeyDown(KeyCode.S))
-      this.FireJet(JetType.AttitudeJetDown);
-    if (Input.GetKeyUp(KeyCode.S))
-      this.TerminateJet(JetType.AttitudeJetDown);
+//    if (Input.GetKeyDown(KeyCode.A))
+//      this.FireJet(JetType.AttitudeJetLeft);
+//    if (Input.GetKeyUp(KeyCode.A))
+//      this.TerminateJet(JetType.AttitudeJetLeft);
 
-    if (Input.GetKeyDown(KeyCode.A))
-      this.FireJet(JetType.AttitudeJetLeft);
-    if (Input.GetKeyUp(KeyCode.A))
-      this.TerminateJet(JetType.AttitudeJetLeft);
+//    if (Input.GetKeyDown(KeyCode.D))
+//      this.FireJet(JetType.AttitudeJetRight);
+//    if (Input.GetKeyUp(KeyCode.D))
+//      this.TerminateJet(JetType.AttitudeJetRight);
 
-    if (Input.GetKeyDown(KeyCode.D))
-      this.FireJet(JetType.AttitudeJetRight);
-    if (Input.GetKeyUp(KeyCode.D))
-      this.TerminateJet(JetType.AttitudeJetRight);
-
-#endif
+//#endif
   }
 
   // Update is called once per frame
@@ -271,7 +328,7 @@ public class AvatarAccounting : MonoBehaviour
     this.CalculateCurrentOxygenCost();
 
     // Update global output fields
-    this.UpdateUXData();
+    ////this.UpdateUXData();
   }
 
   // Update is called once per second
@@ -289,40 +346,40 @@ public class AvatarAccounting : MonoBehaviour
 
   #region Private Methods
 
-  private void UpdateUXData()
-  {
-    // Actual pubic values
-    this.UX_CurrentHeartRatePerMinute = this.CurrentHeartRatePerMinute;
-    this.UX_CurrentRespirationRatePerMinute = this.CurrentRespirationRatePerMinute;
-    this.UX_CurrentJetBurnRatePerSecond = this.CurrentJetBurnRatePerSecond;
-    this.UX_CurrentSuitIntegrity = this.CurrentSuitIntegrity;
-    this.UX_CurrentOxygenBurnRatePerSecond = this.CurrentOxygenBurnRatePerSecond;
-    this.UX_CurrentOxygenTankContent = this.CurrentOxygenTankContent;
-    this.UX_CurrentBloodOxygenPercent = this.CurrentBloodOxygenPercent;
+  ////private void UpdateUXData()
+  ////{
+  ////  // Actual pubic values
+  ////  this.UX_CurrentHeartRatePerMinute = this.CurrentHeartRatePerMinute;
+  ////  this.UX_CurrentRespirationRatePerMinute = this.CurrentRespirationRatePerMinute;
+  ////  this.UX_CurrentJetBurnRatePerSecond = this.CurrentJetBurnRatePerSecond;
+  ////  this.UX_CurrentSuitIntegrity = this.CurrentSuitIntegrity;
+  ////  this.UX_CurrentOxygenBurnRatePerSecond = this.CurrentOxygenBurnRatePerSecond;
+  ////  this.UX_CurrentOxygenTankContent = this.CurrentOxygenAllTanksContent;
+  ////  this.UX_CurrentBloodOxygenPercent = this.CurrentBloodOxygenPercent;
 
-    // Simple TEXT UX (should be replaced and these variables removed)
-    this.UX_CurrentHeartRatePerMinuteText = SetUXData("HeartRateValue", this.CurrentHeartRatePerMinute.ToString() + " bpm");
-    this.UX_CurrentRespirationRatePerMinuteText = SetUXData("RespirationRateValue", this.CurrentRespirationRatePerMinute.ToString() + " bpm");
-    this.UX_CurrentJetBurnRatePerSecondText = SetUXData("JetBurnRateValue", this.CurrentJetBurnRatePerSecond.ToString() + " ml\\s");
-    this.UX_CurrentSuitIntegrityText = SetUXData("SuitIntegrityValue", this.CurrentSuitIntegrity.ToString() + " units");
-    this.UX_CurrentOxygenBurnRatePerSecondText = SetUXData("OxygenBurnRateValue", this.CurrentOxygenBurnRatePerSecond.ToString() + " ml\\s");
-    this.UX_CurrentOxygenTankContentText = SetUXData("OxygenTankValue", this.CurrentOxygenTankContent.ToString() + " litres");
-    this.UX_CurrentBloodOxygenPercentText = SetUXData("BloodOxygenValue", this.CurrentBloodOxygenPercent.ToString() + "%");
-  }
+  ////  // Simple TEXT UX (should be replaced and these variables removed)
+  ////  this.UX_CurrentHeartRatePerMinuteText = SetUXData("HeartRateValue", this.CurrentHeartRatePerMinute.ToString() + " bpm");
+  ////  this.UX_CurrentRespirationRatePerMinuteText = SetUXData("RespirationRateValue", this.CurrentRespirationRatePerMinute.ToString() + " bpm");
+  ////  this.UX_CurrentJetBurnRatePerSecondText = SetUXData("JetBurnRateValue", this.CurrentJetBurnRatePerSecond.ToString() + " ml\\s");
+  ////  this.UX_CurrentSuitIntegrityText = SetUXData("SuitIntegrityValue", this.CurrentSuitIntegrity.ToString() + " units");
+  ////  this.UX_CurrentOxygenBurnRatePerSecondText = SetUXData("OxygenBurnRateValue", this.CurrentOxygenBurnRatePerSecond.ToString() + " ml\\s");
+  ////  this.UX_CurrentOxygenTankContentText = SetUXData("OxygenTankValue", this.CurrentOxygenAllTanksContent.ToString() + " litres");
+  ////  this.UX_CurrentBloodOxygenPercentText = SetUXData("BloodOxygenValue", this.CurrentBloodOxygenPercent.ToString() + "%");
+  ////}
 
-  private Text SetUXData(string gameObjectName, string value)
-  {
-    // Find a reference to the indicated GameObject
-    GameObject objectFinder = GameObject.Find(gameObjectName);
+  ////private Text SetUXData(string gameObjectName, string value)
+  ////{
+  ////  // Find a reference to the indicated GameObject
+  ////  GameObject objectFinder = GameObject.Find(gameObjectName);
 
-    // Get the Text Component of that GameObject
-    Text gameObjectText = objectFinder.GetComponent<Text>();
+  ////  // Get the Text Component of that GameObject
+  ////  Text gameObjectText = objectFinder.GetComponent<Text>();
 
-    // Set the starting number of points to 0
-    gameObjectText.text = value;
+  ////  // Set the starting number of points to 0
+  ////  gameObjectText.text = value;
 
-    return gameObjectText;
-  }
+  ////  return gameObjectText;
+  ////}
 
   /// <summary>
   /// Like MonoBehavior.Invoke("FunctionName", 2f); but can include params. Usage:
@@ -344,13 +401,45 @@ public class AvatarAccounting : MonoBehaviour
 
   private void BreathOneSecond()
   {
+    // NOTE: This pattern is special, it does not remove oxygen per frame, but per second, like actual breathing
 
-    
+    float breathCost = 1f;  // this should be calculated based on respiration
+
+
     // TODO: Calculate how much oxygen to reduce tank by, using current respiration
 
 
     // Only breathe if there's air in the tank
-    if (this.CurrentOxygenTankContent != 0f) this.CurrentOxygenTankContent -= 1f;
+    this.UseOxygen(breathCost);
+  }
+
+  private void UseOxygen(float howMuch)
+  {
+    // No, you cannot add oxygen this way
+    if (howMuch <= 0) return;
+
+    // Add to or subtract from standard tanks under specified circumstances only
+    if (!this.buffPresentExtraTank)       // If pony bottle is NOT present, then add or subtract from main tank
+      this.CurrentOxygenTankContent -= howMuch;
+
+    // Take from the pony bottle, if applicable (and amount sent indicates SUBTRACTION - cannot add to the pnoy bottle)
+    else
+      this.CurrentOxygenPonyBottleContent -= howMuch;
+
+    // if both tanks are empty, now its time to suffer
+    if ((this.CurrentOxygenTankContent == 0f) && (this.CurrentOxygenPonyBottleContent == 0f))
+    {
+      // Can't breathe with no air in the tank
+      this.CurrentRespirationRatePerMinute = this.oxygenTankEmptyRespirationRatePerMinute;
+
+      // Reset all Jets to inoperative
+      this.TerminateAllJets();
+
+
+      // TODO: Should probably do something with heart rate, too
+      // this.CurrentHeartRatePerMinute = ;
+
+    }
   }
 
   // Should be called by FixedUpdate, every frame
@@ -360,16 +449,15 @@ public class AvatarAccounting : MonoBehaviour
     float currentFrameRate = 50f;
 
     // Once the oxygen tank is empty, Sp02 or "Blood Oxygen Level" decreaces until you black out and eventually die of hypoxemia
-    if (this.CurrentOxygenTankContent == 0f)
+    if (this.CurrentOxygenAllTanksContent == 0f)
     {
       this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / currentFrameRate) * 2);
     }
     else
     {
-      // Consume oxygen for current jet consumption rate (1\50th per frame)
-      this.CurrentOxygenTankContent -= (this.CurrentJetBurnRatePerSecond * (1f / currentFrameRate));
+      // Consume oxygen for current jet consumption rate (1/50th per frame)
+      this.UseOxygen(this.CurrentJetBurnRatePerSecond * (1f / currentFrameRate));
     }
-
   }
 
 
@@ -447,7 +535,7 @@ public class AvatarAccounting : MonoBehaviour
     //// current cost = adjusted amount of damage per the value captured above
     //// If the current amount of damage is 4.3%, then the 10% damage value is used, but adjusted to
     //// 43% of that value, (43% of 10% = 4.3% cost for 4.3% damage) 
-    //this.currentSuitIntegrityCostPerSecond =
+    this.currentSuitIntegrityCostPerSecond = 500f;
     //  (
     //      currentOxygenCostRate
     //    * (this.currentSuitIntegrityDamage / 10)
@@ -551,39 +639,49 @@ public class AvatarAccounting : MonoBehaviour
     }
   }
 
+  public float CurrentOxygenAllTanksContent
+  {
+    get { return this.CurrentOxygenTankContent + this.CurrentOxygenPonyBottleContent; }
+  }
+
   public float CurrentOxygenTankContent
   {
     get { return this.currentOxygenTankContent; }
     private set
     {
+        if (value > this.maxOxygenTankContent)
+          this.currentOxygenTankContent = this.maxOxygenTankContent;
+        else if (value <= this.minOxygenTankContent)
+          this.currentOxygenTankContent = this.minOxygenTankContent;
+        else
+          this.currentOxygenTankContent = value;
+    }
+  }
 
-      // TODO: Enable tank buff by adding code using these values.  Reset the flag once extra tank is empty (expired).
-      //       this.maxOxygenWithExtraTank
-      //       this.buffPresentExtraTank
-
-
-
-      if (value > this.maxOxygenTankContent)
-        this.currentOxygenTankContent = this.maxOxygenTankContent;
-      else if (value <= this.minOxygenTankContent)
+  public float CurrentOxygenPonyBottleContent
+  {
+    get
+    {
+      if (this.buffPresentExtraTank) return this.currentOxygenPonyBottleContent;
+      else return 0f;
+    }
+    private set
+    {
+      // When tank is empty, expire the buff and remove the extra tank
+      if (value <= 0)
       {
-        // Tank is empty
-        this.currentOxygenTankContent = this.minOxygenTankContent;
-
-        // Can't breathe with no air in the tank
-        this.CurrentRespirationRatePerMinute = this.oxygenTankEmptyRespirationRatePerMinute;
-
-        // Reset all Jets to inoperative
-        this.TerminateAllJets();
-
-
-
-        // TODO: Should probably do something with heart rate, too
-        // this.CurrentHeartRatePerMinute = ;
-
+        this.buffPresentExtraTank = false;
+        this.currentOxygenPonyBottleContent = 0f;
       }
-      else
-        this.currentOxygenTankContent = value;
+
+      // Can only set this value if the buff is present (unless wiping out, as above, then who cares)
+      else if (this.buffPresentExtraTank)
+
+        // Can't "refil" a pony bottle, they are used until empty and discarded
+        if (value <= this.fullOxygenPonyBottle)
+
+          // But value can change as air is used (lower value only)
+          this.currentOxygenPonyBottleContent = value;
     }
   }
 
@@ -683,7 +781,7 @@ public class AvatarAccounting : MonoBehaviour
   public void FireJet(JetType jetType, float powerLevel, bool overburn)
   {
     // No juice, no jet
-    if (this.CurrentOxygenTankContent == 0f) return;
+    if (this.CurrentOxygenAllTanksContent == 0f) return;
 
     // optional param, can be used to set variable power level applied to jets
     if (powerLevel <= 0) powerLevel = 1f;   //100%
@@ -762,15 +860,56 @@ public class AvatarAccounting : MonoBehaviour
   }
 
   // Add damage to the player's suit, or just scare the shit out of them and increase their heartrate and respiration
-  public void AddInjury(InjuryType injuryType, float velocity)
+  public void AddInjury(InjuryType injuryType, float velocity = 0)
   {
     float newSuitIntegrityDamage = 0.0f;
     float newHeartRateIncrease = 0.0f;
 
+    switch (injuryType)
+    {
+      // Get "base" damage occurring from injury
+      case InjuryType.WallStrikeGlancingBlow:
+        newSuitIntegrityDamage = this.injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage;
+        newHeartRateIncrease = this.injuryEffectWallStrikeGlancingBlow_HeartRateIncrease;
+        break;
+      case InjuryType.WallStrikeDirect:
+        newSuitIntegrityDamage = this.injuryEffectWallStrikeDirect_SuitIntegrityDamage;
+        newHeartRateIncrease = this.injuryEffectWallStrikeDirect_HeartRateIncrease;
+        break;
+      case InjuryType.WallStrikeNearMiss:
+        newSuitIntegrityDamage = 0.0f;
+        newHeartRateIncrease = this.injuryEffectWallStrikeNearMiss_HeartRateIncrease;
+        break;
+      case InjuryType.SharpObject:
+        newSuitIntegrityDamage = this.injuryEffectSharpObject_SuitIntegrityDamage;
+        newHeartRateIncrease = this.injuryEffectSharpObject_HeartRateIncrease;
+        break;
+      case InjuryType.SharpObjectNearMiss:
+        newSuitIntegrityDamage = 0.0f;
+        newHeartRateIncrease = this.injuryEffectSharpObjectNearMiss_HeartRateIncrease;
+        break;
+      case InjuryType.EnemyAttack:
+        newSuitIntegrityDamage = this.injuryEffectEnemyAttack_SuitIntegrityDamage;
+        newHeartRateIncrease = this.injuryEffectEnemyAttack_HeartRateIncrease;
+        break;
+      case InjuryType.EnemyAttackNearMiss:
+        newSuitIntegrityDamage = 0.0f;
+        newHeartRateIncrease = this.injuryEffectEnemyAttackNearMiss_HeartRateIncrease;
+        break;
+      default:
+        break;
+    }
 
-    //switch (injuryType)
-    //{
+    // Suit damage is in percent of current integrity (can't take away 70% of something that only has 30%,
+    // but you can take 70% of the 30% since the suit is waving around it is harder to damage what is left)
+    float actualDamage = this.currentSuitIntegrity * (newSuitIntegrityDamage / 100);
 
+    this.currentSuitIntegrity += actualDamage;
+    this.CalculateSuitIntegrityDamage();
+
+
+
+    // TODO: YOU ARE HERE!!!
 
     // Set up variables for storing damage rates defined in InjuryType enum
     // NOTE: IT may be necessary to calculate the velocity of the avatar at the point of impact
@@ -791,50 +930,49 @@ public class AvatarAccounting : MonoBehaviour
     // Duration: When impact results in dragging along a wall, etc., how long was the duration?
 
 
-
-    //  // Get "base" damage occurring from injury
-    //  case InjuryType.WallStrikeGlancingBlow:
-    //    newSuitIntegrityDamage = injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage;
-    //    newHeartRateIncrease = injuryEffectWallStrikeGlancingBlow_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.WallStrikeDirect:
-    //    newSuitIntegrityDamage = injuryEffectWallStrikeDirect_SuitIntegrityDamage;
-    //    newHeartRateIncrease = injuryEffectWallStrikeDirect_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.WallStrikeNearMiss:
-    //    newSuitIntegrityDamage = 0.0f;
-    //    newHeartRateIncrease = injuryEffectWallStrikeNearMiss_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.SharpObject:
-    //    newSuitIntegrityDamage = injuryEffectSharpObject_SuitIntegrityDamage;
-    //    newHeartRateIncrease = injuryEffectSharpObject_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.SharpObjectNearMiss:
-    //    newSuitIntegrityDamage = 0.0f;
-    //    newHeartRateIncrease = injuryEffectSharpObjectNearMiss_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.EnemyAttack:
-    //    newSuitIntegrityDamage = injuryEffectEnemyAttack_SuitIntegrityDamage;
-    //    newHeartRateIncrease = injuryEffectEnemyAttack_HeartRateIncrease;
-    //    break;
-    //  case InjuryType.EnemyAttackNearMiss:
-    //    newSuitIntegrityDamage = 0.0f;
-    //    newHeartRateIncrease = injuryEffectEnemyAttackNearMiss_HeartRateIncrease;
-    //    break;
-    //  default:
-    //    break;
-    //}
-
-
-
-    //// TODO: YOU ARE HERE!!!
-    //// Alter actual damage based on the angle and velocity of impact
-    //this.currentSuitIntegrityDamage += 25.0f;  // This is in percent of damage to suits ability to hold air
+    // Alter actual damage based on the angle and velocity of impact
+    //this.CurrentSuitIntegrity += newSuitIntegrityDamage;
 
 
     //// Emotional damage is also altered based on angle and speed becuase a "near miss" is much worse at high speed
 
   }
+
+  // Allows for normal refill (allowIncreaseOverBase = false) or buffs (allowIncreaseOverBase = true)
+  public void AddOxygen(OxygenTankRefillAmount oxygenTankRefillAmount)
+  {
+    float percentToFillTanks = 0.0f;
+
+    switch (oxygenTankRefillAmount)
+    {
+      case OxygenTankRefillAmount.FivePercent:
+        percentToFillTanks = 0.05f;
+        break;
+      case OxygenTankRefillAmount.TenPercent:
+        percentToFillTanks = 0.1f;
+        break;
+      case OxygenTankRefillAmount.FullSingleTank:
+        percentToFillTanks = this.oxygenTankRefillSingleTank;
+        break;
+      case OxygenTankRefillAmount.FillBothTanks:
+        percentToFillTanks = this.oxygenTankRefillBothTanks;
+        break;
+    }
+
+    // Normal refill operation, just add to tank (up to max - constrained in property setter)
+    this.CurrentOxygenTankContent += (this.maxOxygenTankContent * percentToFillTanks);
+  }
+  public void AddOxygenExtraTank()
+  {
+    // If extra tank is already present, cannot add another
+    if (!this.buffPresentExtraTank)
+    {
+      this.buffPresentExtraTank = true;
+      this.CurrentOxygenPonyBottleContent = this.fullOxygenPonyBottle;
+    }
+  }
+
+
 
   // Allows for normal repairs (allowIncreaseOverBase = false) or buffs (allowIncreaseOverBase = true)
   public void RepairInjury(float suitIntegrityIncrease) { this.RepairInjury(suitIntegrityIncrease, false); }
@@ -842,31 +980,21 @@ public class AvatarAccounting : MonoBehaviour
   {
   }
 
-  // Allows for normal refill (allowIncreaseOverBase = false) or buffs (allowIncreaseOverBase = true)
-  public void AddOxygen(float oxygenIncrease) { this.AddOxygen(oxygenIncrease, false); }
-  public void AddOxygen(float oxygenIncrease, bool increaseOverBase)
-  {
-    // if placing a buff, set a value that allows tank to hold more than max, until oxygen falls
-    // below normal max, at which point the buff "expires", the flag is reset and level is again
-    // capped at max
-
-  }
-
   // Slow breathing and heartrate through rest, meditation or drugs
   public void CalmDown(CalmingType calmingType)
-  {
-    //switch (calmingType)
-    //{
-    //  case CalmingType.ControlBreathing:
-    //    break;
-    //  case CalmingType.MedicalInducement:
-    //    break;
-    //  case CalmingType.Rest:
-    //    break;
-    //  default:
-    //    break;
-    //}
-  }
+    {
+      //switch (calmingType)
+      //{
+      //  case CalmingType.ControlBreathing:
+      //    break;
+      //  case CalmingType.MedicalInducement:
+      //    break;
+      //  case CalmingType.Rest:
+      //    break;
+      //  default:
+      //    break;
+      //}
+    }
 
   #endregion Public Methods
 }
