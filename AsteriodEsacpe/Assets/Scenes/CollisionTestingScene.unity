@@ -1091,6 +1091,7 @@ MonoBehaviour:
   playerRB: {fileID: 923298570}
   force: {x: 0, y: 0, z: 0}
   CollOxScript: {fileID: 0}
+  vertRot: 0
 --- !u!1 &960746565
 GameObject:
   m_ObjectHideFlags: 0

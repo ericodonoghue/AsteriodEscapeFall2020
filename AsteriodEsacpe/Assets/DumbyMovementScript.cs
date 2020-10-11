@@ -7,8 +7,10 @@ public class DumbyMovementScript : MonoBehaviour
     public GameObject player;
     public Rigidbody playerRB;
     public Vector3 force;
+    public Vector3 rotate;
     public PlayerCollisionO2 CollOxScript;
     readonly float thrust = 10f;
+    readonly float turnSpeed = 0.5f;
     public float vertRot = 0f;
     // Start is called before the first frame update
     void Start()
@@ -17,6 +19,7 @@ public class DumbyMovementScript : MonoBehaviour
         CollOxScript = player.GetComponent<PlayerCollisionO2>();
         playerRB = GetComponent<Rigidbody>();
         force = new Vector3(0f, 0f, 0f);
+        rotate = new Vector3(0f, 0f, 0f);
     }
 
     // Called before Start is called for all objects
@@ -28,8 +31,9 @@ public class DumbyMovementScript : MonoBehaviour
     void Update()
     {
         SetForceVector();
+        
         if(!CollOxScript.hasCollided)
-            RotatePlayer();
+            RotateWithKeys();
         //do rotation back to 0,0,0, here
     }
 
@@ -37,6 +41,7 @@ public class DumbyMovementScript : MonoBehaviour
     void FixedUpdate()
     {
         ApplyForce();
+        ApplyTorque();
     }
 
     /** Apply's a force to the player based on WASD input */
@@ -45,6 +50,12 @@ public class DumbyMovementScript : MonoBehaviour
         playerRB.AddRelativeForce(force * thrust);
         //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
     }
+
+    void ApplyTorque()
+    {
+        playerRB.AddRelativeTorque(rotate * turnSpeed);
+    }
+
     /** Rotates the player object according to mouse position on screen */
     void RotatePlayer()
     {
@@ -115,6 +126,11 @@ public class DumbyMovementScript : MonoBehaviour
                 force.z = 1;
                 CollOxScript.fuelRate += fuelRateValue;
             }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                force.z = 1;
+                CollOxScript.fuelRate += fuelRateValue;
+            }
 
             // Key up
             if (Input.GetKeyUp(KeyCode.D))
@@ -138,6 +154,11 @@ public class DumbyMovementScript : MonoBehaviour
                 CollOxScript.fuelRate -= fuelRateValue;
             }
             if (Input.GetMouseButtonUp(0))
+            {
+                force.z = 0;
+                CollOxScript.fuelRate -= fuelRateValue;
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 force.z = 0;
                 CollOxScript.fuelRate -= fuelRateValue;
@@ -183,6 +204,22 @@ public class DumbyMovementScript : MonoBehaviour
         return angle;
     }
 
+    void RotateWithKeys()
+    {
+        if (Input.GetKey(KeyCode.K))
+        {
+            rotate.y = -1f;
+        }
+        if (Input.GetKey(KeyCode.L))
+        {
+            rotate.y = 1f;
+        }
+        // Key up
+        if (Input.GetKeyUp(KeyCode.K))
+            rotate.y = 0f;
+        if (Input.GetKeyUp(KeyCode.L))
+            rotate.y = 0f;
+    }   
 
     // Code we want to save
     /*D and S do not function; W and A do not in other configuration
