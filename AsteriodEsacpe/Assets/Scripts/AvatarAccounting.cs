@@ -119,11 +119,16 @@ public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, Fi
 
 public class AvatarAccounting : MonoBehaviour
 {
-  #region Private Variables
-  
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Local variables for internal tracking and processing
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    #region Private Variables
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Local variables for internal tracking and processing
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // Overall Oxygen burn rate, and Oxygen remaining
+  private float currentOxygenTankContent = 0.0f;
+  private float currentOxygenPonyBottleContent = 0.0f;    // Extra tank "buff"  
+
   private bool buffPresentExtraTank = false;              // place holder for future addition of buffs like "Extra Tank"
   private bool buffPresentExtraSuitIntegrity = false;     // place holder for future addition of buffs
   private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
@@ -142,10 +147,6 @@ public class AvatarAccounting : MonoBehaviour
   // Jets are currently burning...
   private float currentJetBurnRate = 0.0f;
   private Dictionary<JetType, float> currentJetBurnRateSpecificJet = new Dictionary<JetType, float>();
-
-  // Overall Oxygen burn rate, and Oxygen remaining
-  private float currentOxygenTankContent = 0.0f;
-  private float currentOxygenPonyBottleContent = 0.0f;    // Extra tank "buff"
 
   // Current Blood Oxygen Level (this is character health determinant: 80% = brain death)
   private float currentBloodOxygenPercent = 95.0f;

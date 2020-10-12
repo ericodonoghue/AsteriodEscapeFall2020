@@ -38,10 +38,19 @@ public class PlayerCollisionO2 : MonoBehaviour
     public int warnTimerOxygen = 0;
     public int warnTimerFuel = 0;
 
+    // Set in inspector
+    public AudioSource wallCollisionAudio1;
+    public AudioSource wallCollisionAudio2;
+    private int collisions = 0;
+
+
+    public AvatarAccounting avatarScript;
+
     // Start is called before the first frame update
     void Start()
     {
         // TODO: get values of variables from save data once implemented
+        //wallCollision = GetComponent<AudioSource>();
     }
 
     private void Awake()
@@ -117,6 +126,15 @@ public class PlayerCollisionO2 : MonoBehaviour
         {
             hasCollided = true;
             suitDamage++;
+            if (collisions % 2 == 0)
+            {
+                wallCollisionAudio1.Play();
+            }
+            else
+            {
+                wallCollisionAudio2.Play();
+            }
+            collisions++;
             //TODO: add impulse to player depending on speed
         }
 

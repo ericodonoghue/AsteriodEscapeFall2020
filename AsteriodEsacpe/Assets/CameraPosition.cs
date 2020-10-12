@@ -26,12 +26,20 @@ public class CameraPosition : MonoBehaviour
             Application.Quit();
         }
 
-        Vector3 pos = player.transform.position;
-        pos.y = player.transform.position.y + 1f;
-        pos.z = player.transform.position.z - 10f;
-        Camera.main.transform.position = pos;
+        //Vector3 pos = player.transform.position;
+        //pos.y = 
+        //pos.z = player.transform.position.z - 10f;
+        //Camera.main.transform.position = pos;
 
         // TODO: figure out how to rotate camera with player
         //Camera.main.transform.rotation = player.transform.rotation;
+
+        Vector3 p = new Vector3(0, 0, 0);
+
+        p.x = Mathf.Sin(player.transform.rotation.y) + player.transform.position.x;
+        p.y = player.transform.position.y + 1f;
+        p.z = Mathf.Cos(player.transform.rotation.y) + player.transform.position.z - 10f;
+
+        Camera.main.transform.position = p;
     }
 }

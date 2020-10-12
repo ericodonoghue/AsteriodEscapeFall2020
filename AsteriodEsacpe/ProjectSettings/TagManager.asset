@@ -9,6 +9,7 @@ TagManager:
   - Canvas
   - OxygenBar
   - AirTank
+  - WallCollision1
   layers:
   - Default
   - TransparentFX
