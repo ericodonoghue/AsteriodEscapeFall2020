@@ -31,10 +31,10 @@ public class DumbyMovementScript : MonoBehaviour
     void Update()
     {
         SetForceVector();
-        
-        if(!CollOxScript.hasCollided)
-            RotateWithKeys();
-        //do rotation back to 0,0,0, here
+
+        RotateWithKeys();
+
+        ResetForcesButton();
     }
 
     // Called 50 times per second
@@ -78,28 +78,6 @@ public class DumbyMovementScript : MonoBehaviour
 
         if (CollOxScript.fuel > 0)
         {
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
-            if (scroll > 0f)
-            {
-                Debug.Log("up");
-                //Quaternion playerRot = player.transform.rotation;
-                //player.transform.rotation = Quaternion.Euler(playerRot.x+10, playerRot.y, playerRot.z);
-                vertRot+= 1;
-                //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
-                CollOxScript.fuel -= fuelRateValue/10;
-            }
-
-            else if (scroll < 0f)
-            {
-                Debug.Log("down");
-                //Quaternion playerRot = player.transform.rotation;
-                //player.transform.rotation = Quaternion.Euler(playerRot.x-10, playerRot.y, playerRot.z);
-                vertRot-=1;
-                //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
-                CollOxScript.fuel -= fuelRateValue/10;
-            }
-
-
             // Key down
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -131,7 +109,6 @@ public class DumbyMovementScript : MonoBehaviour
                 force.z = 1;
                 CollOxScript.fuelRate += fuelRateValue;
             }
-
             // Key up
             if (Input.GetKeyUp(KeyCode.D))
             {
@@ -206,21 +183,54 @@ public class DumbyMovementScript : MonoBehaviour
 
     void RotateWithKeys()
     {
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             rotate.y = -1f;
         }
-        if (Input.GetKey(KeyCode.L))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             rotate.y = 1f;
         }
         // Key up
-        if (Input.GetKeyUp(KeyCode.K))
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
             rotate.y = 0f;
-        if (Input.GetKeyUp(KeyCode.L))
+        if (Input.GetKeyUp(KeyCode.RightArrow))
             rotate.y = 0f;
+
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            rotate.x = -1f;
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            rotate.x = 1f;
+        }
+        // Key up
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+            rotate.x = 0f;
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+            rotate.x = 0f;
     }   
 
+
+    void ResetForcesButton()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            // https://forum.unity.com/threads/reset-rigidbody.39998/
+            if (playerRB.isKinematic == false)
+            {
+                //playerRB.velocity = Vector3.zero;
+                playerRB.angularVelocity = Vector3.zero;
+                playerRB.rotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+            //playerRB.isKinematic = true;
+        }  
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            playerRB.isKinematic = false;
+        }
+    }
     // Code we want to save
     /*D and S do not function; W and A do not in other configuration
     check for neither / both

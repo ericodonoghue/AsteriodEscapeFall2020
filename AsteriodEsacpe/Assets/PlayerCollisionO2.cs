@@ -158,5 +158,30 @@ public class PlayerCollisionO2 : MonoBehaviour
         }
         if (collided.tag == "Monster")
             Destroy(PlayerModelTest);
+
+        
+    }
+
+    private void OnTriggerEnter(Collider c)
+    {
+        GameObject collided = c.gameObject;
+        if (collided.tag == "AirTank")
+        {
+            if (oxygen <= 74)
+                oxygen += 25;
+            else
+                oxygen = 99;
+
+            Destroy(collided);
+        }
+
+        if (collided.tag == "FuelTank")
+        {
+            if (fuel <= 74)
+                fuel += 25;
+            else
+                fuel = 99;
+            Destroy(collided);
+        }
     }
 }
