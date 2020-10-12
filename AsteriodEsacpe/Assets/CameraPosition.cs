@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraPosition : MonoBehaviour
 {
@@ -31,7 +32,12 @@ public class CameraPosition : MonoBehaviour
     void Update()
     {
         // quits game when player presses Q
-        if (Input.GetKeyDown(KeyCode.Q))  
+        if (Input.GetKeyDown(KeyCode.Backspace))  
+        {
+            SceneManager.LoadScene("CollisionTestingScene");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
