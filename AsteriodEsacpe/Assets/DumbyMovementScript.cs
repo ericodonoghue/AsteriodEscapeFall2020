@@ -183,11 +183,11 @@ public class DumbyMovementScript : MonoBehaviour
 
     void RotateWithKeys()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             rotate.y = -1f;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             rotate.y = 1f;
         }
@@ -197,11 +197,11 @@ public class DumbyMovementScript : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.RightArrow))
             rotate.y = 0f;
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             rotate.x = -1f;
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             rotate.x = 1f;
         }

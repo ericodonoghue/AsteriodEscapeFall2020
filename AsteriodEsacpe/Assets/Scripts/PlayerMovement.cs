@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
   // Local reference to the central AvatarAccounting object (held by main camera)
   private AvatarAccounting avatarAccounting;
 
+    private float resetButtonCost = 1000f; 
+
   [Header("Set in Inspector")]
   public string GameSceneName;
 
@@ -21,6 +23,11 @@ public class PlayerMovement : MonoBehaviour
   {
     // Check to see if the player is dead
     this.AreWeDeadYet();
+
+    if (Input.GetKeyDown(KeyCode.Tab))
+    {
+        avatarAccounting.UseOxygen(resetButtonCost);
+    }
 
     // If flag and actual button state are not the same, do something about it
     if (leftMouseButtonIsDown != Input.GetMouseButton(0))
@@ -61,7 +68,38 @@ public class PlayerMovement : MonoBehaviour
       avatarAccounting.FireJet(JetType.AttitudeJetRight);
     if (Input.GetKeyUp(KeyCode.D))
       avatarAccounting.TerminateJet(JetType.AttitudeJetRight);
-  }
+
+
+    // Key down
+    if (Input.GetKeyDown(KeyCode.LeftArrow))
+    {
+        avatarAccounting.FireJet(JetType.AttitudeJetLeft);
+    }
+    if (Input.GetKeyDown(KeyCode.RightArrow))
+    {
+        avatarAccounting.FireJet(JetType.AttitudeJetRight);
+    }
+    // Key up
+    if (Input.GetKeyUp(KeyCode.LeftArrow))
+        avatarAccounting.TerminateJet(JetType.AttitudeJetLeft);
+    if (Input.GetKeyUp(KeyCode.RightArrow))
+        avatarAccounting.TerminateJet(JetType.AttitudeJetRight);
+
+    // Key down
+    if (Input.GetKeyDown(KeyCode.DownArrow))
+    {
+        avatarAccounting.FireJet(JetType.AttitudeJetDown);
+    }
+    if (Input.GetKeyDown(KeyCode.UpArrow))
+    {
+        avatarAccounting.FireJet(JetType.AttitudeJetUp);
+    }
+    // Key up
+    if (Input.GetKeyUp(KeyCode.UpArrow))
+        avatarAccounting.TerminateJet(JetType.AttitudeJetUp);
+    if (Input.GetKeyUp(KeyCode.DownArrow))
+        avatarAccounting.TerminateJet(JetType.AttitudeJetDown);
+    }
 
   private void AreWeDeadYet()
   {

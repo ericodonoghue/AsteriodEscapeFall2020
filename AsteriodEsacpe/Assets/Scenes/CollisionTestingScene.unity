@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 274452}
   - component: {fileID: 274451}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,9 +495,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 35524292}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.5000001
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -5504,7 +5504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 811556609}
   - component: {fileID: 811556610}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallCollisionAudio1
   m_TagString: WallCollision1
   m_Icon: {fileID: 0}
@@ -5537,7 +5537,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9cca5640e9882c24a99c18566e9c0efb, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.561
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6695,7 +6695,7 @@ GameObject:
   - component: {fileID: 923298565}
   - component: {fileID: 923298571}
   - component: {fileID: 923298572}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerModelTest
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -6828,7 +6828,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!114 &923298571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8829,7 +8829,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161565632}
   - component: {fileID: 1161565633}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ambience_space
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8862,7 +8862,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8e8291c5d9e00294aad8f906ff43de76, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.757
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -9879,7 +9879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1258731979}
   - component: {fileID: 1258731978}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallCollisionAudio2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9898,7 +9898,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7760fe6fe222b4e438f086aa43dce018, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.564
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -14258,7 +14258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1969793504}
   - component: {fileID: 1969793505}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HeartBeatAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14291,7 +14291,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 1cb672bb1e620034291170dab7b0f297, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0
