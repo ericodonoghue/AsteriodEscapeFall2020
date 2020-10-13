@@ -414,7 +414,7 @@ public class AvatarAccounting : MonoBehaviour
     this.UseOxygen(breathCost);
   }
 
-  private void UseOxygen(float howMuch)
+  public void UseOxygen(float howMuch)
   {
     // No, you cannot add oxygen this way
     if (howMuch <= 0) return;
