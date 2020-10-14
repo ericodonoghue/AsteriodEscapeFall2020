@@ -30,24 +30,30 @@ public class PlayerMovement : MonoBehaviour
             avatarAccounting.UseOxygen(resetButtonCost);
         }
 
-        // If flag and actual button state are not the same, do something about it
-        if (leftMouseButtonIsDown != Input.GetMouseButton(0))
-        {
-            // Left Mouse Button pressed
-            if ((!leftMouseButtonIsDown) && (Input.GetMouseButton(0)))
-            {
-                avatarAccounting.FireJet(JetType.MainThruster);
-                leftMouseButtonIsDown = true;
-            }
+        //// If flag and actual button state are not the same, do something about it
+        //if (leftMouseButtonIsDown != Input.GetMouseButton(0))
+        //{
+        //    // Left Mouse Button pressed
+        //    if ((!leftMouseButtonIsDown) && (Input.GetMouseButton(0)))
+        //    {
+        //        avatarAccounting.FireJet(JetType.MainThruster);
+        //        leftMouseButtonIsDown = true;
+        //    }
 
-            // Left Mouse Button released
-            if ((leftMouseButtonIsDown) && (!Input.GetMouseButton(0)))
-            {
-                avatarAccounting.TerminateJet(JetType.MainThruster);
-                leftMouseButtonIsDown = false;
-            }
+        //    // Left Mouse Button released
+        //    if ((leftMouseButtonIsDown) && (!Input.GetMouseButton(0)))
+        //    {
+        //        avatarAccounting.TerminateJet(JetType.MainThruster);
+        //        leftMouseButtonIsDown = false;
+        //    }
 
-        }
+        //}
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            avatarAccounting.FireJet(JetType.MainThruster);
+        if (Input.GetKeyUp(KeyCode.Space))
+            avatarAccounting.TerminateJet(JetType.MainThruster);
 
         if (Input.GetKeyDown(KeyCode.W))
             avatarAccounting.FireJet(JetType.AttitudeJetUp);
