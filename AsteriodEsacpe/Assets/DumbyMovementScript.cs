@@ -31,8 +31,9 @@ public class DumbyMovementScript : MonoBehaviour
     void Update()
     {
         SetForceVector();
-        RotateWithKeys();
-        //RotatePlayer();
+
+        //RotateWithKeys();
+        RotatePlayer();
         ResetForcesButton();
     }
 
@@ -88,12 +89,12 @@ public class DumbyMovementScript : MonoBehaviour
                 force.x = -1;
                 CollOxScript.fuelRate += fuelRateValue;
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 force.y = -1;
                 CollOxScript.fuelRate += fuelRateValue;
             }
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 force.y = 1;
                 CollOxScript.fuelRate += fuelRateValue;
@@ -103,7 +104,7 @@ public class DumbyMovementScript : MonoBehaviour
                 force.z = 1;
                 CollOxScript.fuelRate += fuelRateValue;
             }
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 force.z = 1;
                 CollOxScript.fuelRate += fuelRateValue;
