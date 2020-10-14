@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class DumbyMovementScript : MonoBehaviour
 {
+    // Local reference to the central AvatarAccounting object (held by main camera)
+    private AvatarAccounting avatarAccounting;
+
     public GameObject player;
     public Rigidbody playerRB;
     public Vector3 force;
     public Vector3 rotate;
-    public PlayerCollisionO2 CollOxScript;
+    //MW: public PlayerCollisionO2 CollOxScript;
     readonly float thrust = 10f;
     readonly float turnSpeed = 0.5f;
     public float vertRot = 0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        // Get a reference to the AvatarAccounting component of Main Camera
+        this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
+
         player = GameObject.FindGameObjectWithTag("Player");
-        CollOxScript = player.GetComponent<PlayerCollisionO2>();
+        //MW: CollOxScript = player.GetComponent<PlayerCollisionO2>();
         playerRB = GetComponent<Rigidbody>();
         force = new Vector3(0f, 0f, 0f);
         rotate = new Vector3(0f, 0f, 0f);
@@ -32,8 +40,8 @@ public class DumbyMovementScript : MonoBehaviour
     {
         SetForceVector();
 
-        //RotateWithKeys();
-        RotatePlayer();
+        RotateWithKeys();
+
         ResetForcesButton();
     }
 
@@ -74,91 +82,100 @@ public class DumbyMovementScript : MonoBehaviour
     /** Sets the force vector based on WASD input */
     void SetForceVector()
     {
-        float fuelRateValue = 1f;
-
-        if (CollOxScript.fuel > 0)
+        // Only fire jets if there's air in the tanks
+        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
         {
-            // Key down
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                force.x = 1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                force.x = -1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                force.y = -1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                force.y = 1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            if (Input.GetMouseButtonDown(0))
-            {
-                force.z = 1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                force.z = 1;
-                CollOxScript.fuelRate += fuelRateValue;
-            }
-            // Key up
-            if (Input.GetKeyUp(KeyCode.D))
-            {
-                force.x = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-            if (Input.GetKeyUp(KeyCode.A))
-            {
-                force.x = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                force.y = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-            if (Input.GetKeyUp(KeyCode.W))
-            {
-                force.y = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                force.z = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                force.z = 0;
-                CollOxScript.fuelRate -= fuelRateValue;
-            }
-        }
+            //MW: float fuelRateValue = 1f;
 
-        if (CollOxScript.fuel <= 0)
-        {
-            CollOxScript.fuel = 0;
-            CollOxScript.fuelRate = 0;
-        }
-
-        //reset button - should be smoother and automatic
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (player.transform.rotation.x != 0f && player.transform.rotation.y != 0f && player.transform.rotation.z != 0f && CollOxScript.fuel >= 5)
+            //MW: if (CollOxScript.fuel > 0)
             {
-                Quaternion initialRot = player.transform.rotation;
-                player.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
-                CollOxScript.fuel -= 5;
-                CollOxScript.fuelRate = 0;
-                CollOxScript.hasCollided = false;
-                vertRot = 0;
+                // Key down
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    force.x = 1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(KeyCode.A))
+                {
+                    force.x = -1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    force.y = -1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    force.y = 1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    force.z = 1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    force.z = 1;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                // Key up
+                if (Input.GetKeyUp(KeyCode.D))
+                {
+                    force.x = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+                if (Input.GetKeyUp(KeyCode.A))
+                {
+                    force.x = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+                if (Input.GetKeyUp(KeyCode.S))
+                {
+                    force.y = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+                if (Input.GetKeyUp(KeyCode.W))
+                {
+                    force.y = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    force.z = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    force.z = 0;
+                    //MW: CollOxScript.fuelRate -= fuelRateValue;
+                }
+            }
+
+            //MW: 
+            //if (CollOxScript.fuel <= 0)
+            //{
+            //    CollOxScript.fuel = 0;
+            //    CollOxScript.fuelRate = 0;
+            //}
+
+            //reset button - should be smoother and automatic
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (player.transform.rotation.x != 0f
+                && player.transform.rotation.y != 0f
+                && player.transform.rotation.z != 0f
+                && (avatarAccounting.CurrentOxygenAllTanksContent != 0))
+                //MW: && CollOxScript.fuel >= 5)
+                {
+                    Quaternion initialRot = player.transform.rotation;
+                    player.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+                    //MW: CollOxScript.fuel -= 5;
+                    //MW: CollOxScript.fuelRate = 0;
+                    //MW: CollOxScript.hasCollided = false;
+                    vertRot = 0;
+                }
             }
         }
     }
@@ -169,66 +186,72 @@ public class DumbyMovementScript : MonoBehaviour
         // definitely not it //float angle = Mathf.Atan2(b.x - a.x, 0) * Mathf.Rad2Deg;
         float angle = Mathf.Atan2(b.x - a.x, b.y - a.y) * Mathf.Rad2Deg;//working fine
         //Debug.Log("horizontal angle: " + angle);
-        return angle;     
+        return angle;
     }
 
     //added - don't change original
     float AngleBetweenTwoPointsX(Vector2 a, Vector2 b)
     {
         //definitely not it //float angle = Mathf.Atan2(0, b.y - a.y) * Mathf.Rad2Deg;
-        float angle =  Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;//not working except top-left corner
+        float angle = Mathf.Atan2(b.y - a.y, b.x - a.x) * Mathf.Rad2Deg;//not working except top-left corner
         //Debug.Log("vertical angle: " + angle);
         return angle;
     }
 
     void RotateWithKeys()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
         {
-            rotate.y = -1f;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            rotate.y = 1f;
-        }
-        // Key up
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
-            rotate.y = 0f;
-        if (Input.GetKeyUp(KeyCode.RightArrow))
-            rotate.y = 0f;
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                rotate.y = -1f;
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                rotate.y = 1f;
+            }
+            // Key up
+            if (Input.GetKeyUp(KeyCode.LeftArrow))
+                rotate.y = 0f;
+            if (Input.GetKeyUp(KeyCode.RightArrow))
+                rotate.y = 0f;
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            rotate.x = -1f;
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                rotate.x = -1f;
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rotate.x = 1f;
+            }
+            // Key up
+            if (Input.GetKeyUp(KeyCode.UpArrow))
+                rotate.x = 0f;
+            if (Input.GetKeyUp(KeyCode.DownArrow))
+                rotate.x = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            rotate.x = 1f;
-        }
-        // Key up
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-            rotate.x = 0f;
-        if (Input.GetKeyUp(KeyCode.DownArrow))
-            rotate.x = 0f;
-    }   
-
+    }
 
     void ResetForcesButton()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        // Only fire jets if there's air in the tank
+        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
         {
-            // https://forum.unity.com/threads/reset-rigidbody.39998/
-            if (playerRB.isKinematic == false)
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                //playerRB.velocity = Vector3.zero;
-                playerRB.angularVelocity = Vector3.zero;
-                playerRB.rotation = Quaternion.Euler(0f, 0f, 0f);
+                // https://forum.unity.com/threads/reset-rigidbody.39998/
+                if (playerRB.isKinematic == false)
+                {
+                    //playerRB.velocity = Vector3.zero;
+                    playerRB.angularVelocity = Vector3.zero;
+                    playerRB.rotation = Quaternion.Euler(0f, 0f, 0f);
+                }
+                //playerRB.isKinematic = true;
             }
-            //playerRB.isKinematic = true;
-        }  
-        if (Input.GetKeyUp(KeyCode.Tab))
-        {
-            playerRB.isKinematic = false;
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                playerRB.isKinematic = false;
+            }
         }
     }
     // Code we want to save
