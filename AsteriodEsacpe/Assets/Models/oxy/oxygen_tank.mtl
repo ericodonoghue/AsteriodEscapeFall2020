@@ -1,0 +1,66 @@
+newmtl lambert3
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert3_color.tga
+map_Ks oxygen_tank_lambert3_rough.tga
+map_bump oxygen_tank_lambert3_nmap.tga
+newmtl lambert4
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert4_color.tga
+map_Ks oxygen_tank_lambert4_rough.tga
+map_bump oxygen_tank_lambert4_nmap.tga
+newmtl lambert8
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert8_color.tga
+map_Ks oxygen_tank_lambert8_rough.tga
+map_bump oxygen_tank_lambert8_nmap.tga
+newmtl lambert9
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert9_color.tga
+map_Ks oxygen_tank_lambert9_rough.tga
+map_bump oxygen_tank_lambert9_nmap.tga
+newmtl lambert10
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert10_color.tga
+map_Ks oxygen_tank_lambert10_rough.tga
+map_bump oxygen_tank_lambert10_nmap.tga
+newmtl lambert5
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd oxygen_tank_lambert5_color.tga
+map_Ks oxygen_tank_lambert5_rough.tga
+map_bump oxygen_tank_lambert5_nmap.tga
