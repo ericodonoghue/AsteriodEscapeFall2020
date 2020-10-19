@@ -20,7 +20,7 @@ public class MainMenuScript : MonoBehaviour
     public void LevelSelectPressed()
     {
         // TODO: change to load the level select screen
-        SceneManager.LoadScene("CollisionTestingScene");
+        SceneManager.LoadScene("LevelSelectScene");
     }
 
 
