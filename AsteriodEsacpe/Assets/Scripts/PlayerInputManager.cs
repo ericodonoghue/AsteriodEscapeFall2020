@@ -29,6 +29,9 @@ using UnityEngine;
             // Data being stored must be [SERIALIZABLE], all native types (string, int, float, etc.) are.
             // Check PlayerInputManager for example of making your type (class, struct, enum) serializable.
             this.playerInputManager.SetPlayerConfigurationValue("MyStringName", this.myStoredStringValue)
+
+            // Values are auto-loaded, but the actual file should be saved after making changes
+            this.playerInputManager.SavePlayerConfiguration();
         }
     }
  */
