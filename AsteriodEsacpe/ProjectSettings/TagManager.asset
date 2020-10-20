@@ -10,6 +10,7 @@ TagManager:
   - OxygenBar
   - AirTank
   - WallCollision1
+  - PostProcessor
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - AirTank
   - Player
   - CaveWall
-  - 
+  - PostProcessing
   - 
   - 
   - 
