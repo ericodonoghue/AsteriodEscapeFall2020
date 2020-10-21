@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DumbyMovementScript : MonoBehaviour
+public class Movement2 : MonoBehaviour
 {
     // Local reference to the central AvatarAccounting object (held by main camera)
     private AvatarAccounting avatarAccounting;
@@ -11,10 +11,17 @@ public class DumbyMovementScript : MonoBehaviour
     public Rigidbody playerRB;
     public Vector3 force;
     public Vector3 rotate;
+    public float rotationSpeed = 1f;
+    public float forwardThrust = 1f;
+    public float vertThrust = 0.5f;
+    public float strafeThrust = 0.5f;
+    public float lookSensitivity = 2f;
     //MW: public PlayerCollisionO2 CollOxScript;
     readonly float thrust = 10f;
     readonly float turnSpeed = 0.5f;
     public float vertRot = 0f;
+
+    private Vector3 CamRot;
 
 
     // Start is called before the first frame update
@@ -68,16 +75,8 @@ public class DumbyMovementScript : MonoBehaviour
     /** Rotates the player object according to mouse position on screen */
     void RotatePlayer()
     {
-        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        float angleY = AngleBetweenTwoPointsY(positionOnScreen, mouseOnScreen);
-        //float angleX = AngleBetweenTwoPointsX(positionOnScreen, mouseOnScreen);
-        //playerRB.AddRelativeTorque(new Vector3(0f, angle, 0f));
-
-        //Quaternion playerRot = player.transform.rotation;
-        //player.transform.rotation = Quaternion.Euler(new Vector3(playerRot.x, angleY, playerRot.z));
-        player.transform.rotation = Quaternion.Euler(new Vector3(vertRot, angleY, 0f));
-        //playerRB.AddRelativeTorque(vertRot, 0f, 0f);
+        //Camera.main.transform.Rotate(lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse X"), lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse Y"), 0);
+        player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, Time.deltaTime * rotationSpeed);
     }
 
     /** Sets the force vector based on WASD input */
@@ -93,32 +92,32 @@ public class DumbyMovementScript : MonoBehaviour
                 // Key down
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    force.x = 1;
+                    force.x = strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    force.x = -1;
+                    force.x = -strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
-                if (Input.GetKeyDown(KeyCode.S))
+                if (Input.GetKeyDown(KeyCode.LeftShift))
                 {
-                    force.y = -1;
-                    //MW: CollOxScript.fuelRate += fuelRateValue;
-                }
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    force.y = 1;
-                    //MW: CollOxScript.fuelRate += fuelRateValue;
-                }
-                if (Input.GetMouseButtonDown(0))
-                {
-                    force.z = 1;
+                    force.y = -vertThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    force.z = 1;
+                    force.y = vertThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    force.z = forwardThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    force.z = forwardThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
                 // Key up
@@ -132,12 +131,12 @@ public class DumbyMovementScript : MonoBehaviour
                     force.x = 0;
                     //MW: CollOxScript.fuelRate -= fuelRateValue;
                 }
-                if (Input.GetKeyUp(KeyCode.S))
+                if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
                     force.y = 0;
                     //MW: CollOxScript.fuelRate -= fuelRateValue;
                 }
-                if (Input.GetKeyUp(KeyCode.W))
+                if (Input.GetKeyUp(KeyCode.Space))
                 {
                     force.y = 0;
                     //MW: CollOxScript.fuelRate -= fuelRateValue;
@@ -147,7 +146,7 @@ public class DumbyMovementScript : MonoBehaviour
                     force.z = 0;
                     //MW: CollOxScript.fuelRate -= fuelRateValue;
                 }
-                if (Input.GetKeyUp(KeyCode.Space))
+                if (Input.GetKeyUp(KeyCode.W))
                 {
                     force.z = 0;
                     //MW: CollOxScript.fuelRate -= fuelRateValue;

@@ -15,6 +15,10 @@ public class CameraPosition : MonoBehaviour
     float height = 5.0f;
     float heightDamping = 2.0f;
     float rotationDamping = 3.0f;
+    float lookSensitivity = 500f;
+    float cameraHeightOffset = 2.0f;    
+
+    private Vector3 CamRot;
 
     // Start is called before the first frame update
     void Start()
@@ -42,25 +46,9 @@ public class CameraPosition : MonoBehaviour
             Application.Quit();
         }
 
-        //Vector3 pos = player.transform.position;
-        //pos.y = player.transform.position.y + 1f;
-        //pos.z = player.transform.position.z - 10f;
-        //Camera.main.transform.position = pos;
-
-        // TODO: figure out how to rotate camera with player
-        //Camera.main.transform.rotation = player.transform.rotation;
-
-        /*Vector3 p = new Vector3(0, 0, 0);
-
-        p.x = Mathf.Sin(player.transform.rotation.y) * player.transform.position.x;
-        p.y = player.transform.position.y + 1f;
-        p.z = Mathf.Cos(player.transform.rotation.y) * (player.transform.position.z - 10f);
-
-        Camera.main.transform.position = p;*/
-
     }
 
-    // https://answers.unity.com/questions/38526/smooth-follow-camera.html
+    
     private void LateUpdate()
     {
         playerT = player.transform;
@@ -68,6 +56,18 @@ public class CameraPosition : MonoBehaviour
         if (!playerT)
             return;
 
+        //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
+        CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity * Time.deltaTime;
+        CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity * Time.deltaTime;
+        CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
+        Quaternion newAngle = Quaternion.Euler(CamRot.x,CamRot.y,0);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
+        transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
+        transform.position = new Vector3(transform.position.x,transform.position.y + cameraHeightOffset, transform.position.z);
+
+        /*
+        // https://answers.unity.com/questions/38526/smooth-follow-camera.html
         // Calculate the current rotation angles
         float wantedRotationAngle = playerT.eulerAngles.y;
         float wantedHeight = playerT.position.y + height;
@@ -87,5 +87,6 @@ public class CameraPosition : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
         // Always look at the target
         transform.LookAt(playerT);
+        */
     }
 }
