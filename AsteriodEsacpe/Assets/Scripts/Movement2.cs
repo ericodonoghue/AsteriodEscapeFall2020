@@ -11,7 +11,7 @@ public class Movement2 : MonoBehaviour
     public Rigidbody playerRB;
     public Vector3 force;
     public Vector3 rotate;
-    public float rotationSpeed = 1f;
+    float rotationSpeed = 1f;
     public float forwardThrust = 1f;
     public float vertThrust = 0.5f;
     public float strafeThrust = 0.5f;
@@ -93,9 +93,11 @@ public class Movement2 : MonoBehaviour
     {
         if (spinOut)
         {
-            if (Time.time <= spinOutTime)
+            rotationSpeed += 1 * Time.deltaTime;
+            if (Time.time >= spinOutTime)
             {
                 spinOut = false;
+                rotationSpeed = 1;
             }
         }
     }
