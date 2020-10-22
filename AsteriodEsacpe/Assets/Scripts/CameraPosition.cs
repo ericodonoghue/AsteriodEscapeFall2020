@@ -10,13 +10,13 @@ public class CameraPosition : MonoBehaviour
 
 
     // The distance in the x-z plane to the target
-    float distance = 10.0f;
+    public float distance = 10.0f;
     // the height we want the camera to be above the target
     float height = 5.0f;
     float heightDamping = 2.0f;
     float rotationDamping = 3.0f;
-    float lookSensitivity = 500f;
-    float cameraHeightOffset = 2.0f;    
+    public float lookSensitivity = 3f;
+    public float cameraHeightOffset = 2.0f;    
 
     private Vector3 CamRot;
 
@@ -57,8 +57,8 @@ public class CameraPosition : MonoBehaviour
             return;
 
         //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
-        CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity * Time.deltaTime;
-        CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity * Time.deltaTime;
+        CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
+        CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity;
         CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
         Quaternion newAngle = Quaternion.Euler(CamRot.x,CamRot.y,0);
 

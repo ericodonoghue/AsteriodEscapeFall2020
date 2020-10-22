@@ -15,11 +15,11 @@ public class Movement2 : MonoBehaviour
     public float forwardThrust = 1f;
     public float vertThrust = 0.5f;
     public float strafeThrust = 0.5f;
-    public float lookSensitivity = 2f;
     //MW: public PlayerCollisionO2 CollOxScript;
     readonly float thrust = 10f;
-    readonly float turnSpeed = 0.5f;
+    readonly float turnSpeed = 2f;
     public float vertRot = 0f;
+    public bool spinOut = false;
 
     private Vector3 CamRot;
 
@@ -76,7 +76,15 @@ public class Movement2 : MonoBehaviour
     void RotatePlayer()
     {
         //Camera.main.transform.Rotate(lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse X"), lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse Y"), 0);
-        player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, Time.deltaTime * rotationSpeed);
+        if (!spinOut)
+        {
+            player.transform.rotation = Camera.main.transform.rotation;
+        }
+        else
+        {
+            player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
+        }
+        
     }
 
     /** Sets the force vector based on WASD input */
@@ -120,38 +128,10 @@ public class Movement2 : MonoBehaviour
                     force.z = forwardThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
-                // Key up
-                if (Input.GetKeyUp(KeyCode.D))
-                {
-                    force.x = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
-                if (Input.GetKeyUp(KeyCode.A))
-                {
-                    force.x = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
-                if (Input.GetKeyUp(KeyCode.LeftShift))
-                {
-                    force.y = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    force.y = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    force.z = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
-                if (Input.GetKeyUp(KeyCode.W))
-                {
-                    force.z = 0;
-                    //MW: CollOxScript.fuelRate -= fuelRateValue;
-                }
+                
             }
+
+            
 
             //MW: 
             //if (CollOxScript.fuel <= 0)
@@ -177,6 +157,37 @@ public class Movement2 : MonoBehaviour
                     vertRot = 0;
                 }
             }
+        }
+        // Key up
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            force.x = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            force.x = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            force.y = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            force.y = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            force.z = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            force.z = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
         }
     }
 
