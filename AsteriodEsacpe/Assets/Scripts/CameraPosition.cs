@@ -7,6 +7,7 @@ public class CameraPosition : MonoBehaviour
 {
     GameObject player;
     Transform playerT;
+    private PauseControl pauseControl;
 
 
     // The distance in the x-z plane to the target
@@ -23,7 +24,7 @@ public class CameraPosition : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        pauseControl = Camera.main.GetComponent<PauseControl>();
     }
 
     private void Awake()
@@ -56,15 +57,18 @@ public class CameraPosition : MonoBehaviour
         if (!playerT)
             return;
 
-        //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
-        CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
-        CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity;
-        CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
-        Quaternion newAngle = Quaternion.Euler(CamRot.x,CamRot.y,0);
+        if (!pauseControl.isPaused)
+        {
+            //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
+            CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
+            CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity;
+            CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
+            Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, 0);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
-        transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
-        transform.position = new Vector3(transform.position.x,transform.position.y + cameraHeightOffset, transform.position.z);
+            transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
+            transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
+            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset, transform.position.z);
+        }
 
         /*
         // https://answers.unity.com/questions/38526/smooth-follow-camera.html

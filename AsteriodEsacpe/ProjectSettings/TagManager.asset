@@ -11,6 +11,7 @@ TagManager:
   - AirTank
   - WallCollision1
   - PostProcessor
+  - PauseMenu
   layers:
   - Default
   - TransparentFX

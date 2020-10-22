@@ -7,6 +7,8 @@ public class Movement2 : MonoBehaviour
     // Local reference to the central AvatarAccounting object (held by main camera)
     private AvatarAccounting avatarAccounting;
 
+    private PauseControl pauseControl;
+
     public GameObject player;
     public Rigidbody playerRB;
     public Vector3 force;
@@ -30,6 +32,8 @@ public class Movement2 : MonoBehaviour
     {
         // Get a reference to the AvatarAccounting component of Main Camera
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
+        pauseControl = Camera.main.GetComponent<PauseControl>();
+
 
         player = GameObject.FindGameObjectWithTag("Player");
         //MW: CollOxScript = player.GetComponent<PlayerCollisionO2>();
@@ -46,21 +50,23 @@ public class Movement2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SetForceVector();
-
-        //RotateWithKeys();
-        RotatePlayer();
-
-        ResetForcesButton();
-
-        ResetSpinOut();
+        if (!pauseControl.isPaused)
+        {
+            SetForceVector();
+            RotatePlayer();
+            ResetForcesButton();
+            ResetSpinOut();
+        }    
     }
 
     // Called 50 times per second
     void FixedUpdate()
     {
-        ApplyForce();
-        ApplyTorque();
+        if (!pauseControl.isPaused)
+        {
+            ApplyForce();
+            ApplyTorque();
+        }
     }
 
     /** Apply's a force to the player based on WASD input */
