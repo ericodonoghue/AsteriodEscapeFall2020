@@ -20,6 +20,7 @@ public class Movement2 : MonoBehaviour
     readonly float turnSpeed = 2f;
     public float vertRot = 0f;
     public bool spinOut = false;
+    private float spinOutTime = 0;
 
     private Vector3 CamRot;
 
@@ -51,6 +52,8 @@ public class Movement2 : MonoBehaviour
         RotatePlayer();
 
         ResetForcesButton();
+
+        ResetSpinOut();
     }
 
     // Called 50 times per second
@@ -85,6 +88,55 @@ public class Movement2 : MonoBehaviour
             player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
         }
         
+    }
+    private void ResetSpinOut()
+    {
+        if (spinOut)
+        {
+            if (Time.time <= spinOutTime)
+            {
+                spinOut = false;
+            }
+        }
+    }
+    private void OnCollisionEnter(Collision c)
+    {
+        GameObject collided = c.gameObject;
+        spinOut = true;
+
+        switch (collided.tag)
+        {
+            case "Cave":
+                spinOutTime = Time.time + 7;
+                break;
+            case "AirTank":
+                
+                break;
+            case "Cave_GlancingBlow":
+                spinOutTime = Time.time + 5;
+                break;
+            case "SharpObject":
+                spinOutTime = Time.time + 10;
+                break;
+            case "SharpObject_NearMiss":
+               
+                break;
+            case "Monster":
+                spinOutTime = Time.time + 20;
+                break;
+            case "Monster_NearMiss":
+                spinOutTime = Time.time + 5;
+                break;
+            case "AirTank_Single":
+                
+                break;
+            case "AirTank_Double":
+                
+                break;
+            case "AirTank_PonyBottle":
+                
+                break;
+        }
     }
 
     /** Sets the force vector based on WASD input */
@@ -128,7 +180,12 @@ public class Movement2 : MonoBehaviour
                     force.z = forwardThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
-                
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    force.z = -strafeThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+
             }
 
             
@@ -185,6 +242,11 @@ public class Movement2 : MonoBehaviour
             //MW: CollOxScript.fuelRate -= fuelRateValue;
         }
         if (Input.GetKeyUp(KeyCode.W))
+        {
+            force.z = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(KeyCode.S))
         {
             force.z = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;

@@ -5312,6 +5312,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b066119bcd98d57449d8f1ffa3186e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 10
+  lookSensitivity: 3
+  cameraHeightOffset: 2
 --- !u!114 &761169223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7056,8 +7059,8 @@ MonoBehaviour:
   forwardThrust: 1
   vertThrust: 0.5
   strafeThrust: 0.5
-  lookSensitivity: 2
   vertRot: 0
+  spinOut: 0
 --- !u!114 &923298572
 MonoBehaviour:
   m_ObjectHideFlags: 0
