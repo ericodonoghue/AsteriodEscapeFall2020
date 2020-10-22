@@ -13,7 +13,7 @@ public class PostProcessingScript : MonoBehaviour
     void Start()
     {
         volume = GetComponent<PostProcessVolume>();
-        volume.sharedProfile.TryGetSettings(out vignette);
+        _ = volume.sharedProfile.TryGetSettings(out vignette);
         avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
     }
 
