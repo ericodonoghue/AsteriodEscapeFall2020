@@ -36,12 +36,6 @@ public class CameraPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // quits game when player presses Q
-        if (Input.GetKeyDown(KeyCode.Backspace))  
-        {
-            SceneManager.LoadScene("CollisionTestingScene");
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
