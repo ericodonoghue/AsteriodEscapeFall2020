@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelSelectController : MonoBehaviour
 {
     private PlayerInputManager playerInputManager;
-    int currentLevel;
+    int currentLevel = 1;
     
 
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class LevelSelectController : MonoBehaviour
     public int LoadCurrentLevel()
     {
         // Data type returned is "object", so depending upon data type it may be necessary to cast
-        currentLevel = (int)this.playerInputManager.GetPlayerConfigurationValue("CurrentLevel");
+        //currentLevel = (int)this.playerInputManager.GetPlayerConfigurationValue("CurrentLevel");
         return currentLevel;
     }
 
