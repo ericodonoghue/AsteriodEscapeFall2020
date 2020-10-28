@@ -13,7 +13,7 @@ public class PostProcessingScript : MonoBehaviour
     void Start()
     {
         volume = GetComponent<PostProcessVolume>();
-        _ = volume.sharedProfile.TryGetSettings(out vignette);
+        bool temp = volume.sharedProfile.TryGetSettings(out vignette);
         avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
     }
 
@@ -29,7 +29,11 @@ public class PostProcessingScript : MonoBehaviour
 
     private float CalculateVignetteIntensity ()
     {
-        float currO2 = avatarAccounting.CurrentOxygenAllTanksContent;
-        return 1.0f - (currO2*0.0001f);
+        //float currO2 = avatarAccounting.CurrentOxygenAllTanksContent;
+        //return 1.0f - (currO2*0.0001f);
+
+        float bloodO2 = avatarAccounting.CurrentBloodOxygenPercent;
+
+        return 1.0f - ((bloodO2 * 0.01f) + 0.2f);
     }
 }

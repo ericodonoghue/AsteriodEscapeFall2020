@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelSelectController : MonoBehaviour
 {
     private PlayerInputManager playerInputManager;
-    int currentLevel = 1;
+    int currentLevel;
     
 
     // Start is called before the first frame update
@@ -22,12 +22,22 @@ public class LevelSelectController : MonoBehaviour
 
     public int LoadCurrentLevel()
     {
-        // Data type returned is "object", so depending upon data type it may be necessary to cast
-        //currentLevel = (int)this.playerInputManager.GetPlayerConfigurationValue("CurrentLevel");
+        object result = this.playerInputManager.GetPlayerConfigurationValue("CurrentLevel");
+
+        // when result is null it is the first time the player has loaded the game so set the current level to one then save 
+        if (result == null)
+        {
+            currentLevel = 1;
+            SaveCurrentLevel();
+        }
+        else
+        {
+            currentLevel = (int)result;
+        }
         return currentLevel;
     }
 
-    public void SaveMySettings()
+    public void SaveCurrentLevel()
     {
         // Data being stored must be [SERIALIZABLE], all native types (string, int, float, etc.) are.
         // Check PlayerInputManager for example of making your type (class, struct, enum) serializable.

@@ -25,6 +25,7 @@ public class CameraPosition : MonoBehaviour
     void Start()
     {
         pauseControl = Camera.main.GetComponent<PauseControl>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Awake()
