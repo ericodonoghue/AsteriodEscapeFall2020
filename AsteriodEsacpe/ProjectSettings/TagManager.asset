@@ -12,6 +12,8 @@ TagManager:
   - WallCollision1
   - PostProcessor
   - PauseMenu
+  - SettingsMenu
+  - UpButton
   layers:
   - Default
   - TransparentFX

@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 public class PauseButtonControl : MonoBehaviour
 {
     private PauseControl pauseControl;
+    private SettingsControl settingsControl;
 
     // Start is called before the first frame update
     void Start()
     {
         pauseControl = Camera.main.GetComponent<PauseControl>();
+        settingsControl = Camera.main.GetComponent<SettingsControl>();
     }
 
     // Update is called once per frame
@@ -27,7 +29,7 @@ public class PauseButtonControl : MonoBehaviour
 
     public void SettingsPressed()
     {
-        // TODO: Implement a settings UI interface
+        settingsControl.SetSettingMenuActive();
     }
 
     public void LevelSelectPressed()
