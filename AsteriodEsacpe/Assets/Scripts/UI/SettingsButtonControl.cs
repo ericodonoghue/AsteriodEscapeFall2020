@@ -28,20 +28,29 @@ public class SettingsButtonControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        keyInputs = new Dictionary<string, KeyCode>();
-        keyInputs.Add("up", KeyCode.Space);
-        keyInputs.Add("down", KeyCode.LeftShift);
-        keyInputs.Add("left", KeyCode.A);
-        keyInputs.Add("right", KeyCode.D);
-        keyInputs.Add("forward", KeyCode.W);
-        keyInputs.Add("reverse", KeyCode.S);
+        
+        
+    }
+
+    private void Awake()
+    {
+        // todo: add in code that on load that loads in the players previous keybinds
+        keyInputs = new Dictionary<string, KeyCode>
+        {
+            { "up", KeyCode.Space },
+            { "down", KeyCode.LeftShift },
+            { "left", KeyCode.A },
+            { "right", KeyCode.D },
+            { "forward", KeyCode.W },
+            { "reverse", KeyCode.S }
+        };
 
         keyInputButtonPressed = false;
         keyDetect = new bool[6];
 
         settingsControl = Camera.main.GetComponent<SettingsControl>();
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -328,5 +337,34 @@ public class SettingsButtonControl : MonoBehaviour
     public void BackPressed()
     {
         settingsControl.SetSettingMenuDeactive();
+    }
+
+    public KeyCode GetKeyCodeMappedToDirection (string direction)
+    {
+        KeyCode result = KeyCode.None;
+
+        switch (direction)
+        {
+            case "up":
+                result = keyInputs["up"];
+                break;
+            case "down":
+                result = keyInputs["down"];
+                break;
+            case "left":
+                result = keyInputs["left"];
+                break;
+            case "right":
+                result = keyInputs["right"];
+                break;
+            case "forward":
+                result = keyInputs["forward"];
+                break;
+            case "reverse":
+                result = keyInputs["reverse"];
+                break;
+        }
+
+        return result;
     }
 }

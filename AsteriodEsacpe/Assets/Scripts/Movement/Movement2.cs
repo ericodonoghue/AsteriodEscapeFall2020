@@ -9,6 +9,8 @@ public class Movement2 : MonoBehaviour
 
     private PauseControl pauseControl;
 
+    private SettingsButtonControl settingsButtonControl;
+
     public GameObject player;
     public Rigidbody playerRB;
     public Vector3 force;
@@ -33,7 +35,7 @@ public class Movement2 : MonoBehaviour
         // Get a reference to the AvatarAccounting component of Main Camera
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
         pauseControl = Camera.main.GetComponent<PauseControl>();
-
+        
 
         player = GameObject.FindGameObjectWithTag("Player");
         //MW: CollOxScript = player.GetComponent<PlayerCollisionO2>();
@@ -45,6 +47,8 @@ public class Movement2 : MonoBehaviour
     // Called before Start is called for all objects
     private void Awake()
     {
+        GameObject g = GameObject.FindGameObjectWithTag("SettingsMenu");
+        settingsButtonControl = g.GetComponent<SettingsButtonControl>();
     }
 
     // Update is called once per frame
@@ -158,7 +162,7 @@ public class Movement2 : MonoBehaviour
             //MW: if (CollOxScript.fuel > 0)
             {
                 // Key down
-                if (Input.GetKeyDown(KeyCode.D))
+                /*if (Input.GetKeyDown(KeyCode.D))
                 {
                     force.x = strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
@@ -189,6 +193,36 @@ public class Movement2 : MonoBehaviour
                     //MW: CollOxScript.fuelRate += fuelRateValue;
                 }
                 if (Input.GetKeyDown(KeyCode.S))
+                {
+                    force.z = -strafeThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }*/
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("right")))
+                {
+                    force.x = strafeThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("left")))
+                {
+                    force.x = -strafeThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("down")))
+                {
+                    force.y = -vertThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("up")))
+                {
+                    force.y = vertThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("forward")))
+                {
+                    force.z = forwardThrust;
+                    //MW: CollOxScript.fuelRate += fuelRateValue;
+                }
+                if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("reverse")))
                 {
                     force.z = -strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
@@ -224,7 +258,7 @@ public class Movement2 : MonoBehaviour
             }
         }
         // Key up
-        if (Input.GetKeyUp(KeyCode.D))
+        /*if (Input.GetKeyUp(KeyCode.D))
         {
             force.x = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
@@ -255,6 +289,36 @@ public class Movement2 : MonoBehaviour
             //MW: CollOxScript.fuelRate -= fuelRateValue;
         }
         if (Input.GetKeyUp(KeyCode.S))
+        {
+            force.z = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }*/
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("right")))
+        {
+            force.x = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("left")))
+        {
+            force.x = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("down")))
+        {
+            force.y = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("up")))
+        {
+            force.y = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("forward")))
+        {
+            force.z = 0;
+            //MW: CollOxScript.fuelRate -= fuelRateValue;
+        }
+        if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("reverse")))
         {
             force.z = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
