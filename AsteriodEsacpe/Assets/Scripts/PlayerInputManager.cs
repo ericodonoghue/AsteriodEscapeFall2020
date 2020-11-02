@@ -3,7 +3,74 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-//using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XInput;
+using UnityEngine.InputSystem.LowLevel;
+
+
+/* Player Input Mapping UI:
+
+The UI form for setting player controls should allow the user to select from two drop down lists or radio
+button sets for
+    Control Type: Choose from “Keyboard Only”, “Keyboard and Mouse”, or “Gamepad”
+        NOTE: It may not be possible to do a Keyboard Only mapping with the way we are doing the camera
+        this would require altering that code to use the arrow keys (probably, or allow the user to choose)
+        and would change the way the camera is now working.
+    Control Map: Choose from “Mapping Template A”, “.. B”, “.. C”, or “Custom”
+Depending on their selection above, you can either just call one of the 9 matching “prefab” methods defined
+below in this script, or you will need to collect input to allow them to build a custom control map.  Only
+list the prefabs that match the "Control Type" selection (do not list the Gamepad prefabs for keyboard users).
+
+The best way to see how the mappings are actually assembled and stored is to look at the first (and so far,
+the only) “prefab” method, SetControlMappingKeyboardOnlyPrefabA().  The prefab methods can be called to
+simply load a hard-coded “prefab” set of control mappings.  Get the names of all of the prefabs (they aren’t
+coded, but there are method stubs for them).  Call the appropriate method if the player chooses a prefab.
+    NOTE: If you want to design some prefabs, go ahead and fill in the methods following the example above, but
+    check with me before checking anything in to GitHub to make sure we don’t end up with merge conflicts – I
+    am still working on this script.
+
+For a “custom” mapping, the user needs to provide a name (or leave it with some default value that you supply,
+then using a grid or simple list they can set the controls they want to change.  Allow the player to choose a
+“prefab” template first to populate the custom mapping form.  When they change to “Custom”, don’t clear
+anything, but allow them to start with a map that is mostly close to what they are after.
+
+To support this custom mapping ability, I’ve added new events that you can hook up handlers for, that will
+tell you which key or button the user is pressing:
+    OnKeyDown(KeyCode key)
+    OnKeyUp(KeyCode key)
+
+    OnMouseButtonDown(int mouseButton)
+    OnMouseButtonUp(int mouseButton)
+
+    OnGamepadButtonDown(string gamepadButton)
+    OnGamepadButtonUp(string gamepadButton)
+
+NOTE: I haven’t done anything with Gamepad, yet, but the events and some other support stuff is in place for
+coding against so things are mostly ready for when I find the time to get to it.
+
+Please take a look at the enum I use for mapping controls called PlayerInput.  It lists all of the possible
+player actions, including several that we may or may not implement.  I just put them there in case.  The UI
+should provide this list to allow buttons\keys etc. to be assigned.  For now, ignore the functions we are not
+currently doing (zoom camera, etc.) and I haven't figured out how to assign mouse movement or gamepad sticks
+to movement or camera just yet, those are forthcoming.
+
+Anyway, to create a mapping for use\storage, check out the code in the prefab method above, you will see it
+is really simple.  Call this.playerInputManager.SetCustomControlMapping with the player selected values to
+import them to the PlayerInputManager.
+
+Finally, call this.playerInputManager.SavePlayerConfiguration(); to save the user configuration stored in the
+input manager.
+
+
+There is a good example of using the events in my UnitTest script PlayerSettingsUnitTest, I commented out
+everything that no longer applies.  Also, there is some testing code that demonstrates how things are used
+in this script (PlayerInputManager) in the #region “Unit Testing Code”, and I built a vanilla scene that is
+used for testing called “PlayerSettingsTest.”  Open and run the scene and it shows which button or key is
+pressed.
+
+Let me know if you have any questions or need me to change\add anything.
+
+*/
 
 
 /* Player Configuration Sample Usage
@@ -56,33 +123,34 @@ using UnityEngine;
 
     void OnEnable()
     {
-       playerInputManager.AssignPlayerInputEventHandler(PlayerInput.MoveUp, OnMoveUp_Pressed, OnMoveUp_Released);
+        // Map a pair of event handlers (OnX_Pressed, OnX_Released) for every supported command (MoveUp, MoveDown, etc.)
+        playerInputManager.AssignPlayerInputEventHandler(PlayerInput.MoveUp, OnMoveUp_Pressed, OnMoveUp_Released);
     }
   
     void OnDisable()
     {
-       playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.MoveUp, OnMoveUp_Pressed, OnMoveUp_Released);
+        // Map a pair of event handlers (OnX_Pressed, OnX_Released) for every supported command (MoveUp, MoveDown, etc.)
+        playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.MoveUp, OnMoveUp_Pressed, OnMoveUp_Released);
     }
 
     void MoveUp_Pressed()
     {
-       avatarAccounting.FireJet(JetType.AttitudeJetUp);
+        avatarAccounting.FireJet(JetType.AttitudeJetUp);
        
-       // Execute avatar movement code (increase movement UP)
+        // Execute avatar movement code (increase movement UP)
     }
   
     void MoveUp_Released()
     {
-       avatarAccounting.TerminateJet(JetType.AttitudeJetUp);
+        avatarAccounting.TerminateJet(JetType.AttitudeJetUp);
        
-       // Execute avatar movement code (stop movement UP)
+        // Execute avatar movement code (stop movement UP)
     }
-    
+
  */
 
 
-/* 
- * Player Input object notes:
+/* Player Input object notes:
  *      settings for all possile player actions (Move Left\Right\Up\Down, Turn Camera, Stabilize, etc.)
  *      settings for 2-3 prefab mapping sets
  *      settings for using keyboard or controller (if controler is possible, 2-3 more mappings needed)
@@ -99,6 +167,10 @@ using UnityEngine;
  *      Control Settings (Controller, Keyboard, Mouse setup) - I will take a crack at this
  *          Allow player to choose from presets, or edit individual values (in a table, nnthing fancy)
  *
+ * InputSystem is new, and must be installed.  Folloow instructions to set project to use BOTH new and old
+ * https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Installation.html
+ * 
+ * Gamepad Input Links:
  * https://docs.unity3d.com/Packages/com.unity.inputsystem@0.9/api/UnityEngine.InputSystem.Gamepad.html
  * https://docs.unity3d.com/Packages/com.unity.inputsystem@0.9/manual/Gamepad.html
  * https://docs.unity3d.com/2020.1/Documentation/ScriptReference/ControllerColliderHit-moveDirection.html
@@ -106,23 +178,29 @@ using UnityEngine;
  * 
  */
 
+
 #region Player Input Support Types
 
 public enum PlayerInput
 {
     Interact               // Start/Cancel O2 refill at refilling stations, etc.
-    , MoveUp
+    , MoveAll              // Use to assign to gamepad stick
+    , MoveUp               // Use to assign to individual keys
     , MoveDown
     , MoveLeft
     , MoveRight
     , MoveForward          // Primary Jet - costs more to use, but moves much faster than other jets
     , MoveBackward         // Reverse jet should be small like the other directional jets
-    , CameraUp
+
+    , CameralAll           // Use to assign camera controls to mouse or gamepad stick
+    , CameraUp             // Use to assign to individual keys
     , CameraDown
     , CameraLeft
     , CameraRight
+    
     , StabilizeAvatar      // are are we making this automatic?
-    , PauseGame
+
+    , PauseGame            // Are these separate?
     , SystemMenu
 
     // Nice to Haves
@@ -140,21 +218,64 @@ public enum PlayerInputType
 
 public enum InputAction { Pressed, Released }
 
-[Serializable]
-public class InputMapping
+public interface MappedControl
 {
-    public KeyCode MappedKeyCode = KeyCode.None;  // Default value, should be changed upon scene load\UX config update
-    //    public MouseInput         // create enum for this, or is there something available?
-    //    public GamepadButton      // create enum for this, or is there something available?
+    object Control { get; set; }
+}
 
+[Serializable]
+public class KeyboardInputMapping : MappedControl
+{
+    private KeyCode keyCode = KeyCode.None;  // Default value, should be set to appropriate value upon instantiation
 
-    public InputMapping(KeyCode mappedKeyCode)
+    public KeyboardInputMapping(KeyCode keyCode)
     {
-        this.MappedKeyCode = mappedKeyCode;
+        this.keyCode = keyCode;
+    }
+
+    public object Control
+    {
+        get { return this.keyCode; }
+        set { if (value is KeyCode) this.keyCode = (KeyCode)value; }
+    }
+}
+
+[Serializable]
+public class MouseInputMapping : MappedControl
+{
+    private int mouseButton = -1;                  // Default value, should be set to appropriate value upon instantiation
+
+    public MouseInputMapping(int mouseButton)
+    {
+        this.mouseButton = mouseButton;
+    }
+
+    public object Control
+    {
+        get { return this.mouseButton; }
+        set { if (value is int) this.mouseButton = (int)value; }
+    }
+}
+
+[Serializable]
+public class GamepadInputMapping : MappedControl
+{
+    private int gamepadButton = -1;                // Default value, should be set to appropriate value upon instantiation
+
+    public GamepadInputMapping(int gamepadButton)
+    {
+        this.gamepadButton = gamepadButton;
+    }
+
+    public object Control
+    {
+        get { return this.gamepadButton; }
+        set { if (value is int) this.gamepadButton = (int)value; }
     }
 }
 
 #endregion Player Input Support Types
+
 
 #region Event Juggling
 // Borrowed and heavily modified the code in this region from: https://stackoverflow.com/questions/987050/array-of-events-in-c
@@ -191,6 +312,21 @@ class PlayerInputEventSet
 
 #endregion Event Juggling
 
+
+#region Public Event Delegates
+
+public delegate void KeyDown(KeyCode keyCode);
+public delegate void KeyUp(KeyCode keyCode);
+
+public delegate void MouseButtonDown(int mouseButton);
+public delegate void MouseButtonUp(int mouseButton);
+
+public delegate void GamepadButtonDown(string gamepadButton);
+public delegate void GamepadButtonUp(string gamepadButton);
+
+#endregion
+
+
 #region Player Configuration File Support Types
 
 /// <summary>
@@ -203,7 +339,7 @@ class PlayerConfigurationData
     public PlayerInputType SelectedPlayerInputType;
 
     // Current player input mappings (which button moves the avatar up, etc.)
-    public Dictionary<PlayerInput, InputMapping> InputMappingTable;
+    public Dictionary<PlayerInput, MappedControl> InputMappingTable;
 
     // Do player control mappings come from a Prefab or Custom map?
     public string PlayerInputMappingPrefabName = "";
@@ -216,11 +352,13 @@ class PlayerConfigurationData
 
 public class PlayerInputManager : MonoBehaviour
 {
+    #region Private Declarations
+
     // Current player input type (keyboard, mouse, gamepad)
     private PlayerInputType selectedPlayerInputType = PlayerInputType.KeyboardOnly;  // default - calue is loaded in RefreshControlMappings()
 
     // Current player input mappings (which button moves the avatar up, etc.)
-    private Dictionary<PlayerInput, InputMapping> inputMappingTable;
+    private Dictionary<PlayerInput, MappedControl> inputMappingTable;
 
     // Do player control mappings come from a Prefab or Custom map?
     private string playerInputMappingPrefabName = "";
@@ -235,10 +373,28 @@ public class PlayerInputManager : MonoBehaviour
     private string playerConfigFileName = "/PlayerConfiguration.xml";
     private string playerConfigFilePath;
 
+    #endregion Private Declarations
+
+
+    #region Public Fields
+
+    // Set this from a calling procedure to be able to detect WHICH keys or buttons the player is using
+    // This should only be used by the Setting UX to allow player to set which key\button they want to
+    // map to a specific control function (MoveUp, CameraRight, etc.)
+    public bool ActivateOpenInputMonitoring = false;
+
+
+    // Set in Unity Inspector to run in debug mode (warning, this will display output in the host scene)
+    public bool DEBUG = false;
+    
+    #endregion Public Fields
+
 
     #region Unit Testing Code
 
     string stateOfMoveUp = "RELEASED";
+    string stateOfUserInput = "";
+
 
     public void OnMoveUp_Pressed()
     {
@@ -248,15 +404,6 @@ public class PlayerInputManager : MonoBehaviour
     public void OnMoveUp_Released()
     {
         stateOfMoveUp = "RELEASED";
-    }
-
-    void OnGUI()
-    {
-        GUI.Label(new Rect(375, 300, 125, 50), "MoveUp is: " + stateOfMoveUp);
-
-        if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game")) this.SavePlayerConfiguration();
-        if (GUI.Button(new Rect(750, 100, 125, 50), "Load Your Game")) this.LoadPlayerConfiguration();
-        if (GUI.Button(new Rect(750, 200, 125, 50), "Reset Save Data")) this.DeletePlayerConfiguration();
     }
 
     private void InitUnitTest()
@@ -277,9 +424,8 @@ public class PlayerInputManager : MonoBehaviour
 
         this.InitializePlayerInputManager();
 
-#if DEBUG
-        InitUnitTest();
-#endif
+        // Set the DEBUG flag in Unity scene to run in debug mode
+        if (this.DEBUG) InitUnitTest();
     }
 
     // Update is called once per frame
@@ -306,6 +452,93 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
+    private void OnGUI()
+    {
+        if (ActivateOpenInputMonitoring)
+        {
+            if ((this.selectedPlayerInputType == PlayerInputType.KeyboardOnly)
+            || (this.selectedPlayerInputType == PlayerInputType.KeyboardAndMouse))
+            {
+                Event currentEvent = Event.current;
+
+                switch (currentEvent.type)
+                {
+                    case EventType.KeyDown:
+                        if (currentEvent.keyCode != KeyCode.None)
+                        {
+                            // Invoke assigned event handler(s)
+                            this.InvokeOnKeyDown(currentEvent.keyCode);
+
+                            // Set debug text (if applicable)
+                            if (this.DEBUG) stateOfUserInput = currentEvent.keyCode.ToString() + " was PRESSED";
+                        }
+
+                        Event.current.Use();
+                        break;
+                    case EventType.KeyUp:
+                        if (currentEvent.keyCode != KeyCode.None)
+                        {
+                            // Invoke assigned event handler(s)
+                            this.InvokeOnKeyUp(currentEvent.keyCode);
+
+                            // Set debug text (if applicable)
+                            if (this.DEBUG) stateOfUserInput = currentEvent.keyCode.ToString() + " was RELEASED";
+                        }
+
+                        Event.current.Use();
+                        break;
+                    case EventType.MouseDown:
+                        // Invoke assigned event handler(s)
+                        this.OnMouseButtonDown(currentEvent.button);
+
+                        // Set debug text (if applicable)
+                        if (this.DEBUG) stateOfUserInput = "Mouse Button '" + currentEvent.button.ToString() + "' was PRESSED";
+
+                        Event.current.Use();
+                        break;
+                    case EventType.MouseUp:
+                        // Invoke assigned event handler(s)
+                        this.OnMouseButtonUp(currentEvent.button);
+
+                        // Set debug text (if applicable)
+                        if (this.DEBUG) stateOfUserInput = "Mouse Button '" + currentEvent.button.ToString() + "' was RELEASED";
+
+                        Event.current.Use();
+                        break;
+                }
+            }
+
+            //else if (this.selectedPlayerInputType == PlayerInputType.Gamepad)
+            //{
+
+            //    // TODO: Gamepad must be handled differently...
+
+            //    if (Gamepad.current.buttonSouth.isPressed)
+            //    {
+
+            //    }
+
+            //    //      Gamepad.current[GamepadButton.Y]
+            //    //      Gamepad.current["Y"]
+            //    //      Gamepad.current[GamepadButton.Triangle]
+            //    //      Gamepad.current["Triangle"]
+
+
+            //}
+        }
+
+
+        // Set the DEBUG flag in Unity scene to run in debug mode
+        if (this.DEBUG)
+        {
+            GUI.Label(new Rect(375, 0, 125, 150), "MoveUp is: " + stateOfMoveUp);
+            GUI.Label(new Rect(375, 100, 125, 150), "User Input: " + stateOfUserInput);
+            if (GUI.Button(new Rect(750, 0, 125, 50), "Save Your Game")) this.SavePlayerConfiguration();
+            if (GUI.Button(new Rect(750, 100, 125, 50), "Load Your Game")) this.LoadPlayerConfiguration();
+            if (GUI.Button(new Rect(750, 200, 125, 50), "Reset Save Data")) this.DeletePlayerConfiguration();
+        }
+    }
+
     #endregion Unity Event Handlers
 
 
@@ -314,46 +547,118 @@ public class PlayerInputManager : MonoBehaviour
     private void CaptureKeyboardInput()
     {
         // Loop through the mapping table to check the state of all (and ONLY) mapped keys
-        foreach (KeyValuePair<PlayerInput, InputMapping> entry in this.inputMappingTable)
+        foreach (KeyValuePair<PlayerInput, MappedControl> entry in this.inputMappingTable)
         {
-            PlayerInput playerInput = (PlayerInput)entry.Key;
-            InputMapping inputMapping = (InputMapping)entry.Value;
-
-            if (inputMapping.MappedKeyCode != KeyCode.None)
+            // Only process KEYBOARD mappings (it is possible for multiple types to exist in a map (i.e., Keys and Mouse)
+            if (entry.Value is KeyboardInputMapping)
             {
-                // Has the key been pressed?
-                if (Input.GetKeyDown(inputMapping.MappedKeyCode))
+                PlayerInput playerInput = entry.Key;
+                KeyCode mappedKeyCode = (KeyCode)((KeyboardInputMapping)entry.Value).Control;
+
+                if (mappedKeyCode != KeyCode.None)
                 {
-                    // Fire event handler(s) for the identified action
-                    this.DispactchPlayerInputEventHandler(playerInput, InputAction.Pressed);
+                    // Has the key been pressed?
+                    if (Input.GetKeyDown(mappedKeyCode))
+                    {
+                        // Fire event handler(s) for the identified action
+                        this.InvokePlayerInputEventHandler(playerInput, InputAction.Pressed);
 
-                    print(string.Format("'{0}' key was pressed", inputMapping.MappedKeyCode.ToString()));
+                        print(string.Format("'{0}' key was pressed", mappedKeyCode.ToString()));
+                    }
+
+                    // Has the key been released?
+                    else if (Input.GetKeyUp(mappedKeyCode))
+                    {
+                        // Fire event handler(s) for the identified action
+                        this.InvokePlayerInputEventHandler(playerInput, InputAction.Released);
+
+                        print(string.Format("'{0}' key was released", mappedKeyCode.ToString()));
+                    }
                 }
-
-                // Has the key been released?
-                else if (Input.GetKeyUp(inputMapping.MappedKeyCode))
-                {
-                    // Fire event handler(s) for the identified action
-                    this.DispactchPlayerInputEventHandler(playerInput, InputAction.Released);
-
-                    print(string.Format("'{0}' key was released", inputMapping.MappedKeyCode.ToString()));
-                }
-
             }
         }
     }
 
     private void CaptureMouseInput()
     {
+        // Loop through the mapping table to check the state of all (and ONLY) mapped keys
+        foreach (KeyValuePair<PlayerInput, MappedControl> entry in this.inputMappingTable)
+        {
+            // Only process KEYBOARD mappings (it is possible for multiple types to exist in a map (i.e., Keys and Mouse)
+            if (entry.Value is MouseInputMapping)
+            {
+                PlayerInput playerInput = entry.Key;
+                int mappedMouseButton = (int)((MouseInputMapping)entry.Value).Control;
 
+                if (mappedMouseButton != -1)
+                {
+                    // Has the key been pressed?
+                    if (Input.GetMouseButtonDown(mappedMouseButton))
+                    {
+                        // Fire event handler(s) for the identified action
+                        this.InvokePlayerInputEventHandler(playerInput, InputAction.Pressed);
+
+                        print(string.Format("Mouse Button '{0}' was clicked", mappedMouseButton.ToString()));
+                    }
+
+                    // Has the key been released?
+                    else if (Input.GetMouseButtonUp(mappedMouseButton))
+                    {
+                        // Fire event handler(s) for the identified action
+                        this.InvokePlayerInputEventHandler(playerInput, InputAction.Released);
+
+                        print(string.Format("Mouse Button '{0}' was released", mappedMouseButton.ToString()));
+                    }
+                }
+            }
+        }
     }
 
     private void CaptureGamepadInput()
     {
+        // Loop through the mapping table to check the state of all (and ONLY) mapped keys
+        foreach (KeyValuePair<PlayerInput, MappedControl> entry in this.inputMappingTable)
+        {
+            // Only process KEYBOARD mappings (it is possible for multiple types to exist in a map (i.e., Keys and Mouse)
+            if (entry.Value is GamepadInputMapping)
+            {
+                PlayerInput playerInput = entry.Key;
+                int mappedGamepadButton = (int)((GamepadInputMapping)entry.Value).Control;
 
+                if (mappedGamepadButton != -1)
+                {
+                    // All of these check the same button - the enum covers multiple gamepad formats
+                    //      Gamepad.current[GamepadButton.Y]
+                    //      Gamepad.current["Y"]
+                    //      Gamepad.current[GamepadButton.Triangle]
+                    //      Gamepad.current["Triangle"]
+
+
+                    // GamepadButton.X, GamepadButton.RightTrigger, etc.
+
+                    //// Has the key been pressed?
+                    ////if (Input.GetMouseButtonDown(mappedGamepadButton))
+                    //{
+                    //    // Fire event handler(s) for the identified action
+                    //    this.DispactchPlayerInputEventHandler(playerInput, InputAction.Pressed);
+
+                    //    print(string.Format("Mouse Button '{0}' was clicked", mappedGamepadButton.ToString()));
+                    //}
+
+                    //// Has the key been released?
+                    ////else if (Input.GetMouseButtonUp(mappedGamepadButton))
+                    //{
+                    //    // Fire event handler(s) for the identified action
+                    //    this.DispactchPlayerInputEventHandler(playerInput, InputAction.Released);
+
+                    //    print(string.Format("Mouse Button '{0}' was released", mappedGamepadButton.ToString()));
+                    //}
+                }
+            }
+        }
     }
 
-    private void DispactchPlayerInputEventHandler(PlayerInput playerInput, InputAction inputAction)
+    private void InvokePlayerInputEventHandler(PlayerInput playerInput, InputAction inputAction)
     {
         // Only attempt to call function delegates that are actually set
         if (this.playerInputEventDelegates[playerInput] != null)
@@ -373,6 +678,53 @@ public class PlayerInputManager : MonoBehaviour
     }
 
     #endregion Private Methods
+
+
+    #region Public Events
+
+    public event KeyDown OnKeyDown;
+    public event KeyUp OnKeyUp;
+
+    public event MouseButtonDown OnMouseButtonDown;
+    public event MouseButtonUp OnMouseButtonUp;
+
+    public event GamepadButtonDown OnGamepadButtonDown;
+    public event GamepadButtonUp OnGamepadButtonUp;
+
+    private void InvokeOnKeyDown(KeyCode key)
+    {
+        if (OnKeyDown != null) OnKeyDown(key);
+    }
+
+    private void InvokeOnKeyUp(KeyCode key)
+    {
+        if (OnKeyUp != null) OnKeyUp(key);
+    }
+
+    private void InvokeOnMouseButtonDown(int mouseButton)
+    {
+        if (OnMouseButtonDown != null) OnMouseButtonDown(mouseButton);
+    }
+
+    private void InvokeOnMouseButtonUp(int mouseButton)
+    {
+        if (OnMouseButtonUp != null) OnMouseButtonUp(mouseButton);
+    }
+
+    private void InvokeOnGamepadButtonDown(string gamepadButton)
+    {
+        if (OnGamepadButtonDown != null) OnGamepadButtonDown(gamepadButton);
+    }
+
+    private void InvokeOnGamepadButtonUp(string gamepadButton)
+    {
+        if (OnGamepadButtonUp != null) OnGamepadButtonUp(gamepadButton);
+    }
+
+    #endregion Public Events
+
+
+    // TODO: Player should be allowed to swap Y and X axis with Mouse or Gamepad
 
 
     #region Public Methods
@@ -469,33 +821,38 @@ public class PlayerInputManager : MonoBehaviour
             this.playerConfigurationDictionary.Add(settingName, value);
     }
 
+    public void SetCustomControlMapping(PlayerInputType playerInputType, string playerInputMappingName, Dictionary<PlayerInput, MappedControl>  inputMappingTable)
+    {
+        this.selectedPlayerInputType = playerInputType;
+        this.playerInputMappingPrefabName = playerInputMappingName;
+        this.inputMappingTable = inputMappingTable;
+    }
+
 
     #region Public Control Mapping "Prefab" Methods
     // Prefab mappings are available for player to choose a "ready made" mapping without setting every button themselves
 
     public void SetControlMappingKeyboardOnlyPrefabA()
     {
-        // Set field variables
-        this.selectedPlayerInputType = PlayerInputType.KeyboardOnly;
-        this.playerInputMappingPrefabName = "Keyboard Prefab A";
-
-        // Set default key mappings
-        this.inputMappingTable = new Dictionary<PlayerInput, InputMapping>()
+        // Set prefab key mappings
+        Dictionary<PlayerInput, MappedControl> inputMappingTable = new Dictionary<PlayerInput, MappedControl>()
                 {
-                     { PlayerInput.CameraDown, (new InputMapping(KeyCode.DownArrow)) }
-                    ,{ PlayerInput.CameraUp, (new InputMapping(KeyCode.UpArrow)) }
-                    ,{ PlayerInput.CameraLeft, (new InputMapping(KeyCode.LeftArrow)) }
-                    ,{ PlayerInput.CameraRight, (new InputMapping(KeyCode.RightArrow)) }
+                     { PlayerInput.CameraDown, (new KeyboardInputMapping(KeyCode.DownArrow)) }
+                    ,{ PlayerInput.CameraUp, (new KeyboardInputMapping(KeyCode.UpArrow)) }
+                    ,{ PlayerInput.CameraLeft, (new KeyboardInputMapping(KeyCode.LeftArrow)) }
+                    ,{ PlayerInput.CameraRight, (new KeyboardInputMapping(KeyCode.RightArrow)) }
 
-                    ,{ PlayerInput.MoveDown, (new InputMapping(KeyCode.S)) }
-                    ,{ PlayerInput.MoveUp, (new InputMapping(KeyCode.W)) }
-                    ,{ PlayerInput.MoveLeft, (new InputMapping(KeyCode.A)) }
-                    ,{ PlayerInput.MoveRight, (new InputMapping(KeyCode.D)) }
-                    ,{ PlayerInput.MoveForward, (new InputMapping(KeyCode.Space)) }
-                    ,{ PlayerInput.MoveBackward, (new InputMapping(KeyCode.LeftShift)) }
+                    ,{ PlayerInput.MoveDown, (new KeyboardInputMapping(KeyCode.S)) }
+                    ,{ PlayerInput.MoveUp, (new KeyboardInputMapping(KeyCode.W)) }
+                    ,{ PlayerInput.MoveLeft, (new KeyboardInputMapping(KeyCode.A)) }
+                    ,{ PlayerInput.MoveRight, (new KeyboardInputMapping(KeyCode.D)) }
+                    ,{ PlayerInput.MoveForward, (new KeyboardInputMapping(KeyCode.Space)) }
+                    ,{ PlayerInput.MoveBackward, (new KeyboardInputMapping(KeyCode.LeftShift)) }
 
-                    ,{ PlayerInput.StabilizeAvatar, (new InputMapping(KeyCode.Tab)) }
+                    ,{ PlayerInput.StabilizeAvatar, (new KeyboardInputMapping(KeyCode.Tab)) }
                 };
+
+        this.SetCustomControlMapping(PlayerInputType.KeyboardOnly, "Keyboard Prefab A", inputMappingTable);
     }
 
     public void SetControlMappingKeyboardOnlyPrefabB()
@@ -607,7 +964,6 @@ public class PlayerInputManager : MonoBehaviour
     }
 
     #endregion Plagiarized Public Methods
-
 
     #endregion Public Methods
 }

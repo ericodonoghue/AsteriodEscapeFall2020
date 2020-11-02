@@ -57,7 +57,7 @@ public class HeadsUpDisplay : MonoBehaviour
     SetUXData("HeartRate", avatarAccounting.CurrentHeartRatePerMinute, " bpm");
     SetUXData("RespirationRate", avatarAccounting.CurrentRespirationRatePerMinute, " bpm");
     SetUXData("JetBurnRate", avatarAccounting.CurrentJetBurnRatePerSecond, " ml\\s");
-    SetUXData("SuitIntegrity", avatarAccounting.CurrentSuitIntegrity, " units");
+    SetUXData("SuitIntegrity", avatarAccounting.CurrentSuitIntegrityInPercentage, " units");
     SetUXData("OxygenBurnRate", avatarAccounting.CurrentOxygenBurnRatePerSecond, " ml\\s");
     SetUXData("OxygenTank", avatarAccounting.CurrentOxygenAllTanksContent, " litres");
     SetUXData("BloodOxygen", avatarAccounting.CurrentBloodOxygenPercent, "%");
