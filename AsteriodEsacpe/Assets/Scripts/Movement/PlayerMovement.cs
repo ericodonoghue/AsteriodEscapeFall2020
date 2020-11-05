@@ -110,8 +110,8 @@ public class PlayerMovement : MonoBehaviour
     private void AreWeDeadYet()
     {
         // For now, just restart on blackout
-        if (avatarAccounting.PlayerBlackout)
-            SceneManager.LoadScene(GameSceneName);
+        //if (avatarAccounting.PlayerBlackout)
+            //SceneManager.LoadScene(GameSceneName);
     }
 
     //private void OnCollisionEnter(Collision c)
