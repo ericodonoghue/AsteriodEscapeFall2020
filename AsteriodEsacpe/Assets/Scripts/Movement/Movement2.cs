@@ -155,7 +155,7 @@ public class Movement2 : MonoBehaviour
     void SetForceVector()
     {
         // Only fire jets if there's air in the tanks
-        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
+        if (true || avatarAccounting.CurrentOxygenAllTanksContent != 0)
         {
             //MW: float fuelRateValue = 1f;
 
