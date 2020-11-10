@@ -14,6 +14,7 @@ public class PlayerCollisionO2 : MonoBehaviour
     private int collisions = 0;
 
     private bool inRefuelRange;
+    private bool fillTanks;
 
 
     // Start is called before the first frame update
@@ -23,6 +24,7 @@ public class PlayerCollisionO2 : MonoBehaviour
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
 
         inRefuelRange = false;
+        fillTanks = false;
         // TODO: get values of variables from save data once implemented
         //wallCollision = GetComponent<AudioSource>();
     }
@@ -34,8 +36,11 @@ public class PlayerCollisionO2 : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //TODO: actually fill tanks
-                Debug.Log("pressed f");
+                fillTanks = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.F))
+            {
+                fillTanks = true;
             }
         }
     }
