@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 
 public class PlayerCollisionO2 : MonoBehaviour
@@ -12,6 +13,8 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     private int collisions = 0;
 
+    private bool inRefuelRange;
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,9 +22,22 @@ public class PlayerCollisionO2 : MonoBehaviour
         // Get a reference to the AvatarAccounting component of Main Camera
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
 
-
+        inRefuelRange = false;
         // TODO: get values of variables from save data once implemented
         //wallCollision = GetComponent<AudioSource>();
+    }
+
+
+    private void Update()
+    {
+        if (inRefuelRange)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                //TODO: actually fill tanks
+                Debug.Log("pressed f");
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision c)
@@ -87,5 +103,21 @@ public class PlayerCollisionO2 : MonoBehaviour
             avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
             Destroy(collided);
         }
+        if (collided.tag == "RefuelStation")
+        {
+            inRefuelRange = true;
+        }
     }
+
+    private void OnTriggerExit(Collider c)
+    {
+        GameObject collided = c.gameObject;
+        if (collided.tag == "RefuelStation")
+        {
+            inRefuelRange = false;
+        }
+    }
+
+
+
 }
