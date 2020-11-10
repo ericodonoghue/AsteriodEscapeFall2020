@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
+
 
 
 public class PlayerCollisionO2 : MonoBehaviour
@@ -42,6 +44,12 @@ public class PlayerCollisionO2 : MonoBehaviour
             {
                 fillTanks = true;
             }
+        }
+
+        if (fillTanks)
+        {
+            //TODO: fill player tanks
+            avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
         }
     }
 
