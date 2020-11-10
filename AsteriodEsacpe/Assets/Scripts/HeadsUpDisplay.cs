@@ -31,24 +31,6 @@ public class HeadsUpDisplay : MonoBehaviour
   {
       // Update global output fields
       this.UpdateHUD();
-
-    //if (oxygen <= 10)
-    //{
-    //  warnTimerOxygen++;
-    //  if (warnTimerOxygen >= 25)
-    //  {
-    //    if (oxygenDisplay.color == regOxygen)
-    //    {
-    //      oxygenDisplay.color = warnOxygen;
-    //      warnTimerOxygen = 0;
-    //    }
-    //    else if (oxygenDisplay.color == warnOxygen)
-    //    {
-    //      oxygenDisplay.color = regOxygen;
-    //      warnTimerOxygen = 0;
-    //    }
-    //  }
-    //}
   }
 
   private void UpdateHUD()

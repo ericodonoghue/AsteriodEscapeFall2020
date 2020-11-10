@@ -3,10 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-// Looking for gauges, this set appears to come with everything needed to build our own:
-// https://assetstore.unity.com/packages/3d/props/top-gauges-mega-pack-30-bonus-4-compass-118453
-
-
 /* Using members of this class from another game object is accomplished by including the following code in the calling module:
 
     // Define a local (unshared) variable to hold a reference to the central AvatarAccounting object (held by main camera)
@@ -65,12 +61,12 @@ using UnityEngine.UI;
     avatarAccounting.CurrentOxygenAllTanksContent
     avatarAccounting.CurrentOxygenBurnRatePerSecond
     avatarAccounting.CurrentRespirationRatePerMinute
-    avatarAccounting.CurrentSuitIntegrity
+    avatarAccounting.CurrentSuitIntegrityInPercentage
 
     // Secondary properties used internally, but available for detail
     avatarAccounting.CurrentOxygenPonyBottleContent
     avatarAccounting.CurrentOxygenTankContent
-    avatarAccounting.CurrentRespirationCostPerSecond
+    avatarAccounting.CurrentRespirationBurnRatePerSecond
     avatarAccounting.CurrentSuitIntegrityDamageCostPerSecond
 
 
@@ -139,14 +135,14 @@ public class AvatarAccounting : MonoBehaviour
 
     private bool buffPresentExtraTank = false;              // place holder for future addition of buffs like "Extra Tank"
     private bool buffPresentExtraSuitIntegrity = false;     // place holder for future addition of buffs
-    private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
+    //private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
 
     // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
     private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
 
     // How much Oxygen per second is respiration burning?
-    private float currentRespirationRatePerMinute = 40.0f;  // Litterally, breathes per minute (permissible range = base to max)
-    private float currentRespirationCostPerSecond = 0.0f;   // MilliLiters per second (16.667 ml\s is normal)
+    private float currentRespirationRatePerMinute = 20.0f;  // Litterally, breathes per minute (permissible range = min to max)
+    private float currentRespirationBurnRatePerSecond = 1.0f;   // How much oxygen does the current respiration rate cost
 
     // How much is suit damage costing?
     private float currentSuitIntegrityInPercentage = 100.0f;    // Base integrity, does not change with damage (starts at 10, but could be buffed to max)
@@ -179,6 +175,10 @@ public class AvatarAccounting : MonoBehaviour
     public float minRespirationRatePerMinute = 10.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
     public float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
 
+    public float baseRespirationBurnRatePerMinute = 60.0f;  // Default value
+    public float minRespirationBurnRatePerMinute = 0.0f;    // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
+    public float maxRespirationBurnRatePerMinute = 180.0f;  // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+
     public float baseSuitIntegrityPercentage = 100.0f;  // Default value
     public float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
     public float maxSuitIntegrityPercentage = 150.0f;   // Suit starts at 100, but with buffs...
@@ -200,19 +200,24 @@ public class AvatarAccounting : MonoBehaviour
     public float maxBloodOxygenPercent = 98.0f;         // High level
 
     // How much Oxygen per second does respiration burn?
-    public float oxygenCostRespirationMultiplier = 2.0f;  // How much extra does it cost to breath too fast?
+    public float oxygenCostRespirationHeatbeatBase = 1.0f;        // Multipler of base burn rate = How much does it cost to breath with normal pulse?
+    public float oxygenCostRespirationHeatbeatPlus20bpm = 1.3f;   // How much does it cost to breath with normal pulse + 20bpm?
+    public float oxygenCostRespirationHeatbeatPlus40bpm = 1.7f;   // How much does it cost to breath with normal pulse + 40bpm?
+    public float oxygenCostRespirationHeatbeatPlus60bpm = 2.0f;   // How much does it cost to breath with normal pulse + 60bpm?
+    public float oxygenCostRespirationHeatbeatPlus80bpm = 2.5f;   // How much does it cost to breath with normal pulse + 80bpm?
+    public float oxygenCostRespirationHeatbeatPlus100bpm = 3.0f;  // How much does it cost to breath with normal pulse + 100bpm?
 
     // How does damage to the spacesuit affect oxygen use?
     // Suit Integrity cost is calculated using the closest value, multiplied against actual damage (see calc)
-    public float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 200.0f;   // This much damage causes a minor leak
-    public float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 400.0f;   // Getting sloppy bub
-    public float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 600.0f;   // Dying is starting to sound like an option
-    public float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 1000.0f;  // WTF dude, stop running into walls
-    public float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 1500.0f;  // Ok, you are just hitting walls to see what happens, right?
-    public float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 2000.0f;  // Doh!
-    public float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 2500.0f;  // This isn't fun anymore...
-    public float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 3500.0f;  // That next step is a loser
-    public float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 4000.0f;  // Wow!  You're fucked!
+    public float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 200.0f;   // This much damage caused by a minor leak
+    public float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 300.0f;   // Getting sloppy bub
+    public float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 450.0f;   // Dying is starting to sound like an option
+    public float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 650.0f;   // WTF dude, stop running into walls
+    public float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 900.0f;   // Ok, you are just hitting walls to see what happens, right?
+    public float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 1200.0f;  // Doh!
+    public float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 1550.0f;  // This isn't fun anymore...
+    public float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 1800.0f;  // That next step is a loser
+    public float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 2000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
     public float oxygenCostPerSecondUsingMainThruster = 250.0f;             // Litres per second - it adds up quick!
@@ -275,7 +280,8 @@ public class AvatarAccounting : MonoBehaviour
 
         // Set internal tracking vars to "base" (default) values
         this.CurrentHeartRatePerMinute = this.baseHeartRatePerMinute;
-        this.CurrentRespirationRatePerMinute = this.CurrentRespirationRatePerMinute;
+        this.CurrentRespirationRatePerMinute = this.baseRespirationRatePerMinute;
+        this.CurrentRespirationBurnRatePerSecond = this.baseRespirationBurnRatePerMinute;
         this.CurrentJetBurnRatePerSecond = this.minJetBurnRatePerSecond;
         this.CurrentSuitIntegrityInPercentage = this.baseSuitIntegrityPercentage;
         this.CurrentOxygenTankContent = this.baseOxygenTankContent;
@@ -284,17 +290,7 @@ public class AvatarAccounting : MonoBehaviour
         // Initialize jet cost tracking
         this.TerminateAllJets();
 
-        this.nextUpdate = Mathf.FloorToInt(Time.time);
-    }
-
-    private void Update()
-    {
-        // Provide for Update calls once per second for time-based UX requirements
-        if (Time.time >= this.nextUpdate)
-        {
-            this.nextUpdate = Mathf.FloorToInt(Time.time) + 1;
-            this.UpdateEverySecond();
-        }
+        //this.nextUpdate = Mathf.FloorToInt(Time.time);
     }
 
     // Update is called once per frame
@@ -308,21 +304,160 @@ public class AvatarAccounting : MonoBehaviour
 
     #region Private Methods
 
-    // Update is called once per second
-    private void UpdateEverySecond() // Every second (not every frame)
+    // Calculates oxygen used by jets, suit damage, anything by actually breathing (handled elsewhere)
+    // and "uses" one frames worth.
+    // Should be called by FixedUpdate, every frame
+    private void ProcessCurrentOxygenBurn()
     {
-        // Update Oxygen usage (subtract oxygen from tank every second, based upon current respiration)
-        this.ProcessRespirationOneSecond();
+        // This should use actual frame rate, but meh
+        float currentFrameRate = 50f;
 
 
-        // Process DOT, Buff\Debuff Expiration, etc.
+        // Once the oxygen tank is empty, Sp02 or "Blood Oxygen Level" decreaces until you black out and eventually die of hypoxemia
+        if (this.CurrentOxygenAllTanksContent == 0f)
+        {
+            this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / currentFrameRate) * 2);
+        }
+        else
+        {
+            // Update current respiration cost
+            this.CalculateRespirationBurnRate();
+
+
+            // Update current suit integrity oxygen loss
+            this.CalculateSuitIntegrityBurnRate();
+
+
+            // Consume oxygen for current consumption rate (1/50th per frame)
+            this.UseOxygen(this.CurrentOxygenBurnRatePerSecond * (1f / currentFrameRate));
+        }
     }
 
+    // Calculates oxygen used by respiration, and "uses" one seconds worth.
+    private void CalculateRespirationBurnRate()
+    {
+        // Normal Respiration Rate(in space):
+        // 60 Litres\hour or 1 L\minute(this is actually 50 per hour, but 60 makes the math easier)
+        // 1 Litres\minute = 16.66 milliletre\second
+
+        float heartRateOverrage = (this.CurrentHeartRatePerMinute - this.baseHeartRatePerMinute);
+        float heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatBase;
+
+
+        // Calculate Respiration Cost by Pulse:
+        // Normal bpm(50) = normal respiration
+        // Terrified bpm(150) = increased respiration 300 % (this is just a guess)
+        if (heartRateOverrage > 0)
+        {
+            if (heartRateOverrage >= 100) heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatPlus100bpm;
+            else if (heartRateOverrage >= 80) heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatPlus80bpm;
+            else if (heartRateOverrage >= 60) heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatPlus60bpm;
+            else if (heartRateOverrage >= 40) heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatPlus40bpm;
+            else if (heartRateOverrage >= 20) heartRateOverrageMultiplier = this.oxygenCostRespirationHeatbeatPlus20bpm;
+        }
+
+
+        // Set the current RATE (breaths per minute) based on pulse (for now)
+        this.CurrentRespirationRatePerMinute = (this.baseRespirationRatePerMinute * heartRateOverrageMultiplier);
+
+
+        // How much Oxygen is consumed PER SECOND by the current respiration RATE?
+        this.CurrentRespirationBurnRatePerSecond =
+            (this.baseRespirationBurnRatePerMinute * heartRateOverrageMultiplier) / 60;
+    }
+
+    private void CalculateSuitIntegrityBurnRate()
+    {
+        float currentOxygenCostRate = 0f;
+        float suitIntegrityLossInPercentage = (this.CurrentSuitIntegrityInPercentage - this.baseSuitIntegrityPercentage);
+
+
+        // If no damage, or integrity is up due to buff presense, set cost to 0;
+        if (suitIntegrityLossInPercentage <= 0) this.currentSuitIntegrityCostPerSecond = 0f;
+
+        // If suit is damaged, calculate the cost
+        else
+        {
+            if (suitIntegrityLossInPercentage >= 10)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus10Percent;
+            else if (suitIntegrityLossInPercentage >= 20)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus20Percent;
+            else if (suitIntegrityLossInPercentage >= 30)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus30Percent;
+            else if (suitIntegrityLossInPercentage >= 40)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus40Percent;
+            else if (suitIntegrityLossInPercentage >= 50)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus50Percent;
+            else if (suitIntegrityLossInPercentage >= 60)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus60Percent;
+            else if (suitIntegrityLossInPercentage >= 70)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus70Percent;
+            else if (suitIntegrityLossInPercentage >= 80)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus80Percent;
+            else if (suitIntegrityLossInPercentage >= 90)
+                currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus90Percent;
+
+
+            this.currentSuitIntegrityCostPerSecond = currentOxygenCostRate;
+        }
+    }
 
     #endregion Private Methods
 
 
     #region Public Properties
+
+    #region Public "BurnRate" Properties (actual O2 consumption rates)
+
+    public float CurrentRespirationBurnRatePerSecond
+    {
+        // Read-Only, calculated inline
+        get
+        {
+            return (this.currentRespirationBurnRatePerSecond / 60);
+        }
+        private set
+        {
+            if (value > this.maxRespirationBurnRatePerMinute)
+                this.currentRespirationBurnRatePerSecond = this.maxRespirationBurnRatePerMinute;
+            else if (value <= this.minRespirationBurnRatePerMinute)
+                this.currentRespirationBurnRatePerSecond = this.minRespirationBurnRatePerMinute;
+            else
+                this.currentRespirationBurnRatePerSecond = value;
+        }
+    }
+
+    public float CurrentJetBurnRatePerSecond
+    {
+        get { return this.currentJetBurnRate; }
+        private set
+        {
+            if (value > this.maxJetBurnRatePerSecond)
+                this.currentJetBurnRate = this.maxJetBurnRatePerSecond;
+            else if (value < this.minJetBurnRatePerSecond)
+                this.currentJetBurnRate = this.minJetBurnRatePerSecond;
+            else
+                this.currentJetBurnRate = value;
+        }
+    }
+
+    public float CurrentOxygenBurnRatePerSecond
+    {
+        // Read-Only, calculated inline
+        get
+        {
+            return
+              (
+                  this.CurrentRespirationBurnRatePerSecond
+                + this.CurrentSuitIntegrityDamageCostPerSecond
+                + this.CurrentJetBurnRatePerSecond
+              );
+        }
+    }
+
+    #endregion Public "BurnRate" Properties (actual O2 consumption rates)
+
+    #region Public "Rate" Properties used in calculations
 
     public float CurrentHeartRatePerMinute
     {
@@ -355,31 +490,7 @@ public class AvatarAccounting : MonoBehaviour
         }
     }
 
-    public float CurrentRespirationCostPerSecond
-    {
-        // Read-Only, calculated inline
-        get
-        {
-
-            // TODO: This is how much respiration occurs per second, not how much oxygen is used
-
-            return (this.currentRespirationRatePerMinute / 60);
-        }
-    }
-
-    public float CurrentJetBurnRatePerSecond
-    {
-        get { return this.currentJetBurnRate; }
-        private set
-        {
-            if (value > this.maxJetBurnRatePerSecond)
-                this.currentJetBurnRate = this.maxJetBurnRatePerSecond;
-            else if (value < this.minJetBurnRatePerSecond)
-                this.currentJetBurnRate = this.minJetBurnRatePerSecond;
-            else
-                this.currentJetBurnRate = value;
-        }
-    }
+    #endregion Public "Rate" Properties used in calculations
 
     public float CurrentOxygenAllTanksContent
     {
@@ -420,24 +531,10 @@ public class AvatarAccounting : MonoBehaviour
             else if (this.buffPresentExtraTank)
 
                 // Can't "refil" a pony bottle, they are used until empty and discarded
-                if (value <= this.fullOxygenPonyBottle)
+                if ((value <= this.fullOxygenPonyBottle) && (value <= this.currentOxygenPonyBottleContent))
 
                     // But value can change as air is used (lower value only)
                     this.currentOxygenPonyBottleContent = value;
-        }
-    }
-
-    public float CurrentOxygenBurnRatePerSecond
-    {
-        // Read-Only, calculated inline
-        get
-        {
-            return
-              (
-                  this.CurrentRespirationCostPerSecond
-                + this.CurrentSuitIntegrityDamageCostPerSecond
-                + this.CurrentJetBurnRatePerSecond
-              );
         }
     }
 
@@ -463,6 +560,36 @@ public class AvatarAccounting : MonoBehaviour
 
 
 
+        }
+    }
+
+    //TODO: Fix how setting this value with a buff works
+    public float CurrentSuitIntegrityInPercentage
+    {
+        get { return this.currentSuitIntegrityInPercentage; }
+        private set
+        {
+
+            // TODO: Integrity can be higher than max if (this.buffPresentExtraSuitIntegrity == true)
+            //       BUT IT CANNOT BE ADDED TO!  Once the integrity drops below the normal max, this buff
+            //       drops off (set this.buffPresentExtraSuitIntegrity = false), and allow adding again
+
+
+            if (value > this.maxSuitIntegrityPercentage)
+                this.currentSuitIntegrityInPercentage = this.maxSuitIntegrityPercentage;
+            else if (value < this.minSuitIntegrityPercentage)
+                this.currentSuitIntegrityInPercentage = this.minSuitIntegrityPercentage;
+            else
+                this.currentSuitIntegrityInPercentage = value;
+        }
+    }
+
+    public float CurrentSuitIntegrityDamageCostPerSecond
+    {
+        // Read-Only
+        get
+        {
+            return this.currentSuitIntegrityCostPerSecond;
         }
     }
 
@@ -607,6 +734,48 @@ public class AvatarAccounting : MonoBehaviour
 
     #region Public Methods - Oxygen
 
+    // Decreaces stored oxygen, or terminates normal usage if tanks are empty
+    public void UseOxygen(float howMuch)
+    {
+        // No, you cannot add oxygen this way
+        if (howMuch <= 0) return;
+
+
+        // Take from the pony bottle first, if applicable.  Any remainder is passed on to the main tank
+        if (this.buffPresentExtraTank)
+        {
+            float howMuchRemovedFromPonyBottle = howMuch;
+
+            // more o2 being used than remaining in the pony bottle, adjust to leave some to take from main tanks
+            if (howMuch > this.CurrentOxygenPonyBottleContent)
+                howMuch = howMuch - this.CurrentOxygenPonyBottleContent;
+
+            this.CurrentOxygenPonyBottleContent -= howMuchRemovedFromPonyBottle;
+        }
+
+
+        // if there is still a debt to pay, take it from the main tanks (amount does not matter, property will only go to 0)
+        if (howMuch > 0) this.CurrentOxygenTankContent -= howMuch;
+
+
+        // If tanks are all empty, discontinue normal O2 burning operations (player is now blacking out)
+        if (this.CurrentOxygenAllTanksContent == 0f)
+        {
+            // Can't breathe with no air in the tank
+            this.CurrentRespirationRatePerMinute = this.oxygenTankEmptyRespirationRatePerMinute;
+
+            // Reset all Jets to inoperative
+            this.TerminateAllJets();
+
+
+            // TODO: Stop leaking air from suit injuries (no air left to give)
+
+
+            // Set heart rate to min, not breathing
+            this.CurrentHeartRatePerMinute = this.minHeartRatePerMinute;
+        }
+    }
+
     // Allows for normal refill (allowIncreaseOverBase = false) or buffs (allowIncreaseOverBase = true)
     public void AddOxygen(OxygenTankRefillAmount oxygenTankRefillAmount)
     {
@@ -638,7 +807,7 @@ public class AvatarAccounting : MonoBehaviour
         if (!this.buffPresentExtraTank)
         {
             this.buffPresentExtraTank = true;
-            this.CurrentOxygenPonyBottleContent = this.fullOxygenPonyBottle;
+            this.currentOxygenPonyBottleContent = this.fullOxygenPonyBottle;
         }
     }
 
@@ -667,215 +836,6 @@ public class AvatarAccounting : MonoBehaviour
 
 
     // YOU ARE HERE
-
-
-    // Decreaces stored oxygen, or terminates normal usage if tanks are empty
-    public void UseOxygen(float howMuch)
-    {
-        // No, you cannot add oxygen this way
-        if (howMuch <= 0) return;
-
-        // Add to or subtract from standard tanks under specified circumstances only
-        if (!this.buffPresentExtraTank)       // If pony bottle is NOT present, then add or subtract from main tank
-            this.CurrentOxygenTankContent -= howMuch;
-
-        // Take from the pony bottle, if applicable (and amount sent indicates SUBTRACTION - cannot add to the pony bottle)
-        else
-            this.CurrentOxygenPonyBottleContent -= howMuch;
-
-
-        // If tanks are all empty, discontinue normal O2 burning operations (player is now blacking out)
-        if (this.CurrentOxygenAllTanksContent == 0f)
-        {
-            // Can't breathe with no air in the tank
-            this.CurrentRespirationRatePerMinute = this.oxygenTankEmptyRespirationRatePerMinute;
-
-            // Reset all Jets to inoperative
-            this.TerminateAllJets();
-
-
-            // Stop leaking air from suit injuries (no air left to give)
-
-
-            // TODO: Should probably do something with heart rate, too
-            // this.CurrentHeartRatePerMinute = ;
-
-
-        }
-    }
-
-
-
-    //TODO: Fix how setting this value with a buff works
-    public float CurrentSuitIntegrityInPercentage
-    {
-        get { return this.currentSuitIntegrityInPercentage; }
-        private set
-        {
-
-            // TODO: Integrity can be higher than max if (this.buffPresentExtraSuitIntegrity == true)
-            //       BUT IT CANNOT BE ADDED TO!  Once the integrity drops below the normal max, this buff
-            //       drops off (set this.buffPresentExtraSuitIntegrity = false), and allow adding again
-
-
-            if (value > this.maxSuitIntegrityPercentage)
-                this.currentSuitIntegrityInPercentage = this.maxSuitIntegrityPercentage;
-            else if (value < this.minSuitIntegrityPercentage)
-                this.currentSuitIntegrityInPercentage = this.minSuitIntegrityPercentage;
-            else
-                this.currentSuitIntegrityInPercentage = value;
-        }
-    }
-
-
-    public float CurrentSuitIntegrityDamageCostPerSecond
-    {
-        // Read-Only, calculated inline
-        get
-        {
-            return
-              (
-
-                // TODO: Calculate how much air is bleeding off due to suit damage
-
-                this.currentSuitIntegrityInPercentage
-              );
-        }
-    }
-
-
-    // TODO: Re-think this entire proc
-    private void CalculateSuitIntegrityBurnRatePerSecond()
-    {
-        //float currentOxygenCostRate = 0f;
-
-        //// Break it down to avoid 9 if-then statements called when the avatar is dying
-        //if (this.currentSuitIntegrityDamage > 0)  // negative values should never occur, and must be avoided in every case
-        //{
-        //  if (this.currentSuitIntegrityDamage <= 10)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus10Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 20)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus20Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 30)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus30Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 40)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus40Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 50)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus50Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 60)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus60Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 70)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus70Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 80)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus80Percent;
-        //  else if (this.currentSuitIntegrityDamage <= 90)
-        //    currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus90Percent;
-        //  else
-        //  {
-        //    currentOxygenCostRate = this.maxOxygenBurnRatePerSecond;
-
-        //    // THERE IS ALSO THE QUESTION OF NOT BEING ABLE TO ACTUALLY BREATH - THE USAGE RATE\
-        //    // DOESN'T REALLY MATTER ONCE YOU CAN'T INHALE ANYWAY...
-
-        //    // SET RESPIRATION RATE TO 0 UNTIL DAMAGE IS REPAIRED OR AVATAR DIES
-        //  }
-        //}
-
-
-        //// current cost = adjusted amount of damage per the value captured above
-        //// If the current amount of damage is 4.3%, then the 10% damage value is used, but adjusted to
-        //// 43% of that value, (43% of 10% = 4.3% cost for 4.3% damage) 
-        this.currentSuitIntegrityCostPerSecond = 500f;
-        //  (
-        //      currentOxygenCostRate
-        //    * (this.currentSuitIntegrityDamage / 10)
-        //  ) / 60;  // values are in "per minute" ratings, so div 60 to output "per second" value
-    }
-
-
-    // Calculates oxygen used by respiration, and "uses" one seconds worth.
-    private void ProcessRespirationOneSecond()
-    {
-        // NOTE: This pattern is special, it does not remove oxygen per frame, but per second, like actual breathing
-
-        float breathCost = 1f;  // this should be calculated based on respiration
-
-
-
-
-        /*
-         // Calculate Respiration Costs:
-
-         use this.CurrentHeartRatePerMinute to affect respiration somehow
-         Normal bpm(50) = normal respiration
-         Terrified bpm(150) = increased respiration 100 % (this is just a guess)
-
-
-         set CurrentRespirationRatePerMinute
-         Normal Respiration Rate(in space):
-         60 Litres\hour or 1 L\minute(this is actually 50 per hour, but 60 makes the math easier)
-         1 Litres\minute = 16.66 milliletre\second
-
-
-         this.currentRespirationCostPerSecond is replaced with a read only property that does the math
-
-
-         this.oxygenCostRespirationMultiplier
-
-
-        this.currentRespirationCostPerSecond =
-          (
-              this.oxygenCostPerSecond_RespirationBase
-            * (
-                  1
-                + this.currentRespirationRateOverrage * this.oxygenCostPerSecond_RespirationMultiplier
-              )
-          ) / 60;
-         
-         */
-
-
-
-
-        // TODO: Calculate how much oxygen to reduce tank by, using current respiration
-        //breathCost = ?;
-
-        // Only breathe if there's air in the tank
-        this.UseOxygen(breathCost);
-
-    }
-
-    // Calculates oxygen used by jets, suit damage, anything by actually breathing (handled elsewhere)
-    // and "uses" one frames worth.
-    // Should be called by FixedUpdate, every frame
-    private void ProcessCurrentOxygenBurn()
-    {
-        float currentBurnRatePerSecond = 0f;
-
-        // This should use actual frame rate, but meh
-        float currentFrameRate = 50f;
-
-
-        // Once the oxygen tank is empty, Sp02 or "Blood Oxygen Level" decreaces until you black out and eventually die of hypoxemia
-        if (this.CurrentOxygenAllTanksContent == 0f)
-        {
-            this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / currentFrameRate) * 2);
-        }
-        else
-        {
-
-            //TODO: Is this correct?
-
-            this.CalculateSuitIntegrityBurnRatePerSecond();
-
-
-            // Consume oxygen for current jet consumption rate (1/50th per frame)
-            currentBurnRatePerSecond = this.CurrentJetBurnRatePerSecond + this.CurrentSuitIntegrityDamageCostPerSecond;
-            this.UseOxygen(currentBurnRatePerSecond * (1f / currentFrameRate));
-        }
-    }
-
-
 
     #region Public Methods - Space Suit Maintenance
 
@@ -976,58 +936,6 @@ public class AvatarAccounting : MonoBehaviour
 
 
 
-/*
-    private void Start()
-    private void Update() 		    -- Sets up periodic calls to UpdateEverySecond()
-    private void FixedUpdate()		-- this.CalculateCurrentOxygenCost();
-    private void UpdateEverySecond()-- this.BreathOneSecond();
-    private void ProcessRespirationOneSecond()	-- calculate the cost of one second's breath, and call this.UseOxygen(breathCost);
-    private void ProcessCurrentOxygenBurn()     -- Oxygen used by Jets, suit damage, anything but respiration
-            this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / currentFrameRate) * 2);
-            this.UseOxygen(this.CurrentJetBurnRatePerSecond * (1f / currentFrameRate));
-
-
-    public float CurrentRespirationRatePerMinute-- Range enforced property
-    public float CurrentRespirationCostPerSecond-- Read only, returns (this.currentRespirationRatePerMinute / 60)
-    public float CurrentOxygenTankContent		-- Range enforced property (with additional checks for buff - PonyBottle)
-    public float CurrentOxygenPonyBottleContent	-- Range enforced property
-    public float CurrentOxygenBurnRatePerSecond	-- Read only, returns (CurrentRespirationCostPerSecond + CurrentSuitIntegrityDamageCostPerSecond + CurrentJetBurnRatePerSecond)
-    public float CurrentBloodOxygenPercent		-- Range enforced property (with additional handling for SpO2?)
-
-
-    public void UseOxygen(float howMuch)        -- Decreaces stored oxygen, or terminates normal usage if tanks are empty
-
-    public void AddOxygen()				        -- Adds Oxygen to storage tanks (not the PonyBottle buff)
-        sets this.CurrentOxygenTankContent
-
-    public void AddOxygenExtraTank()			-- Adds the PonyBottle buff
-        this.buffPresentExtraTank = true;
-        sets this.CurrentOxygenPonyBottleContent
-        CHANGE HOW THIS IS SET, THIS WAY ALLOWS THE BOTTLE TO BE REFILLED
-*/
-
-
-
-/*
-    public float CurrentJetBurnRatePerSecond		-- Range enforced property
-    public float CurrentOxygenAllTanksContent		-- Read only, returns (this.CurrentOxygenTankContent + this.CurrentOxygenPonyBottleContent)
-    public bool PlayerBlackout				-- Simple property that should probably be an event
-    public float CurrentSuitIntegrityDamageCostPerSecond-- Read only, returns this.currentSuitIntegrity
-
-    public void FireJet					-- Coinsumes Oxygen (if tanks are not empty)
-    public void FireJet(JetType jetType, float powerLevel, bool overburn)
-    	sets this.CurrentJetBurnRatePerSecond
-	sets this.currentJetBurnRateSpecificJet[jetType] = oxygenCostPerSecond;
-
-    public void TerminateJet(JetType jetType)		-- Turns off the given Jet (stop consuming oxygen)
-    public void TerminateJet(JetType jetType, float powerLevel, bool overburn)
-	sets this.CurrentJetBurnRatePerSecond
-        sets this.currentJetBurnRateSpecificJet[jetType] = 0f;
-
-    public void TerminateAllJets()			-- Terminates all jets
-*/
-
-
 /* Keep, just in case
     ///// <summary>
     ///// Like MonoBehavior.Invoke("FunctionName", 2f); but can include params. Usage:
@@ -1046,4 +954,21 @@ public class AvatarAccounting : MonoBehaviour
     //    yield return new WaitForSeconds(waitSeconds);
     //    method();
     //}
+
+    //private void Update()
+    //{
+    //    // Provide for Update calls once per second for time-based UX requirements
+    //    if (Time.time >= this.nextUpdate)
+    //    {
+    //        this.nextUpdate = Mathf.FloorToInt(Time.time) + 1;
+    //        this.UpdateEverySecond();
+    //    }
+    //}
+
+    //// Update is called once per second
+    //private void UpdateEverySecond() // Every second (not every frame)
+    //{
+    //    // Process DOT, Buff\Debuff Expiration, etc.
+    //}
+
  */
