@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using TMPro;
 using UnityEngine;
-
-
+using UnityEngine.InputSystem.Interactions;
 
 public class PlayerCollisionO2 : MonoBehaviour
 {
@@ -18,6 +18,7 @@ public class PlayerCollisionO2 : MonoBehaviour
     private bool inRefuelRange;
     private bool fillTanks;
 
+    private float cdValue;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,9 @@ public class PlayerCollisionO2 : MonoBehaviour
         fillTanks = false;
         // TODO: get values of variables from save data once implemented
         //wallCollision = GetComponent<AudioSource>();
+
+        TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
+        t.text = "";
     }
 
 
@@ -42,14 +46,14 @@ public class PlayerCollisionO2 : MonoBehaviour
             }
             else if (Input.GetKeyUp(KeyCode.F))
             {
-                fillTanks = true;
+                fillTanks = false;
             }
         }
 
         if (fillTanks)
         {
             //TODO: fill player tanks
-            avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
+            avatarAccounting.AddOxygen(OxygenTankRefillAmount.TenPercent);
         }
     }
 
@@ -119,6 +123,11 @@ public class PlayerCollisionO2 : MonoBehaviour
         if (collided.tag == "RefuelStation")
         {
             inRefuelRange = true;
+
+            TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
+            t.text = "Press F to refill oxygen tanks";
+            StartCoroutine(StartCountdown());
+
         }
     }
 
@@ -131,6 +140,17 @@ public class PlayerCollisionO2 : MonoBehaviour
         }
     }
 
-
+    private IEnumerator StartCountdown(float countdownValue = 3)
+    {
+        cdValue = countdownValue;
+        while (cdValue > 0)
+        {
+            UnityEngine.Debug.Log("Countdown: " + cdValue);
+            yield return new WaitForSeconds(1.0f);
+            cdValue--;
+        }
+        TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
+        t.text = "";
+    }
 
 }

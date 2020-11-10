@@ -20,6 +20,7 @@ TagManager:
   - ForwardButton
   - ReverseButton
   - RefuelStation
+  - PressF
   layers:
   - Default
   - TransparentFX
