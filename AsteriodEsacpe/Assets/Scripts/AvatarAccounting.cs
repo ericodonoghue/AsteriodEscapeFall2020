@@ -787,7 +787,7 @@ public class AvatarAccounting : MonoBehaviour
                 percentToFillTanks = 0.05f;
                 break;
             case OxygenTankRefillAmount.TenPercent:
-                percentToFillTanks = 0.1f;
+                percentToFillTanks = 0.1f / 50;
                 break;
             case OxygenTankRefillAmount.FullSingleTank:
                 percentToFillTanks = this.oxygenTankRefillSingleTank;

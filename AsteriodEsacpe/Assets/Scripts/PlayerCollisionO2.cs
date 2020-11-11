@@ -20,6 +20,7 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     private float cdValue;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,10 +50,18 @@ public class PlayerCollisionO2 : MonoBehaviour
                 fillTanks = false;
             }
         }
+        else
+        {
+            fillTanks = false;
+        }
 
+        
+    }
+
+    private void FixedUpdate()
+    {
         if (fillTanks)
         {
-            //TODO: fill player tanks
             avatarAccounting.AddOxygen(OxygenTankRefillAmount.TenPercent);
         }
     }
