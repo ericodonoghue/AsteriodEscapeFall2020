@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1852200260103918128}
   m_Layer: 0
   m_Name: oxypo
-  m_TagString: AirTank
+  m_TagString: AirTank_PonyBottle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 6496437342783487579}
   m_Layer: 0
   m_Name: pCylinder7
-  m_TagString: Untagged
+  m_TagString: AirTank_PonyBottle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

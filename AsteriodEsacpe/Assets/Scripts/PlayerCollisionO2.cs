@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
+
 public class PlayerCollisionO2 : MonoBehaviour
 {
     // Local reference to the central AvatarAccounting object (held by main camera)
@@ -99,37 +100,35 @@ public class PlayerCollisionO2 : MonoBehaviour
                 collisions++;
                 //TODO: add impulse to player depending on speed
                 break;
-            case "AirTank":
-                avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
-                Destroy(collided);
-                break;
             case "Cave_GlancingBlow":
                 avatarAccounting.AddInjury(InjuryType.WallStrikeGlancingBlow);
                 break;
-            case "SharpObject":
-                avatarAccounting.AddInjury(InjuryType.SharpObject);
-                break;
-            case "SharpObject_NearMiss":
-                avatarAccounting.AddInjury(InjuryType.SharpObjectNearMiss);
-                break;
-            case "Monster":
-                avatarAccounting.AddInjury(InjuryType.EnemyAttack);
-                break;
-            case "Monster_NearMiss":
-                avatarAccounting.AddInjury(InjuryType.EnemyAttackNearMiss);
-                break;
-            case "AirTank_Single":
-                avatarAccounting.AddOxygen(OxygenTankRefillAmount.FullSingleTank);
-                Destroy(collided);
-                break;
-            case "AirTank_Double":
-                avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
-                Destroy(collided);
-                break;
-            case "AirTank_PonyBottle":
-                avatarAccounting.AddOxygenExtraTank();
-                Destroy(collided);
-                break;
+
+            // MW 11-12: No need for these until\if we get back to these scenarios
+            //case "SharpObject":
+            //    avatarAccounting.AddInjury(InjuryType.SharpObject);
+            //    break;
+            //case "SharpObject_NearMiss":
+            //    avatarAccounting.AddInjury(InjuryType.SharpObjectNearMiss);
+            //    break;
+            //case "Monster":
+            //    avatarAccounting.AddInjury(InjuryType.EnemyAttack);
+            //    break;
+            //case "Monster_NearMiss":
+            //    avatarAccounting.AddInjury(InjuryType.EnemyAttackNearMiss);
+            //    break;
+            //case "AirTank":
+            //    avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
+            //    Destroy(collided);
+            //    break;
+            //case "AirTank_Single":
+            //    avatarAccounting.AddOxygen(OxygenTankRefillAmount.FullSingleTank);
+            //    Destroy(collided);
+            //    break;
+            //case "AirTank_Double":
+            //    avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
+            //    Destroy(collided);
+            //    break;
         }
     }
 
@@ -137,10 +136,10 @@ public class PlayerCollisionO2 : MonoBehaviour
     {
         GameObject collided = c.gameObject;
 
-        if (collided.tag == "AirTank")
+
+        if (collided.tag == "AirTank_PonyBottle")
         {
-            // TODO: this should do what pony bottles do
-            avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
+            avatarAccounting.AddOxygenExtraTank();
             Destroy(collided);
         }
         if (collided.tag == "RefuelStation")
