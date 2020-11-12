@@ -70,6 +70,19 @@ public class PlayerCollisionO2 : MonoBehaviour
     {
         GameObject collided = c.gameObject;
 
+
+        // Choose the best tag to use (cave walls are not tagged, but should belong to a tagged parent)
+        while (collided.tag == "Untagged")
+        {
+            if (collided.transform.parent != null)
+            {
+                collided = collided.transform.parent.gameObject;
+                if (collided.tag != "Untagged") break;
+            }
+            else break;  // no more parents to bother
+        }
+
+
         switch (collided.tag)
         {
             case "Cave":
