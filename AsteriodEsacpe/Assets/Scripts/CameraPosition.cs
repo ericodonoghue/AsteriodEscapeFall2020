@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class CameraPosition : MonoBehaviour
 {
@@ -13,11 +14,11 @@ public class CameraPosition : MonoBehaviour
     // The distance in the x-z plane to the target
     public float distance = 10.0f;
     // the height we want the camera to be above the target
-    float height = 5.0f;
+    //float height = 5.0f;
     float heightDamping = 2.0f;
     float rotationDamping = 3.0f;
     public float lookSensitivity = 3f;
-    public float cameraHeightOffset = 2.0f;    
+    public float cameraHeightOffset = 4.0f;    
 
     private Vector3 CamRot;
 
@@ -55,14 +56,39 @@ public class CameraPosition : MonoBehaviour
         if (!pauseControl.isPaused)
         {
             //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
-            CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
             CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity;
-            CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
-            Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, 0);
+            if (CamRot.x <= 90 && CamRot.x >= -90)
+            {
+                CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
+            }
+            else
+            {
+                CamRot.y -= Input.GetAxis("Mouse X") * lookSensitivity;
+            }
+            if (CamRot.x >= 180)
+            {
+                CamRot.x -= 360;
+            }
+            if (CamRot.x <= -180)
+            {
+                CamRot.x += 360;
+            }
+            if (CamRot.y >= 180)
+            {
+                CamRot.y -= 360;
+            }
+            if (CamRot.y <= -180)
+            {
+                CamRot.y += 360;
+            }
 
+            double radCamX = CamRot.x * Math.PI / 180;
+            
+            //CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
+            Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
             transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
-            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset * (float)Math.Sin(radCamX), transform.position.z);
         }
 
         /*
