@@ -23,6 +23,7 @@ TagManager:
   - PressF
   - Gauge
   - GaugePin
+  - AirTank_PonyBottle
   layers:
   - Default
   - TransparentFX
