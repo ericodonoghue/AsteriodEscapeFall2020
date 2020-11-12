@@ -82,13 +82,13 @@ public class CameraPosition : MonoBehaviour
                 CamRot.y += 360;
             }
 
-            double radCamX = CamRot.x * Math.PI / 180;
+            double radCamX = CamRot.x * Math.PI / 180   ;
             
             //CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
             Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
             transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
-            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset * (float)Math.Sin(radCamX), transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset * (float)Math.Cos(radCamX), transform.position.z);
         }
 
         /*
