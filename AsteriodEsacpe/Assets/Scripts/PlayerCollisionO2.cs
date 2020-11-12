@@ -139,6 +139,7 @@ public class PlayerCollisionO2 : MonoBehaviour
 
         if (collided.tag == "AirTank")
         {
+            // TODO: this should do what pony bottles do
             avatarAccounting.AddOxygen(OxygenTankRefillAmount.FillBothTanks);
             Destroy(collided);
         }
