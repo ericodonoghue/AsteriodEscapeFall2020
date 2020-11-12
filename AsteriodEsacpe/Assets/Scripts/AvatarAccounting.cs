@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -117,6 +118,7 @@ public enum JetType { MainThruster, AttitudeJetLeft, AttitudeJetRight, AttitudeJ
 public enum InjuryType { WallStrikeGlancingBlow, WallStrikeDirect, WallStrikeNearMiss, SharpObject, SharpObjectNearMiss, EnemyAttack, EnemyAttackNearMiss }
 public enum CalmingType { ControlBreathing, Rest, MedicalInducement }
 public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }
+public enum RepairInjuryAmount { OnePercent, FivePercent, TenPercent }
 
 #endregion Public Enums
 
@@ -135,7 +137,10 @@ public class AvatarAccounting : MonoBehaviour
 
     private bool buffPresentExtraTank = false;              // place holder for future addition of buffs like "Extra Tank"
     private bool buffPresentExtraSuitIntegrity = false;     // place holder for future addition of buffs
-    //private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
+    private int nextUpdate = 1;                             // Used to force certain updates to occur every second, not every frame
+    private float fixedUpdateRate = 50f;
+    private float lastTimeJetsFired = 0f;                   // Keep track of how long it's been, this supports the auto-heal when not using jets
+    private float lastTimeSuitWasDamaged = 0f;              // Keep track of how long it's been, this prevents repeated damage from same hit
 
     // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
     private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
@@ -161,88 +166,91 @@ public class AvatarAccounting : MonoBehaviour
     #endregion Private Variables
 
 
-    #region Public Field Variables
+    #region Private Field Variables
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Values for resource management (settable in Inspector for tweeking - values below are guesses)
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     [Header("Set in Inspector")]
-    public float baseHeartRatePerMinute = 50;  // Default value
-    public float minHeartRatePerMinute = 50;   // Normal pulse, can't go lower
-    public float maxHeartRatePerMinute = 200;  // Abnormal pulse, can't go higher (not doing heart attacks in this game)
+    private float baseHeartRatePerMinute = 50;  // Default value
+    private float minHeartRatePerMinute = 50;   // Normal pulse, can't go lower
+    private float maxHeartRatePerMinute = 200;  // Abnormal pulse, can't go higher (not doing heart attacks in this game)
 
-    public float baseRespirationRatePerMinute = 20.0f;  // Default value
-    public float minRespirationRatePerMinute = 10.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
-    public float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
+    private float baseRespirationRatePerMinute = 20.0f;  // Default value
+    private float minRespirationRatePerMinute = 10.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
+    private float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
 
-    public float baseRespirationBurnRatePerMinute = 60.0f;  // Default value
-    public float minRespirationBurnRatePerMinute = 0.0f;    // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
-    public float maxRespirationBurnRatePerMinute = 180.0f;  // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+    private float baseRespirationBurnRatePerMinute = 60.0f;  // Default value
+    private float minRespirationBurnRatePerMinute = 0.0f;    // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
+    private float maxRespirationBurnRatePerMinute = 180.0f;  // Hard to imagine being able to physically inhale\exhale this much, but it's a game
 
-    public float baseSuitIntegrityPercentage = 100.0f;  // Default value
-    public float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
-    public float maxSuitIntegrityPercentage = 150.0f;   // Suit starts at 100, but with buffs...
+    private float baseSuitIntegrityPercentage = 100.0f;  // Default value
+    private float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
+    private float maxSuitIntegrityPercentage = 100.0f;   // Suit starts at 100%
 
-    public float minJetBurnRatePerSecond = 0.0f;
-    public float maxJetBurnRatePerSecond = 2000.0f;
+    private float minJetBurnRatePerSecond = 0.0f;
+    private float maxJetBurnRatePerSecond = 2000.0f;
 
-    public float baseOxygenBurnRatePerSecond = 20.0f;   // Default value
-    public float minOxygenBurnRatePerSecond = 20.0f;    // Represents normal respiration rate
-    public float maxOxygenBurnRatePerSecond = 2000.0f;  // Cry havok!  And let loose the dogs of war!
+    private float baseOxygenBurnRatePerSecond = 20.0f;   // Default value
+    private float minOxygenBurnRatePerSecond = 20.0f;    // Represents normal respiration rate
+    private float maxOxygenBurnRatePerSecond = 2000.0f;  // Cry havok!  And let loose the dogs of war!
 
-    public float baseOxygenTankContent = 6000.0f;       // Default value, full tank
-    public float minOxygenTankContent = 0.0f;           // Out of air...
-    public float maxOxygenTankContent = 6000.0f;        // This is actually days worth of air...without using jets
-    public float fullOxygenPonyBottle = 1000.0f;        // This is a buff that expires, can only have one at a time
+    private float baseOxygenTankContent = 6000.0f;       // Default value, full tank
+    private float minOxygenTankContent = 0.0f;           // Out of air...
+    private float maxOxygenTankContent = 6000.0f;        // This is actually days worth of air...without using jets
+    private float fullOxygenPonyBottle = 1000.0f;        // This is a buff that expires, can only have one at a time
 
-    public float baseBloodOxygenPercent = 95.0f;        // Default
-    public float minBloodOxygenPercent = 80.0f;         // Min level (brain death occurs below this point)
-    public float maxBloodOxygenPercent = 98.0f;         // High level
+    private float baseBloodOxygenPercent = 95.0f;        // Default
+    private float minBloodOxygenPercent = 80.0f;         // Min level (brain death occurs below this point)
+    private float maxBloodOxygenPercent = 98.0f;         // High level
 
     // How much Oxygen per second does respiration burn?
-    public float oxygenCostRespirationHeatbeatBase = 1.0f;        // Multipler of base burn rate = How much does it cost to breath with normal pulse?
-    public float oxygenCostRespirationHeatbeatPlus20bpm = 1.3f;   // How much does it cost to breath with normal pulse + 20bpm?
-    public float oxygenCostRespirationHeatbeatPlus40bpm = 1.7f;   // How much does it cost to breath with normal pulse + 40bpm?
-    public float oxygenCostRespirationHeatbeatPlus60bpm = 2.0f;   // How much does it cost to breath with normal pulse + 60bpm?
-    public float oxygenCostRespirationHeatbeatPlus80bpm = 2.5f;   // How much does it cost to breath with normal pulse + 80bpm?
-    public float oxygenCostRespirationHeatbeatPlus100bpm = 3.0f;  // How much does it cost to breath with normal pulse + 100bpm?
+    private float oxygenCostRespirationHeatbeatBase = 1.0f;        // Multipler of base burn rate = How much does it cost to breath with normal pulse?
+    private float oxygenCostRespirationHeatbeatPlus20bpm = 1.3f;   // How much does it cost to breath with normal pulse + 20bpm?
+    private float oxygenCostRespirationHeatbeatPlus40bpm = 1.7f;   // How much does it cost to breath with normal pulse + 40bpm?
+    private float oxygenCostRespirationHeatbeatPlus60bpm = 2.0f;   // How much does it cost to breath with normal pulse + 60bpm?
+    private float oxygenCostRespirationHeatbeatPlus80bpm = 2.5f;   // How much does it cost to breath with normal pulse + 80bpm?
+    private float oxygenCostRespirationHeatbeatPlus100bpm = 3.0f;  // How much does it cost to breath with normal pulse + 100bpm?
 
     // How does damage to the spacesuit affect oxygen use?
     // Suit Integrity cost is calculated using the closest value, multiplied against actual damage (see calc)
-    public float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 200.0f;   // This much damage caused by a minor leak
-    public float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 300.0f;   // Getting sloppy bub
-    public float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 450.0f;   // Dying is starting to sound like an option
-    public float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 650.0f;   // WTF dude, stop running into walls
-    public float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 900.0f;   // Ok, you are just hitting walls to see what happens, right?
-    public float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 1200.0f;  // Doh!
-    public float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 1550.0f;  // This isn't fun anymore...
-    public float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 1800.0f;  // That next step is a loser
-    public float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 2000.0f;  // Wow!  You're fucked!
+    private float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 200.0f;   // This much damage caused by a minor leak
+    private float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 300.0f;   // Getting sloppy bub
+    private float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 450.0f;   // Dying is starting to sound like an option
+    private float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 650.0f;   // WTF dude, stop running into walls
+    private float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 900.0f;   // Ok, you are just hitting walls to see what happens, right?
+    private float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 1200.0f;  // Doh!
+    private float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 1550.0f;  // This isn't fun anymore...
+    private float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 1800.0f;  // That next step is a loser
+    private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 2000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
-    public float oxygenCostPerSecondUsingMainThruster = 250.0f;             // Litres per second - it adds up quick!
-    public float oxygenCostPerSecondUsingAttitudeJet = 50.0f;
+    private float oxygenCostPerSecondUsingMainThruster = 250.0f;             // Litres per second - it adds up quick!
+    private float oxygenCostPerSecondUsingAttitudeJet = 125.0f;              // 50% power used by attitude thrusters
 
     // What happens when the player is "injured"?
-    public float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
-    public float injuryEffectWallStrikeGlancingBlow_HeartRateIncrease = 30.0f;  // Up to 30 bpm pulse increase (see calculation)
-    public float injuryEffectWallStrikeDirect_SuitIntegrityDamage = 10.0f;      // Up to 10% Suit Integrity loss (see calculation)
-    public float injuryEffectWallStrikeDirect_HeartRateIncrease = 10.0f;        // Up to 40 bpm pulse increase (see calculation)
-    public float injuryEffectWallStrikeNearMiss_HeartRateIncrease = 20.0f;      // Up to 20 bpm pulse increase (see calculation)
-    public float injuryEffectSharpObject_SuitIntegrityDamage = 30.0f;           // Up to 30% Suit Integrity loss (see calculation)
-    public float injuryEffectSharpObject_HeartRateIncrease = 70.0f;             // Up to 70 bpm pulse increase (see calculation)
-    public float injuryEffectSharpObjectNearMiss_HeartRateIncrease = 40.0f;     // Up to 40 bpm pulse increase (see calculation)
-    public float injuryEffectEnemyAttack_SuitIntegrityDamage = 50.0f;           // Up to 50% Suit Integrity loss (see calculation)
-    public float injuryEffectEnemyAttack_HeartRateIncrease = 120.0f;            // Up to 20 bpm pulse increase (see calculation)
-    public float injuryEffectEnemyAttackNearMiss_HeartRateIncrease = 80.0f;     // Up to 80 bpm pulse increase (see calculation)
+    private float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
+    private float injuryEffectWallStrikeGlancingBlow_HeartRateIncrease = 30.0f;  // Up to 30 bpm pulse increase (see calculation)
+    private float injuryEffectWallStrikeDirect_SuitIntegrityDamage = 10.0f;      // Up to 10% Suit Integrity loss (see calculation)
+    private float injuryEffectWallStrikeDirect_HeartRateIncrease = 10.0f;        // Up to 40 bpm pulse increase (see calculation)
+    private float injuryEffectWallStrikeNearMiss_HeartRateIncrease = 20.0f;      // Up to 20 bpm pulse increase (see calculation)
+    private float injuryEffectSharpObject_SuitIntegrityDamage = 30.0f;           // Up to 30% Suit Integrity loss (see calculation)
+    private float injuryEffectSharpObject_HeartRateIncrease = 70.0f;             // Up to 70 bpm pulse increase (see calculation)
+    private float injuryEffectSharpObjectNearMiss_HeartRateIncrease = 40.0f;     // Up to 40 bpm pulse increase (see calculation)
+    private float injuryEffectEnemyAttack_SuitIntegrityDamage = 50.0f;           // Up to 50% Suit Integrity loss (see calculation)
+    private float injuryEffectEnemyAttack_HeartRateIncrease = 120.0f;            // Up to 20 bpm pulse increase (see calculation)
+    private float injuryEffectEnemyAttackNearMiss_HeartRateIncrease = 80.0f;     // Up to 80 bpm pulse increase (see calculation)
 
     // How does not having oxygen affect the human brain?  Hypoxemia - low blood oxygen, which leads to brain and tissue death
-    public float oxygenTankEmptyHypoxemiaDamagePerSecond = 0.5f;                // Percent of blood oxygen lost per second when the O2 runs out
-    public float oxygenTankEmptyRespirationRatePerMinute = 0.0f;                // Can't breathe if you have nothing left in the tank
+    private float oxygenTankEmptyHypoxemiaDamagePerSecond = 0.5f;                // Percent of blood oxygen lost per second when the O2 runs out
+    private float oxygenTankEmptyRespirationRatePerMinute = 0.0f;                // Can't breathe if you have nothing left in the tank
 
     // Tank refill and buff values
-    public float oxygenTankRefillSingleTank = 0.5f;                            // Percent of MAX oxygen to restore (will be cut off at max when set)
-    public float oxygenTankRefillBothTanks = 1.0f;                             // Percent of MAX oxygen to restore (will be cut off at max when set)
+    private float oxygenTankRefillSingleTank = 0.5f;                            // 50% of MAX oxygen to restore (will be cut off at max when set)
+    private float oxygenTankRefillBothTanks = 1.0f;                             // 100% of MAX oxygen to restore (will be cut off at max when set)
+
+    // Auto repair costs
+    private float oxygenCostPerSecondAutoRepairingSuit = 50.0f;                 // Litres per second - it adds up quick!
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,15 +265,6 @@ public class AvatarAccounting : MonoBehaviour
     public Text UX_CurrentOxygenBurnRatePerSecondText;
     public Text UX_CurrentOxygenTankContentText;
     public Text UX_CurrentBloodOxygenPercentText;
-
-    // These are the vars that should be used externally
-    public float UX_CurrentHeartRatePerMinute;
-    public float UX_CurrentRespirationRatePerMinute;
-    public float UX_CurrentJetBurnRatePerSecond;
-    public float UX_CurrentSuitIntegrity;
-    public float UX_CurrentOxygenBurnRatePerSecond;
-    public float UX_CurrentOxygenTankContent;
-    public float UX_CurrentBloodOxygenPercent;
 
     #endregion Public Field Variables
 
@@ -290,7 +289,9 @@ public class AvatarAccounting : MonoBehaviour
         // Initialize jet cost tracking
         this.TerminateAllJets();
 
-        //this.nextUpdate = Mathf.FloorToInt(Time.time);
+        this.nextUpdate = Mathf.FloorToInt(Time.time);
+        this.lastTimeJetsFired = Time.time;
+        this.lastTimeSuitWasDamaged = Time.time;
     }
 
     // Update is called once per frame
@@ -299,24 +300,34 @@ public class AvatarAccounting : MonoBehaviour
         this.ProcessCurrentOxygenBurn();
     }
 
+    private void Update()
+    {
+        // If jets are burning, set tracker so auto-heal will not work (while jets are burning)
+        if (this.CurrentJetBurnRatePerSecond > 0) this.lastTimeJetsFired = Time.time;
+
+
+        // Provide for Update calls once per second for time-based UX requirements
+        if (Time.time >= this.nextUpdate)
+        {
+            this.nextUpdate = Mathf.FloorToInt(Time.time) + 1;
+            this.UpdateEverySecond();
+        }
+    }
+
     #endregion Event Handlers
 
 
     #region Private Methods
 
     // Calculates oxygen used by jets, suit damage, anything by actually breathing (handled elsewhere)
-    // and "uses" one frames worth.
-    // Should be called by FixedUpdate, every frame
+    // and "uses" the current call's worth.  
+    // Should be called by FixedUpdate, 50 times per second
     private void ProcessCurrentOxygenBurn()
     {
-        // This should use actual frame rate, but meh
-        float currentFrameRate = 50f;
-
-
         // Once the oxygen tank is empty, Sp02 or "Blood Oxygen Level" decreaces until you black out and eventually die of hypoxemia
         if (this.CurrentOxygenAllTanksContent == 0f)
         {
-            this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / currentFrameRate) * 2);
+            this.CurrentBloodOxygenPercent -= (this.oxygenTankEmptyHypoxemiaDamagePerSecond * (1f / fixedUpdateRate) * 2);
         }
         else
         {
@@ -328,12 +339,12 @@ public class AvatarAccounting : MonoBehaviour
             this.CalculateSuitIntegrityBurnRate();
 
 
-            // Consume oxygen for current consumption rate (1/50th per frame)
-            this.UseOxygen(this.CurrentOxygenBurnRatePerSecond * (1f / currentFrameRate));
+            // Consume oxygen for current consumption rate (1/50th of one second's worth)
+            this.UseOxygen(this.CurrentOxygenBurnRatePerSecond / fixedUpdateRate);
         }
     }
 
-    // Calculates oxygen used by respiration, and "uses" one seconds worth.
+    // Calculates oxygen used by respiration
     private void CalculateRespirationBurnRate()
     {
         // Normal Respiration Rate(in space):
@@ -369,7 +380,7 @@ public class AvatarAccounting : MonoBehaviour
     private void CalculateSuitIntegrityBurnRate()
     {
         float currentOxygenCostRate = 0f;
-        float suitIntegrityLossInPercentage = (this.CurrentSuitIntegrityInPercentage - this.baseSuitIntegrityPercentage);
+        float suitIntegrityLossInPercentage = (this.baseSuitIntegrityPercentage - this.CurrentSuitIntegrityInPercentage);
 
 
         // If no damage, or integrity is up due to buff presense, set cost to 0;
@@ -397,8 +408,34 @@ public class AvatarAccounting : MonoBehaviour
             else if (suitIntegrityLossInPercentage >= 90)
                 currentOxygenCostRate = oxygenCostPerMinuteSuitIntegrityMinus90Percent;
 
+            // Use the constants for "per minute" burn rate, calculate "per second"
+            this.currentSuitIntegrityCostPerSecond = (currentOxygenCostRate / 60);
+        }
+    }
 
-            this.currentSuitIntegrityCostPerSecond = currentOxygenCostRate;
+    // Update is called once per SECOND
+    private void UpdateEverySecond() // Every second (not every frame)
+    {
+        // Process DOT, Buff\Debuff Expiration, etc.
+
+        // Auto repair if actually damaged (less than 100%)
+        if (this.CurrentSuitIntegrityInPercentage < 100.0f) this.AutoRepair();
+    }
+
+    private void AutoRepair()
+    {
+        // Only allow autorepair if the O2 tanks are not empty
+        if (this.CurrentOxygenAllTanksContent > 0)
+        {
+            // Only repair after one or more seconds of no jet activity
+            if ((Time.time - this.lastTimeJetsFired) >= 1)
+            {
+                // Repairs cost a little air
+                this.UseOxygen(this.oxygenCostPerSecondAutoRepairingSuit);
+
+                // Repair 5% - actually 5% of the suit's current integrity.  See RepairInjury() for details.
+                this.RepairInjury(RepairInjuryAmount.OnePercent);
+            }
         }
     }
 
@@ -414,7 +451,7 @@ public class AvatarAccounting : MonoBehaviour
         // Read-Only, calculated inline
         get
         {
-            return (this.currentRespirationBurnRatePerSecond / 60);
+            return this.currentRespirationBurnRatePerSecond;
         }
         private set
         {
@@ -732,6 +769,7 @@ public class AvatarAccounting : MonoBehaviour
 
     #endregion Public Methods - Jets
 
+
     #region Public Methods - Oxygen
 
     // Decreaces stored oxygen, or terminates normal usage if tanks are empty
@@ -781,13 +819,16 @@ public class AvatarAccounting : MonoBehaviour
     {
         float percentToFillTanks = 0.0f;
 
+
         switch (oxygenTankRefillAmount)
         {
             case OxygenTankRefillAmount.FivePercent:
-                percentToFillTanks = 0.05f;
+                // This amount is divided by fixedUpdateRate sos it can be called by FixedUpdate (called 50 times per second) for smooth delivery
+                percentToFillTanks = 0.05f / fixedUpdateRate;
                 break;
             case OxygenTankRefillAmount.TenPercent:
-                percentToFillTanks = 0.1f / 50;
+                // This amount is divided by fixedUpdateRate sos it can be called by FixedUpdate (called 50 times per second) for smooth delivery
+                percentToFillTanks = 0.1f / fixedUpdateRate;
                 break;
             case OxygenTankRefillAmount.FullSingleTank:
                 percentToFillTanks = this.oxygenTankRefillSingleTank;
@@ -840,95 +881,138 @@ public class AvatarAccounting : MonoBehaviour
     #region Public Methods - Space Suit Maintenance
 
     // Add damage to the player's suit, or just scare the shit out of them and increase their heartrate and respiration
-    public void AddInjury(InjuryType injuryType, float velocity = 0)
+    public void AddInjury(InjuryType injuryType) { this.AddInjury(injuryType, 0);  }
+    public void AddInjury(InjuryType injuryType, float velocity, float angle)
+    {
+        //// Calculate damage using velocity, angle - this does not account for sharp objects, just walls, etc.
+        //float impactDamagePercentage = velocity * angle; // maybe some actual math here...
+        //this.AddInjury(injuryType, impactDamagePercentage);
+    }
+    public void AddInjury(InjuryType injuryType, float damagePercentageOverride)
     {
         float newSuitIntegrityDamage = 0.0f;
         float newHeartRateIncrease = 0.0f;
+        float callTime = Time.time;
 
-        switch (injuryType)
+        if ((callTime - this.lastTimeSuitWasDamaged) >= 1)
         {
-            // Get "base" damage occurring from injury
-            case InjuryType.WallStrikeGlancingBlow:
-                newSuitIntegrityDamage = this.injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage;
-                newHeartRateIncrease = this.injuryEffectWallStrikeGlancingBlow_HeartRateIncrease;
-                break;
-            case InjuryType.WallStrikeDirect:
-                newSuitIntegrityDamage = this.injuryEffectWallStrikeDirect_SuitIntegrityDamage;
-                newHeartRateIncrease = this.injuryEffectWallStrikeDirect_HeartRateIncrease;
-                break;
-            case InjuryType.WallStrikeNearMiss:
-                newSuitIntegrityDamage = 0.0f;
-                newHeartRateIncrease = this.injuryEffectWallStrikeNearMiss_HeartRateIncrease;
-                break;
-            case InjuryType.SharpObject:
-                newSuitIntegrityDamage = this.injuryEffectSharpObject_SuitIntegrityDamage;
-                newHeartRateIncrease = this.injuryEffectSharpObject_HeartRateIncrease;
-                break;
-            case InjuryType.SharpObjectNearMiss:
-                newSuitIntegrityDamage = 0.0f;
-                newHeartRateIncrease = this.injuryEffectSharpObjectNearMiss_HeartRateIncrease;
-                break;
-            case InjuryType.EnemyAttack:
-                newSuitIntegrityDamage = this.injuryEffectEnemyAttack_SuitIntegrityDamage;
-                newHeartRateIncrease = this.injuryEffectEnemyAttack_HeartRateIncrease;
-                break;
-            case InjuryType.EnemyAttackNearMiss:
-                newSuitIntegrityDamage = 0.0f;
-                newHeartRateIncrease = this.injuryEffectEnemyAttackNearMiss_HeartRateIncrease;
-                break;
-            default:
-                break;
+
+            switch (injuryType)
+            {
+                // Get "base" damage occurring from injury
+                case InjuryType.WallStrikeGlancingBlow:
+                    newSuitIntegrityDamage = this.injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage;
+                    newHeartRateIncrease = this.injuryEffectWallStrikeGlancingBlow_HeartRateIncrease;
+                    break;
+                case InjuryType.WallStrikeDirect:
+                    newSuitIntegrityDamage = this.injuryEffectWallStrikeDirect_SuitIntegrityDamage;
+                    newHeartRateIncrease = this.injuryEffectWallStrikeDirect_HeartRateIncrease;
+                    break;
+                case InjuryType.WallStrikeNearMiss:
+                    newSuitIntegrityDamage = 0.0f;
+                    newHeartRateIncrease = this.injuryEffectWallStrikeNearMiss_HeartRateIncrease;
+                    break;
+                case InjuryType.SharpObject:
+                    newSuitIntegrityDamage = this.injuryEffectSharpObject_SuitIntegrityDamage;
+                    newHeartRateIncrease = this.injuryEffectSharpObject_HeartRateIncrease;
+                    break;
+                case InjuryType.SharpObjectNearMiss:
+                    newSuitIntegrityDamage = 0.0f;
+                    newHeartRateIncrease = this.injuryEffectSharpObjectNearMiss_HeartRateIncrease;
+                    break;
+                case InjuryType.EnemyAttack:
+                    newSuitIntegrityDamage = this.injuryEffectEnemyAttack_SuitIntegrityDamage;
+                    newHeartRateIncrease = this.injuryEffectEnemyAttack_HeartRateIncrease;
+                    break;
+                case InjuryType.EnemyAttackNearMiss:
+                    newSuitIntegrityDamage = 0.0f;
+                    newHeartRateIncrease = this.injuryEffectEnemyAttackNearMiss_HeartRateIncrease;
+                    break;
+                default:
+                    break;
+            }
+
+
+            // Override calculated suit integrity damage if damage value was given
+            if (damagePercentageOverride > 0f) newSuitIntegrityDamage = damagePercentageOverride;
+
+
+            // TODO: Is this correct?
+
+
+            // Suit damage is in percent of current integrity (can't take away 70% of something that only has 30%,
+            // but you can take 70% OF THAT 30% since the suit is waving around it is harder to damage what is left)
+            float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
+
+            if (actualDamage > 0)
+            {
+                // Update the last time the suit took damage to right now!
+                this.lastTimeSuitWasDamaged = callTime;
+
+                // Apply the actual damage
+                this.CurrentSuitIntegrityInPercentage -= actualDamage;
+            }
+
+
+
+            // TODO: YOU ARE HERE!!!
+
+            // Set up variables for storing damage rates defined in InjuryType enum
+            // NOTE: IT may be necessary to calculate the velocity of the avatar at the point of impact
+            // by vector, or better, put the math here and add vector parameters to allow encapsulation.
+
+
+            // Add "near miss" injury types that just increase heart and respiration rates
+            // Add increases to heart and respiration rates to all suit injuries
+
+
+            // Optional param injuryDuration can put a timer on injuries (especially near misses) to remove the injury
+            // upon expiration.  This should be an ordered list that is reviewed regularaly elsewhere, and must include
+            // the duration, and type\amount of injury so it can be "removed"
+
+
+            // Velocity: directional force at time of impact(if going 23kph N, but hit NW, velocity is 50 %, right ?)
+
+            // Duration: When impact results in dragging along a wall, etc., how long was the duration?
+
+
+            // Alter actual damage based on the angle and velocity of impact
+            //this.CurrentSuitIntegrity += newSuitIntegrityDamage;
+
+
+            //// Emotional damage is also altered based on angle and speed becuase a "near miss" is much worse at high speed
         }
-
-
-        // TODO: Is this correct?
-
-
-        // Suit damage is in percent of current integrity (can't take away 70% of something that only has 30%,
-        // but you can take 70% of the 30% since the suit is waving around it is harder to damage what is left)
-        float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
-
-
-        // WTF are the suit integrity numbers?  Change names to spell it the fuck out:
-
-
-        this.currentSuitIntegrityInPercentage += actualDamage;
-
-
-
-        // TODO: YOU ARE HERE!!!
-
-        // Set up variables for storing damage rates defined in InjuryType enum
-        // NOTE: IT may be necessary to calculate the velocity of the avatar at the point of impact
-        // by vector, or better, put the math here and add vector parameters to allow encapsulation.
-
-
-        // Add "near miss" injury types that just increase heart and respiration rates
-        // Add increases to heart and respiration rates to all suit injuries
-
-
-        // Optional param injuryDuration can put a timer on injuries (especially near misses) to remove the injury
-        // upon expiration.  This should be an ordered list that is reviewed regularaly elsewhere, and must include
-        // the duration, and type\amount of injury so it can be "removed"
-
-
-        // Velocity: directional force at time of impact(if going 23kph N, but hit NW, velocity is 50 %, right ?)
-
-        // Duration: When impact results in dragging along a wall, etc., how long was the duration?
-
-
-        // Alter actual damage based on the angle and velocity of impact
-        //this.CurrentSuitIntegrity += newSuitIntegrityDamage;
-
-
-        //// Emotional damage is also altered based on angle and speed becuase a "near miss" is much worse at high speed
-
     }
 
     // Allows for normal repairs (allowIncreaseOverBase = false) or buffs (allowIncreaseOverBase = true)
-    public void RepairInjury(float suitIntegrityIncrease) { this.RepairInjury(suitIntegrityIncrease, false); }
-    public void RepairInjury(float suitIntegrityIncrease, bool allowIncreaseOverBase)
+    public void RepairInjury(RepairInjuryAmount repairInjuryAmount)
     {
+        float repairPercentage = 0f;
+
+
+        switch (repairInjuryAmount)
+        {
+            case RepairInjuryAmount.OnePercent:
+                repairPercentage = 0.01f;
+                break;
+            case RepairInjuryAmount.FivePercent:
+                repairPercentage = 0.05f;
+                break;
+            case RepairInjuryAmount.TenPercent:
+                repairPercentage = 0.1f;
+                break;
+        }
+
+        // Like damage, suit repairs are done in percent of current integrity(can't improve something by 70% if
+        // it is already at 90%, and you can't repair something that is flapping around in the breeze without
+        // difficulty.  Repair percentage is applied the same way damage applies: you can add 5 % or 10 % the
+        // current integrity of the suit(10 % of 30 % current integrity = 3 % increase\repair).
+        float actualRepair = this.currentSuitIntegrityInPercentage * repairPercentage;
+
+        if ((this.CurrentSuitIntegrityInPercentage + actualRepair) <= this.maxSuitIntegrityPercentage)
+            this.CurrentSuitIntegrityInPercentage += actualRepair;
+        else
+            this.CurrentSuitIntegrityInPercentage += actualRepair;
     }
 
     #endregion Public Methods - Space Suit Maintenance
@@ -953,22 +1037,6 @@ public class AvatarAccounting : MonoBehaviour
     //{
     //    yield return new WaitForSeconds(waitSeconds);
     //    method();
-    //}
-
-    //private void Update()
-    //{
-    //    // Provide for Update calls once per second for time-based UX requirements
-    //    if (Time.time >= this.nextUpdate)
-    //    {
-    //        this.nextUpdate = Mathf.FloorToInt(Time.time) + 1;
-    //        this.UpdateEverySecond();
-    //    }
-    //}
-
-    //// Update is called once per second
-    //private void UpdateEverySecond() // Every second (not every frame)
-    //{
-    //    // Process DOT, Buff\Debuff Expiration, etc.
     //}
 
  */
