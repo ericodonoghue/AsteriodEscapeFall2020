@@ -21,6 +21,9 @@ TagManager:
   - ReverseButton
   - RefuelStation
   - PressF
+  - Gauge
+  - GaugePin
+  - AirTank_PonyBottle
   layers:
   - Default
   - TransparentFX
