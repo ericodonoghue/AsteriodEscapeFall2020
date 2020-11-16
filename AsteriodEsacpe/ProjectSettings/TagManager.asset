@@ -24,6 +24,7 @@ TagManager:
   - Gauge
   - GaugePin
   - AirTank_PonyBottle
+  - PonyBottleParent
   layers:
   - Default
   - TransparentFX

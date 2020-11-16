@@ -4,20 +4,38 @@ using UnityEngine;
 
 public class O2TankMovement : MonoBehaviour
 {
-    public Rigidbody tankRB;
-    readonly float force = 8f;
+    GameObject PoneyBottleParentObj;
+
+    GameObject[] ponyBottles;
+
+    public float intialV = 10.0f;
+    public float intialT = 2.0f;
+
+    public Vector3 rotate = new Vector3(1,0,0);
+    public Vector3 force = new Vector3(1,1,0);
 
     // Start is called before the first frame update
     void Start()
     {
-        tankRB = GetComponent<Rigidbody>();
+        PoneyBottleParentObj = GameObject.FindGameObjectWithTag("PonyBottleParent");
+        ponyBottles = new GameObject[PoneyBottleParentObj.transform.childCount];
 
-        tankRB.AddRelativeForce(new Vector3(Random.Range(0f, 2f) * force, Random.Range(0f, 2f) * force, Random.Range(0, 2f) * force));
+        for (int i = 0; i < ponyBottles.Length; ++i)
+        {
+            ponyBottles[i] = PoneyBottleParentObj.transform.GetChild(i).gameObject;
+        }
+            
+        foreach (GameObject bottle in ponyBottles)
+        {
+            Rigidbody bottleRB = bottle.GetComponent<Rigidbody>();
+            bottleRB.AddForce(force * intialV);
+            bottleRB.AddTorque(rotate * intialT);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        tankRB.AddRelativeForce(new Vector3(Random.Range(0f, 2f) * force, Random.Range(0f, 2f) * force, Random.Range(0, 2f) * force));
+        
     }
 }

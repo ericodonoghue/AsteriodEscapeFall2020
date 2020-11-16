@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 534315479861581173}
   - component: {fileID: 5114112052675255912}
   - component: {fileID: 1852200260103918128}
+  - component: {fileID: -4609247074281183743}
   m_Layer: 0
   m_Name: oxypo
   m_TagString: AirTank_PonyBottle
@@ -63,6 +64,19 @@ CapsuleCollider:
   m_Height: 18
   m_Direction: 0
   m_Center: {x: 0, y: 3, z: 0}
+--- !u!114 &-4609247074281183743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874144409683496911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc1c8eebb8b96614ea0a478ae9213590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankRB: {fileID: 0}
 --- !u!1 &1806214479062463164
 GameObject:
   m_ObjectHideFlags: 0
