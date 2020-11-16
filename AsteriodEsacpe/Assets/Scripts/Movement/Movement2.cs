@@ -135,6 +135,7 @@ public class Movement2 : MonoBehaviour
         {
             case "Cave":
                 spinOutTime = Time.time + 7;
+                //Debug.Log("In Movement2 Script");
                 break;
             case "AirTank":
                 

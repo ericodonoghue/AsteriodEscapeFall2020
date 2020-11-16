@@ -888,6 +888,23 @@ public class AvatarAccounting : MonoBehaviour
         //float impactDamagePercentage = velocity * angle; // maybe some actual math here...
         //this.AddInjury(injuryType, impactDamagePercentage);
     }
+    public void AddInjury(float damage) 
+    {
+        float newSuitIntegrityDamage = 0.0f;
+        float newHeartRateIncrease = damage / 10;//??
+        float callTime = Time.time;
+
+        if (damage > 0f) newSuitIntegrityDamage = damage;
+        float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
+
+        if (actualDamage > 0)
+        {
+            this.lastTimeSuitWasDamaged = callTime;
+            this.CurrentSuitIntegrityInPercentage -= actualDamage;
+            this.currentHeartRatePerMinute += newHeartRateIncrease;
+            //calm down after time?
+        }
+    }
     public void AddInjury(InjuryType injuryType, float damagePercentageOverride)
     {
         float newSuitIntegrityDamage = 0.0f;
