@@ -88,16 +88,20 @@ public class Movement2 : MonoBehaviour
     /** Rotates the player object according to mouse position on screen */
     void RotatePlayer()
     {
-        //Camera.main.transform.Rotate(lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse X"), lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse Y"), 0);
-        if (!spinOut)
+        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
         {
-            player.transform.rotation = Camera.main.transform.rotation;
+            //Camera.main.transform.Rotate(lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse X"), lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse Y"), 0);
+            if (!spinOut)
+            {
+                player.transform.rotation = Camera.main.transform.rotation;
+            }
+            else
+            {
+                player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
+            }
+
         }
-        else
-        {
-            player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
-        }
-        
+
     }
     private void ResetSpinOut()
     {

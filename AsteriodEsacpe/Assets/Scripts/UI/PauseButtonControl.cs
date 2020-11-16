@@ -25,6 +25,7 @@ public class PauseButtonControl : MonoBehaviour
     public void ResumePressed()
     {
         pauseControl.SetPauseMenuDeactive();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void SettingsPressed()

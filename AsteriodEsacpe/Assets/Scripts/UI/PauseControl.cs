@@ -43,6 +43,6 @@ public class PauseControl : MonoBehaviour
     {
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
+        
     }
 }

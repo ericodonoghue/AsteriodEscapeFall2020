@@ -25,6 +25,7 @@ TagManager:
   - GaugePin
   - AirTank_PonyBottle
   - PonyBottleParent
+  - YouDiedMenu
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ public class CameraPosition : MonoBehaviour
     GameObject player;
     Transform playerT;
     private PauseControl pauseControl;
+    private AvatarAccounting avatarAccounting;
 
 
     // The distance in the x-z plane to the target
@@ -26,6 +27,7 @@ public class CameraPosition : MonoBehaviour
     void Start()
     {
         pauseControl = Camera.main.GetComponent<PauseControl>();
+        avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
