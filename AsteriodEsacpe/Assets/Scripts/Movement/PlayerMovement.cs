@@ -112,6 +112,8 @@ public class PlayerMovement : MonoBehaviour
         // For now, just restart on blackout
         //if (avatarAccounting.PlayerBlackout)
             //SceneManager.LoadScene(GameSceneName);
+
+
     }
 
     //private void OnCollisionEnter(Collision c)

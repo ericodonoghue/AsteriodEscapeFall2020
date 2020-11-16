@@ -408,7 +408,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 13961783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc7b056b87f8d2a41952f39cbeca8da2, type: 3}
+  m_Script: {fileID: 11500000, guid: ee0dd17c6cfc58f4b8a9683ddde9800f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &13961786
@@ -4331,7 +4331,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -200}
-  m_SizeDelta: {x: 600, y: 60}
+  m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &593148229
 MonoBehaviour:
@@ -4377,8 +4377,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 13961785}
-        m_TargetAssemblyTypeName: PauseButtonControl, Assembly-CSharp
-        m_MethodName: LevelSelectPressed
+        m_TargetAssemblyTypeName: YouDiedMenuScript, Assembly-CSharp
+        m_MethodName: MainMenuPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4401,7 +4401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9150943, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.13501157, b: 0.9137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5725,6 +5725,7 @@ GameObject:
   - component: {fileID: 761169226}
   - component: {fileID: 761169227}
   - component: {fileID: 761169228}
+  - component: {fileID: 761169229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5941,6 +5942,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3797a8e13afee5b4db639b9a4a318298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &761169229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761169218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759cd3981d56d9a45b523c5545653675, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDead: 0
 --- !u!4 &764917176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4636985127609698, guid: d814e4a95fdb6434daa102638a7db438, type: 3}
@@ -6354,7 +6368,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 60}
+  m_SizeDelta: {x: 400, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &801676721
 MonoBehaviour:
@@ -6400,8 +6414,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 13961785}
-        m_TargetAssemblyTypeName: PauseButtonControl, Assembly-CSharp
-        m_MethodName: SettingsPressed
+        m_TargetAssemblyTypeName: YouDiedMenuScript, Assembly-CSharp
+        m_MethodName: RestartPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6424,7 +6438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9150943, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.14495564, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8148,8 +8162,8 @@ GameObject:
   - component: {fileID: 959719945}
   - component: {fileID: 959719944}
   m_Layer: 5
-  m_Name: Panel
-  m_TagString: Untagged
+  m_Name: RedPanel
+  m_TagString: RedPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

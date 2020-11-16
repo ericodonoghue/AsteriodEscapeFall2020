@@ -26,6 +26,7 @@ TagManager:
   - AirTank_PonyBottle
   - PonyBottleParent
   - YouDiedMenu
+  - RedPanel
   layers:
   - Default
   - TransparentFX

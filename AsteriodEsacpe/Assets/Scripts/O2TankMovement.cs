@@ -30,6 +30,7 @@ public class O2TankMovement : MonoBehaviour
             Rigidbody bottleRB = bottle.GetComponent<Rigidbody>();
             bottleRB.AddForce(force * intialV);
             bottleRB.AddTorque(rotate * intialT);
+            
         }
     }
 
