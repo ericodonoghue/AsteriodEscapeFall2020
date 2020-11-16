@@ -1,0 +1,1162 @@
+fileFormatVersion: 2
+guid: 5bd14a931cd094fc9a05d3703ea6b2c6
+ModelImporter:
+  serializedVersion: 26
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: Astronaut_rig_0004:Ankle_L
+  - first:
+      1: 100004
+    second: Astronaut_rig_0004:Ankle_R
+  - first:
+      1: 100006
+    second: Astronaut_rig_0004:Chest_M
+  - first:
+      1: 100008
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:GOLFIR3
+  - first:
+      1: 100010
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pCylinder4
+  - first:
+      1: 100012
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pSphere1
+  - first:
+      1: 100014
+    second: Astronaut_rig_0004:CylinderPipe:Group55826
+  - first:
+      1: 100016
+    second: Astronaut_rig_0004:CylinderPipe:pCube1
+  - first:
+      1: 100018
+    second: Astronaut_rig_0004:DeformationSystem
+  - first:
+      1: 100020
+    second: Astronaut_rig_0004:Elbow_L
+  - first:
+      1: 100022
+    second: Astronaut_rig_0004:Elbow_R
+  - first:
+      1: 100024
+    second: Astronaut_rig_0004:Extract1:Group27432
+  - first:
+      1: 100026
+    second: Astronaut_rig_0004:Eye_L
+  - first:
+      1: 100028
+    second: Astronaut_rig_0004:Eye_R
+  - first:
+      1: 100030
+    second: Astronaut_rig_0004:EyeEnd_L
+  - first:
+      1: 100032
+    second: Astronaut_rig_0004:EyeEnd_R
+  - first:
+      1: 100034
+    second: Astronaut_rig_0004:Eyes_lips:pCube10
+  - first:
+      1: 100036
+    second: Astronaut_rig_0004:Eyes_lips:pCube6
+  - first:
+      1: 100038
+    second: Astronaut_rig_0004:Eyes_lips:pCube9
+  - first:
+      1: 100040
+    second: Astronaut_rig_0004:Eyes_lips:pSphere4
+  - first:
+      1: 100042
+    second: Astronaut_rig_0004:Eyes_lips:pSphere6
+  - first:
+      1: 100044
+    second: Astronaut_rig_0004:flag_jnt_grp
+  - first:
+      1: 100046
+    second: Astronaut_rig_0004:geo
+  - first:
+      1: 100048
+    second: Astronaut_rig_0004:Geometry
+  - first:
+      1: 100050
+    second: Astronaut_rig_0004:group3
+  - first:
+      1: 100052
+    second: Astronaut_rig_0004:Head_M
+  - first:
+      1: 100054
+    second: Astronaut_rig_0004:HeadEnd_M
+  - first:
+      1: 100056
+    second: Astronaut_rig_0004:Hip_L
+  - first:
+      1: 100058
+    second: Astronaut_rig_0004:Hip_R
+  - first:
+      1: 100060
+    second: Astronaut_rig_0004:IndexFinger1_L
+  - first:
+      1: 100062
+    second: Astronaut_rig_0004:IndexFinger1_R
+  - first:
+      1: 100064
+    second: Astronaut_rig_0004:IndexFinger2_L
+  - first:
+      1: 100066
+    second: Astronaut_rig_0004:IndexFinger2_R
+  - first:
+      1: 100068
+    second: Astronaut_rig_0004:IndexFinger3_L
+  - first:
+      1: 100070
+    second: Astronaut_rig_0004:IndexFinger3_R
+  - first:
+      1: 100072
+    second: Astronaut_rig_0004:IndexFinger4_L
+  - first:
+      1: 100074
+    second: Astronaut_rig_0004:IndexFinger4_R
+  - first:
+      1: 100076
+    second: Astronaut_rig_0004:Jaw_M
+  - first:
+      1: 100078
+    second: Astronaut_rig_0004:JawEnd_M
+  - first:
+      1: 100080
+    second: Astronaut_rig_0004:jnt_backpack
+  - first:
+      1: 100082
+    second: Astronaut_rig_0004:jnt_backpack2
+  - first:
+      1: 100084
+    second: Astronaut_rig_0004:jnt_backpack3
+  - first:
+      1: 100086
+    second: Astronaut_rig_0004:jnt_planet_eyeBrow
+  - first:
+      1: 100088
+    second: Astronaut_rig_0004:jnt_planet_eyeBrow1
+  - first:
+      1: 100090
+    second: Astronaut_rig_0004:jnt_planet_L_eye
+  - first:
+      1: 100092
+    second: Astronaut_rig_0004:jnt_planet_L_eye1
+  - first:
+      1: 100094
+    second: Astronaut_rig_0004:jnt_planet_L_lips
+  - first:
+      1: 100096
+    second: Astronaut_rig_0004:joint1
+  - first:
+      1: 100098
+    second: Astronaut_rig_0004:joint2
+  - first:
+      1: 100100
+    second: Astronaut_rig_0004:joint3
+  - first:
+      1: 100102
+    second: Astronaut_rig_0004:joint4
+  - first:
+      1: 100104
+    second: Astronaut_rig_0004:joint5
+  - first:
+      1: 100106
+    second: Astronaut_rig_0004:joint6
+  - first:
+      1: 100108
+    second: Astronaut_rig_0004:joint7
+  - first:
+      1: 100110
+    second: Astronaut_rig_0004:Knee_L
+  - first:
+      1: 100112
+    second: Astronaut_rig_0004:Knee_R
+  - first:
+      1: 100114
+    second: Astronaut_rig_0004:Main
+  - first:
+      1: 100116
+    second: Astronaut_rig_0004:MiddleFinger1_L
+  - first:
+      1: 100118
+    second: Astronaut_rig_0004:MiddleFinger1_R
+  - first:
+      1: 100120
+    second: Astronaut_rig_0004:MiddleFinger2_L
+  - first:
+      1: 100122
+    second: Astronaut_rig_0004:MiddleFinger2_R
+  - first:
+      1: 100124
+    second: Astronaut_rig_0004:MiddleFinger3_L
+  - first:
+      1: 100126
+    second: Astronaut_rig_0004:MiddleFinger3_R
+  - first:
+      1: 100128
+    second: Astronaut_rig_0004:MiddleFinger4_L
+  - first:
+      1: 100130
+    second: Astronaut_rig_0004:MiddleFinger4_R
+  - first:
+      1: 100132
+    second: Astronaut_rig_0004:Neck_M
+  - first:
+      1: 100134
+    second: Astronaut_rig_0004:pCube3
+  - first:
+      1: 100136
+    second: Astronaut_rig_0004:pCylinder11
+  - first:
+      1: 100138
+    second: Astronaut_rig_0004:PinkyFinger1_L
+  - first:
+      1: 100140
+    second: Astronaut_rig_0004:PinkyFinger1_R
+  - first:
+      1: 100142
+    second: Astronaut_rig_0004:PinkyFinger2_L
+  - first:
+      1: 100144
+    second: Astronaut_rig_0004:PinkyFinger2_R
+  - first:
+      1: 100146
+    second: Astronaut_rig_0004:PinkyFinger3_L
+  - first:
+      1: 100148
+    second: Astronaut_rig_0004:PinkyFinger3_R
+  - first:
+      1: 100150
+    second: Astronaut_rig_0004:PinkyFinger4_L
+  - first:
+      1: 100152
+    second: Astronaut_rig_0004:PinkyFinger4_R
+  - first:
+      1: 100154
+    second: Astronaut_rig_0004:planet_facial
+  - first:
+      1: 100156
+    second: Astronaut_rig_0004:polySurface11
+  - first:
+      1: 100158
+    second: Astronaut_rig_0004:polySurface11 1
+  - first:
+      1: 100160
+    second: Astronaut_rig_0004:polySurface14
+  - first:
+      1: 100162
+    second: Astronaut_rig_0004:polySurface8
+  - first:
+      1: 100164
+    second: Astronaut_rig_0004:RingFinger1_L
+  - first:
+      1: 100166
+    second: Astronaut_rig_0004:RingFinger1_R
+  - first:
+      1: 100168
+    second: Astronaut_rig_0004:RingFinger2_L
+  - first:
+      1: 100170
+    second: Astronaut_rig_0004:RingFinger2_R
+  - first:
+      1: 100172
+    second: Astronaut_rig_0004:RingFinger3_L
+  - first:
+      1: 100174
+    second: Astronaut_rig_0004:RingFinger3_R
+  - first:
+      1: 100176
+    second: Astronaut_rig_0004:RingFinger4_L
+  - first:
+      1: 100178
+    second: Astronaut_rig_0004:RingFinger4_R
+  - first:
+      1: 100180
+    second: Astronaut_rig_0004:Root_M
+  - first:
+      1: 100182
+    second: Astronaut_rig_0004:Scapula_L
+  - first:
+      1: 100184
+    second: Astronaut_rig_0004:Scapula_R
+  - first:
+      1: 100186
+    second: Astronaut_rig_0004:Shoulder_L
+  - first:
+      1: 100188
+    second: Astronaut_rig_0004:Shoulder_R
+  - first:
+      1: 100190
+    second: Astronaut_rig_0004:ShoulderPart1_L
+  - first:
+      1: 100192
+    second: Astronaut_rig_0004:ShoulderPart1_R
+  - first:
+      1: 100194
+    second: Astronaut_rig_0004:ShoulderPart2_L
+  - first:
+      1: 100196
+    second: Astronaut_rig_0004:ShoulderPart2_R
+  - first:
+      1: 100198
+    second: Astronaut_rig_0004:Spine1_M
+  - first:
+      1: 100200
+    second: Astronaut_rig_0004:ThumbFinger1_L
+  - first:
+      1: 100202
+    second: Astronaut_rig_0004:ThumbFinger1_R
+  - first:
+      1: 100204
+    second: Astronaut_rig_0004:ThumbFinger2_L
+  - first:
+      1: 100206
+    second: Astronaut_rig_0004:ThumbFinger2_R
+  - first:
+      1: 100208
+    second: Astronaut_rig_0004:ThumbFinger3_L
+  - first:
+      1: 100210
+    second: Astronaut_rig_0004:ThumbFinger3_R
+  - first:
+      1: 100212
+    second: Astronaut_rig_0004:ThumbFinger4_L
+  - first:
+      1: 100214
+    second: Astronaut_rig_0004:ThumbFinger4_R
+  - first:
+      1: 100216
+    second: Astronaut_rig_0004:Toes_L
+  - first:
+      1: 100218
+    second: Astronaut_rig_0004:Toes_R
+  - first:
+      1: 100220
+    second: Astronaut_rig_0004:ToesEnd_L
+  - first:
+      1: 100222
+    second: Astronaut_rig_0004:ToesEnd_R
+  - first:
+      1: 100224
+    second: Astronaut_rig_0004:Wrist_L
+  - first:
+      1: 100226
+    second: Astronaut_rig_0004:Wrist_R
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: Astronaut_rig_0004:Ankle_L
+  - first:
+      4: 400004
+    second: Astronaut_rig_0004:Ankle_R
+  - first:
+      4: 400006
+    second: Astronaut_rig_0004:Chest_M
+  - first:
+      4: 400008
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:GOLFIR3
+  - first:
+      4: 400010
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pCylinder4
+  - first:
+      4: 400012
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pSphere1
+  - first:
+      4: 400014
+    second: Astronaut_rig_0004:CylinderPipe:Group55826
+  - first:
+      4: 400016
+    second: Astronaut_rig_0004:CylinderPipe:pCube1
+  - first:
+      4: 400018
+    second: Astronaut_rig_0004:DeformationSystem
+  - first:
+      4: 400020
+    second: Astronaut_rig_0004:Elbow_L
+  - first:
+      4: 400022
+    second: Astronaut_rig_0004:Elbow_R
+  - first:
+      4: 400024
+    second: Astronaut_rig_0004:Extract1:Group27432
+  - first:
+      4: 400026
+    second: Astronaut_rig_0004:Eye_L
+  - first:
+      4: 400028
+    second: Astronaut_rig_0004:Eye_R
+  - first:
+      4: 400030
+    second: Astronaut_rig_0004:EyeEnd_L
+  - first:
+      4: 400032
+    second: Astronaut_rig_0004:EyeEnd_R
+  - first:
+      4: 400034
+    second: Astronaut_rig_0004:Eyes_lips:pCube10
+  - first:
+      4: 400036
+    second: Astronaut_rig_0004:Eyes_lips:pCube6
+  - first:
+      4: 400038
+    second: Astronaut_rig_0004:Eyes_lips:pCube9
+  - first:
+      4: 400040
+    second: Astronaut_rig_0004:Eyes_lips:pSphere4
+  - first:
+      4: 400042
+    second: Astronaut_rig_0004:Eyes_lips:pSphere6
+  - first:
+      4: 400044
+    second: Astronaut_rig_0004:flag_jnt_grp
+  - first:
+      4: 400046
+    second: Astronaut_rig_0004:geo
+  - first:
+      4: 400048
+    second: Astronaut_rig_0004:Geometry
+  - first:
+      4: 400050
+    second: Astronaut_rig_0004:group3
+  - first:
+      4: 400052
+    second: Astronaut_rig_0004:Head_M
+  - first:
+      4: 400054
+    second: Astronaut_rig_0004:HeadEnd_M
+  - first:
+      4: 400056
+    second: Astronaut_rig_0004:Hip_L
+  - first:
+      4: 400058
+    second: Astronaut_rig_0004:Hip_R
+  - first:
+      4: 400060
+    second: Astronaut_rig_0004:IndexFinger1_L
+  - first:
+      4: 400062
+    second: Astronaut_rig_0004:IndexFinger1_R
+  - first:
+      4: 400064
+    second: Astronaut_rig_0004:IndexFinger2_L
+  - first:
+      4: 400066
+    second: Astronaut_rig_0004:IndexFinger2_R
+  - first:
+      4: 400068
+    second: Astronaut_rig_0004:IndexFinger3_L
+  - first:
+      4: 400070
+    second: Astronaut_rig_0004:IndexFinger3_R
+  - first:
+      4: 400072
+    second: Astronaut_rig_0004:IndexFinger4_L
+  - first:
+      4: 400074
+    second: Astronaut_rig_0004:IndexFinger4_R
+  - first:
+      4: 400076
+    second: Astronaut_rig_0004:Jaw_M
+  - first:
+      4: 400078
+    second: Astronaut_rig_0004:JawEnd_M
+  - first:
+      4: 400080
+    second: Astronaut_rig_0004:jnt_backpack
+  - first:
+      4: 400082
+    second: Astronaut_rig_0004:jnt_backpack2
+  - first:
+      4: 400084
+    second: Astronaut_rig_0004:jnt_backpack3
+  - first:
+      4: 400086
+    second: Astronaut_rig_0004:jnt_planet_eyeBrow
+  - first:
+      4: 400088
+    second: Astronaut_rig_0004:jnt_planet_eyeBrow1
+  - first:
+      4: 400090
+    second: Astronaut_rig_0004:jnt_planet_L_eye
+  - first:
+      4: 400092
+    second: Astronaut_rig_0004:jnt_planet_L_eye1
+  - first:
+      4: 400094
+    second: Astronaut_rig_0004:jnt_planet_L_lips
+  - first:
+      4: 400096
+    second: Astronaut_rig_0004:joint1
+  - first:
+      4: 400098
+    second: Astronaut_rig_0004:joint2
+  - first:
+      4: 400100
+    second: Astronaut_rig_0004:joint3
+  - first:
+      4: 400102
+    second: Astronaut_rig_0004:joint4
+  - first:
+      4: 400104
+    second: Astronaut_rig_0004:joint5
+  - first:
+      4: 400106
+    second: Astronaut_rig_0004:joint6
+  - first:
+      4: 400108
+    second: Astronaut_rig_0004:joint7
+  - first:
+      4: 400110
+    second: Astronaut_rig_0004:Knee_L
+  - first:
+      4: 400112
+    second: Astronaut_rig_0004:Knee_R
+  - first:
+      4: 400114
+    second: Astronaut_rig_0004:Main
+  - first:
+      4: 400116
+    second: Astronaut_rig_0004:MiddleFinger1_L
+  - first:
+      4: 400118
+    second: Astronaut_rig_0004:MiddleFinger1_R
+  - first:
+      4: 400120
+    second: Astronaut_rig_0004:MiddleFinger2_L
+  - first:
+      4: 400122
+    second: Astronaut_rig_0004:MiddleFinger2_R
+  - first:
+      4: 400124
+    second: Astronaut_rig_0004:MiddleFinger3_L
+  - first:
+      4: 400126
+    second: Astronaut_rig_0004:MiddleFinger3_R
+  - first:
+      4: 400128
+    second: Astronaut_rig_0004:MiddleFinger4_L
+  - first:
+      4: 400130
+    second: Astronaut_rig_0004:MiddleFinger4_R
+  - first:
+      4: 400132
+    second: Astronaut_rig_0004:Neck_M
+  - first:
+      4: 400134
+    second: Astronaut_rig_0004:pCube3
+  - first:
+      4: 400136
+    second: Astronaut_rig_0004:pCylinder11
+  - first:
+      4: 400138
+    second: Astronaut_rig_0004:PinkyFinger1_L
+  - first:
+      4: 400140
+    second: Astronaut_rig_0004:PinkyFinger1_R
+  - first:
+      4: 400142
+    second: Astronaut_rig_0004:PinkyFinger2_L
+  - first:
+      4: 400144
+    second: Astronaut_rig_0004:PinkyFinger2_R
+  - first:
+      4: 400146
+    second: Astronaut_rig_0004:PinkyFinger3_L
+  - first:
+      4: 400148
+    second: Astronaut_rig_0004:PinkyFinger3_R
+  - first:
+      4: 400150
+    second: Astronaut_rig_0004:PinkyFinger4_L
+  - first:
+      4: 400152
+    second: Astronaut_rig_0004:PinkyFinger4_R
+  - first:
+      4: 400154
+    second: Astronaut_rig_0004:planet_facial
+  - first:
+      4: 400156
+    second: Astronaut_rig_0004:polySurface11
+  - first:
+      4: 400158
+    second: Astronaut_rig_0004:polySurface11 1
+  - first:
+      4: 400160
+    second: Astronaut_rig_0004:polySurface14
+  - first:
+      4: 400162
+    second: Astronaut_rig_0004:polySurface8
+  - first:
+      4: 400164
+    second: Astronaut_rig_0004:RingFinger1_L
+  - first:
+      4: 400166
+    second: Astronaut_rig_0004:RingFinger1_R
+  - first:
+      4: 400168
+    second: Astronaut_rig_0004:RingFinger2_L
+  - first:
+      4: 400170
+    second: Astronaut_rig_0004:RingFinger2_R
+  - first:
+      4: 400172
+    second: Astronaut_rig_0004:RingFinger3_L
+  - first:
+      4: 400174
+    second: Astronaut_rig_0004:RingFinger3_R
+  - first:
+      4: 400176
+    second: Astronaut_rig_0004:RingFinger4_L
+  - first:
+      4: 400178
+    second: Astronaut_rig_0004:RingFinger4_R
+  - first:
+      4: 400180
+    second: Astronaut_rig_0004:Root_M
+  - first:
+      4: 400182
+    second: Astronaut_rig_0004:Scapula_L
+  - first:
+      4: 400184
+    second: Astronaut_rig_0004:Scapula_R
+  - first:
+      4: 400186
+    second: Astronaut_rig_0004:Shoulder_L
+  - first:
+      4: 400188
+    second: Astronaut_rig_0004:Shoulder_R
+  - first:
+      4: 400190
+    second: Astronaut_rig_0004:ShoulderPart1_L
+  - first:
+      4: 400192
+    second: Astronaut_rig_0004:ShoulderPart1_R
+  - first:
+      4: 400194
+    second: Astronaut_rig_0004:ShoulderPart2_L
+  - first:
+      4: 400196
+    second: Astronaut_rig_0004:ShoulderPart2_R
+  - first:
+      4: 400198
+    second: Astronaut_rig_0004:Spine1_M
+  - first:
+      4: 400200
+    second: Astronaut_rig_0004:ThumbFinger1_L
+  - first:
+      4: 400202
+    second: Astronaut_rig_0004:ThumbFinger1_R
+  - first:
+      4: 400204
+    second: Astronaut_rig_0004:ThumbFinger2_L
+  - first:
+      4: 400206
+    second: Astronaut_rig_0004:ThumbFinger2_R
+  - first:
+      4: 400208
+    second: Astronaut_rig_0004:ThumbFinger3_L
+  - first:
+      4: 400210
+    second: Astronaut_rig_0004:ThumbFinger3_R
+  - first:
+      4: 400212
+    second: Astronaut_rig_0004:ThumbFinger4_L
+  - first:
+      4: 400214
+    second: Astronaut_rig_0004:ThumbFinger4_R
+  - first:
+      4: 400216
+    second: Astronaut_rig_0004:Toes_L
+  - first:
+      4: 400218
+    second: Astronaut_rig_0004:Toes_R
+  - first:
+      4: 400220
+    second: Astronaut_rig_0004:ToesEnd_L
+  - first:
+      4: 400222
+    second: Astronaut_rig_0004:ToesEnd_R
+  - first:
+      4: 400224
+    second: Astronaut_rig_0004:Wrist_L
+  - first:
+      4: 400226
+    second: Astronaut_rig_0004:Wrist_R
+  - first:
+      43: 4300000
+    second: Astronaut_rig_0004:polySurface11
+  - first:
+      43: 4300002
+    second: Astronaut_rig_0004:CylinderPipe:Group55826
+  - first:
+      43: 4300004
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:GOLFIR3
+  - first:
+      43: 4300006
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pSphere1
+  - first:
+      43: 4300008
+    second: Astronaut_rig_0004:polySurface14
+  - first:
+      43: 4300010
+    second: Astronaut_rig_0004:pCylinder11
+  - first:
+      43: 4300012
+    second: Astronaut_rig_0004:polySurface8
+  - first:
+      43: 4300014
+    second: Astronaut_rig_0004:Eyes_lips:pSphere4
+  - first:
+      43: 4300016
+    second: Astronaut_rig_0004:Eyes_lips:pCube6
+  - first:
+      43: 4300018
+    second: Astronaut_rig_0004:Eyes_lips:pCube10
+  - first:
+      43: 4300020
+    second: Astronaut_rig_0004:Eyes_lips:pSphere6
+  - first:
+      43: 4300022
+    second: Astronaut_rig_0004:Eyes_lips:pCube9
+  - first:
+      43: 4300024
+    second: Astronaut_rig_0004:CylinderPipe:pCube1
+  - first:
+      74: 7400000
+    second: Astronaut
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:GOLFIR3
+  - first:
+      137: 13700002
+    second: Astronaut_rig_0004:CylinderPipe:golf_iron:pSphere1
+  - first:
+      137: 13700004
+    second: Astronaut_rig_0004:CylinderPipe:Group55826
+  - first:
+      137: 13700006
+    second: Astronaut_rig_0004:CylinderPipe:pCube1
+  - first:
+      137: 13700008
+    second: Astronaut_rig_0004:Eyes_lips:pCube10
+  - first:
+      137: 13700010
+    second: Astronaut_rig_0004:Eyes_lips:pCube6
+  - first:
+      137: 13700012
+    second: Astronaut_rig_0004:Eyes_lips:pCube9
+  - first:
+      137: 13700014
+    second: Astronaut_rig_0004:Eyes_lips:pSphere4
+  - first:
+      137: 13700016
+    second: Astronaut_rig_0004:Eyes_lips:pSphere6
+  - first:
+      137: 13700018
+    second: Astronaut_rig_0004:pCylinder11
+  - first:
+      137: 13700020
+    second: Astronaut_rig_0004:polySurface11
+  - first:
+      137: 13700022
+    second: Astronaut_rig_0004:polySurface14
+  - first:
+      137: 13700024
+    second: Astronaut_rig_0004:polySurface8
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Astronaut_rig_0004_CylinderPipe_golf_iron_Astronaut
+    second: {fileID: 2100000, guid: 756ecc3e2df694f58baf4415843d670e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Astronaut_rig_0004_Eyes_lips_CylinderPipe_golf_iron_Astronaut
+    second: {fileID: 2100000, guid: 756ecc3e2df694f58baf4415843d670e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Astronaut_rig_0004_Eyes_lips_blinn1
+    second: {fileID: 2100000, guid: 756ecc3e2df694f58baf4415843d670e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Astronaut_rig_0004_blinn1
+    second: {fileID: 2100000, guid: 756ecc3e2df694f58baf4415843d670e, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Astronaut
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 1
+      lastFrame: 535
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0
+        functionName: disableGameobject
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6163142
+        functionName: enableGameobject
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: playSound
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Astronaut_rig_0004:CylinderPipe:pCube1
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:CylinderPipe:golf_iron:GOLFIR3
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:CylinderPipe:golf_iron:pCylinder4
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:CylinderPipe:golf_iron:pSphere1
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:CylinderPipe:Group55826
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:Extract1:Group27432
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:Extract1:Group27432/Astronaut_rig_0004:polySurface11
+          1
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:pCube3
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:pCylinder11
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial/Astronaut_rig_0004:Eyes_lips:pCube6
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial/Astronaut_rig_0004:Eyes_lips:pCube9
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial/Astronaut_rig_0004:Eyes_lips:pCube10
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial/Astronaut_rig_0004:Eyes_lips:pSphere4
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:planet_facial/Astronaut_rig_0004:Eyes_lips:pSphere6
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:polySurface8
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:polySurface11
+        weight: 1
+      - path: Astronaut_rig_0004:Geometry/Astronaut_rig_0004:geo/Astronaut_rig_0004:polySurface14
+        weight: 1
+      - path: Astronaut_rig_0004:Main
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_L/Astronaut_rig_0004:Knee_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_L/Astronaut_rig_0004:Knee_L/Astronaut_rig_0004:Ankle_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_L/Astronaut_rig_0004:Knee_L/Astronaut_rig_0004:Ankle_L/Astronaut_rig_0004:Toes_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_L/Astronaut_rig_0004:Knee_L/Astronaut_rig_0004:Ankle_L/Astronaut_rig_0004:Toes_L/Astronaut_rig_0004:ToesEnd_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_R/Astronaut_rig_0004:Knee_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_R/Astronaut_rig_0004:Knee_R/Astronaut_rig_0004:Ankle_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_R/Astronaut_rig_0004:Knee_R/Astronaut_rig_0004:Ankle_R/Astronaut_rig_0004:Toes_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Hip_R/Astronaut_rig_0004:Knee_R/Astronaut_rig_0004:Ankle_R/Astronaut_rig_0004:Toes_R/Astronaut_rig_0004:ToesEnd_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Eye_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Eye_L/Astronaut_rig_0004:EyeEnd_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Eye_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Eye_R/Astronaut_rig_0004:EyeEnd_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:HeadEnd_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Jaw_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Neck_M/Astronaut_rig_0004:Head_M/Astronaut_rig_0004:Jaw_M/Astronaut_rig_0004:JawEnd_M
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:IndexFinger1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:IndexFinger1_L/Astronaut_rig_0004:IndexFinger2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:IndexFinger1_L/Astronaut_rig_0004:IndexFinger2_L/Astronaut_rig_0004:IndexFinger3_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:IndexFinger1_L/Astronaut_rig_0004:IndexFinger2_L/Astronaut_rig_0004:IndexFinger3_L/Astronaut_rig_0004:IndexFinger4_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:MiddleFinger1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:MiddleFinger1_L/Astronaut_rig_0004:MiddleFinger2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:MiddleFinger1_L/Astronaut_rig_0004:MiddleFinger2_L/Astronaut_rig_0004:MiddleFinger3_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:MiddleFinger1_L/Astronaut_rig_0004:MiddleFinger2_L/Astronaut_rig_0004:MiddleFinger3_L/Astronaut_rig_0004:MiddleFinger4_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:PinkyFinger1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:PinkyFinger1_L/Astronaut_rig_0004:PinkyFinger2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:PinkyFinger1_L/Astronaut_rig_0004:PinkyFinger2_L/Astronaut_rig_0004:PinkyFinger3_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:PinkyFinger1_L/Astronaut_rig_0004:PinkyFinger2_L/Astronaut_rig_0004:PinkyFinger3_L/Astronaut_rig_0004:PinkyFinger4_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:RingFinger1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:RingFinger1_L/Astronaut_rig_0004:RingFinger2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:RingFinger1_L/Astronaut_rig_0004:RingFinger2_L/Astronaut_rig_0004:RingFinger3_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:RingFinger1_L/Astronaut_rig_0004:RingFinger2_L/Astronaut_rig_0004:RingFinger3_L/Astronaut_rig_0004:RingFinger4_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:ThumbFinger1_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:ThumbFinger1_L/Astronaut_rig_0004:ThumbFinger2_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:ThumbFinger1_L/Astronaut_rig_0004:ThumbFinger2_L/Astronaut_rig_0004:ThumbFinger3_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_L/Astronaut_rig_0004:Shoulder_L/Astronaut_rig_0004:ShoulderPart1_L/Astronaut_rig_0004:ShoulderPart2_L/Astronaut_rig_0004:Elbow_L/Astronaut_rig_0004:Wrist_L/Astronaut_rig_0004:ThumbFinger1_L/Astronaut_rig_0004:ThumbFinger2_L/Astronaut_rig_0004:ThumbFinger3_L/Astronaut_rig_0004:ThumbFinger4_L
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:IndexFinger1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:IndexFinger1_R/Astronaut_rig_0004:IndexFinger2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:IndexFinger1_R/Astronaut_rig_0004:IndexFinger2_R/Astronaut_rig_0004:IndexFinger3_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:IndexFinger1_R/Astronaut_rig_0004:IndexFinger2_R/Astronaut_rig_0004:IndexFinger3_R/Astronaut_rig_0004:IndexFinger4_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:MiddleFinger1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:MiddleFinger1_R/Astronaut_rig_0004:MiddleFinger2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:MiddleFinger1_R/Astronaut_rig_0004:MiddleFinger2_R/Astronaut_rig_0004:MiddleFinger3_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:MiddleFinger1_R/Astronaut_rig_0004:MiddleFinger2_R/Astronaut_rig_0004:MiddleFinger3_R/Astronaut_rig_0004:MiddleFinger4_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:PinkyFinger1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:PinkyFinger1_R/Astronaut_rig_0004:PinkyFinger2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:PinkyFinger1_R/Astronaut_rig_0004:PinkyFinger2_R/Astronaut_rig_0004:PinkyFinger3_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:PinkyFinger1_R/Astronaut_rig_0004:PinkyFinger2_R/Astronaut_rig_0004:PinkyFinger3_R/Astronaut_rig_0004:PinkyFinger4_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:RingFinger1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:RingFinger1_R/Astronaut_rig_0004:RingFinger2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:RingFinger1_R/Astronaut_rig_0004:RingFinger2_R/Astronaut_rig_0004:RingFinger3_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:RingFinger1_R/Astronaut_rig_0004:RingFinger2_R/Astronaut_rig_0004:RingFinger3_R/Astronaut_rig_0004:RingFinger4_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:ThumbFinger1_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:ThumbFinger1_R/Astronaut_rig_0004:ThumbFinger2_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:ThumbFinger1_R/Astronaut_rig_0004:ThumbFinger2_R/Astronaut_rig_0004:ThumbFinger3_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:DeformationSystem/Astronaut_rig_0004:Root_M/Astronaut_rig_0004:Spine1_M/Astronaut_rig_0004:Chest_M/Astronaut_rig_0004:Scapula_R/Astronaut_rig_0004:Shoulder_R/Astronaut_rig_0004:ShoulderPart1_R/Astronaut_rig_0004:ShoulderPart2_R/Astronaut_rig_0004:Elbow_R/Astronaut_rig_0004:Wrist_R/Astronaut_rig_0004:ThumbFinger1_R/Astronaut_rig_0004:ThumbFinger2_R/Astronaut_rig_0004:ThumbFinger3_R/Astronaut_rig_0004:ThumbFinger4_R
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:flag_jnt_grp
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:flag_jnt_grp/Astronaut_rig_0004:joint2
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:flag_jnt_grp/Astronaut_rig_0004:joint2/Astronaut_rig_0004:joint3
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:flag_jnt_grp/Astronaut_rig_0004:joint2/Astronaut_rig_0004:joint3/Astronaut_rig_0004:joint4
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:flag_jnt_grp/Astronaut_rig_0004:joint2/Astronaut_rig_0004:joint3/Astronaut_rig_0004:joint4/Astronaut_rig_0004:joint5
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:jnt_planet_eyeBrow
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:jnt_planet_eyeBrow1
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:jnt_planet_L_eye
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:jnt_planet_L_eye1
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:jnt_planet_L_lips
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:joint1
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:joint6
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:group3/Astronaut_rig_0004:joint7
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:jnt_backpack
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:jnt_backpack/Astronaut_rig_0004:jnt_backpack2
+        weight: 1
+      - path: Astronaut_rig_0004:Main/Astronaut_rig_0004:jnt_backpack/Astronaut_rig_0004:jnt_backpack2/Astronaut_rig_0004:jnt_backpack3
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: astronaut
+  assetBundleVariant: 
