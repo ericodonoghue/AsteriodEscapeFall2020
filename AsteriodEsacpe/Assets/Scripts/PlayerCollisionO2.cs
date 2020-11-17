@@ -9,7 +9,8 @@ public class PlayerCollisionO2 : MonoBehaviour
 {
     // Local reference to the central AvatarAccounting object (held by main camera)
     private AvatarAccounting avatarAccounting;
-
+    public GameObject player;
+    public Rigidbody playerRB;
     // Set in inspector
     public AudioSource wallCollisionAudio1;
     public AudioSource wallCollisionAudio2;
@@ -27,7 +28,9 @@ public class PlayerCollisionO2 : MonoBehaviour
     {
         // Get a reference to the AvatarAccounting component of Main Camera
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
-
+        player = GameObject.FindGameObjectWithTag("Player");
+        //MW: CollOxScript = player.GetComponent<PlayerCollisionO2>();
+        playerRB = GetComponent<Rigidbody>();
         inRefuelRange = false;
         fillTanks = false;
         // TODO: get values of variables from save data once implemented
@@ -83,11 +86,12 @@ public class PlayerCollisionO2 : MonoBehaviour
             else break;  // no more parents to bother
         }
 
-
+        ///*
         switch (collided.tag)
         {
             case "Cave":
-                avatarAccounting.AddInjury(InjuryType.WallStrikeDirect);
+                //avatarAccounting.AddInjury(InjuryType.WallStrikeDirect);
+               // UnityEngine.Debug.Log("In CollisionO2 Script");
 
                 if (collisions % 2 == 0)
                 {
@@ -98,12 +102,39 @@ public class PlayerCollisionO2 : MonoBehaviour
                     wallCollisionAudio2.Play();
                 }
                 collisions++;
+
+                //just get contact [0]
+                /*
+                for (int i = 0; i < c.contactCount; i++)
+                {
+                    ContactPoint contact = c.GetContact(i);
+                    //UnityEngine.Debug.Log("total contacts: " + c.contacts.Length);
+                    UnityEngine.Debug.Log("position: " + contact.point.x + ", " + contact.point.y + ", " + contact.point.z);
+                    UnityEngine.Debug.Log("normal: " + contact.normal.x + ", " + contact.normal.y + ", " + contact.normal.z);
+                    UnityEngine.Debug.DrawLine(contact.point, contact.normal, Color.white);
+                }
+                */
+
+                ContactPoint cPoint = c.GetContact(0);
+                Vector3 cNorm= cPoint.normal;
+                Vector3 vel = playerRB.velocity;//.normalized;
+                Vector3 damage;
+                UnityEngine.Debug.Log("normals: " + cNorm.x + "x, " + cNorm.y +"y, " + cNorm.z + "z");
+                UnityEngine.Debug.Log("velocities: " + vel.x + "x, " + vel.y + "y, " + vel.z + "z");
+                damage.x = cNorm.x * vel.x;
+                damage.y = cNorm.y * vel.y;
+                damage.z = cNorm.z * vel.z;
+                UnityEngine.Debug.Log("damage: " + damage.x + "x, " + damage.y + "y, " + damage.z + "z");
+                UnityEngine.Debug.Log("magnitude: " + damage.magnitude);
+
+                avatarAccounting.AddInjury(damage.magnitude);
                 //TODO: add impulse to player depending on speed
                 break;
+
             case "Cave_GlancingBlow":
                 avatarAccounting.AddInjury(InjuryType.WallStrikeGlancingBlow);
                 break;
-
+        //*/
             // MW 11-12: No need for these until\if we get back to these scenarios
             //case "SharpObject":
             //    avatarAccounting.AddInjury(InjuryType.SharpObject);
