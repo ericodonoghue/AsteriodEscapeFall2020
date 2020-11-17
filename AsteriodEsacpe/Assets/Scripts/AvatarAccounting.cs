@@ -183,9 +183,9 @@ public class AvatarAccounting : MonoBehaviour
     private float minRespirationRatePerMinute = 20.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
     private float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
 
-    private float baseRespirationBurnRatePerMinute = 120.0f;  // Default value
-    private float minRespirationBurnRatePerMinute = 0.0f;     // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
-    private float maxRespirationBurnRatePerMinute = 360.0f;   // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+    private float baseRespirationBurnRatePerMinute = 1200.0f;  // Default value
+    private float minRespirationBurnRatePerMinute = 0.0f;      // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
+    private float maxRespirationBurnRatePerMinute = 3600.0f;   // Hard to imagine being able to physically inhale\exhale this much, but it's a game
 
     private float baseSuitIntegrityPercentage = 100.0f;  // Default value
     private float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
