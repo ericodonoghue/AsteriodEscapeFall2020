@@ -29,6 +29,7 @@ TagManager:
   - RedPanel
   - Bulb
   - EndLevel
+  - InProgressScreen
   layers:
   - Default
   - TransparentFX
