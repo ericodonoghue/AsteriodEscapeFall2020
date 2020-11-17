@@ -114,11 +114,12 @@ Thruster\Jet Usage:
 //
 // Enums used for parameter arguments to public methods
 //
-public enum JetType { MainThruster, AttitudeJetLeft, AttitudeJetRight, AttitudeJetUp, AttitudeJetDown }
+public enum JetType { MainThruster, AttitudeJetLeft, AttitudeJetRight, AttitudeJetUp, AttitudeJetDown, AttitideJetReverse }
 public enum InjuryType { WallStrikeGlancingBlow, WallStrikeDirect, WallStrikeNearMiss, SharpObject, SharpObjectNearMiss, EnemyAttack, EnemyAttackNearMiss }
 public enum CalmingType { ControlBreathing, Rest, MedicalInducement }
 public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }
 public enum RepairInjuryAmount { OnePercent, FivePercent, TenPercent }
+public enum Gauges { OxygenTank, OxygenTankExtra, HeartBeat, BloodOxygen, OxygenBurnRate }
 
 #endregion Public Enums
 
@@ -141,6 +142,8 @@ public class AvatarAccounting : MonoBehaviour
     private float fixedUpdateRate = 50f;
     private float lastTimeJetsFired = 0f;                   // Keep track of how long it's been, this supports the auto-heal when not using jets
     private float lastTimeSuitWasDamaged = 0f;              // Keep track of how long it's been, this prevents repeated damage from same hit
+    private float timeIntervalForAvatarStabilization = 5f;  // Limit stabilization cost to every five seconds incase they spam the button
+    private float timeAvatarLastStabilized = 0f;            // Keep track of how long it's been, this prevents repeated cost from spamming
 
     // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
     private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
@@ -166,7 +169,7 @@ public class AvatarAccounting : MonoBehaviour
     #endregion Private Variables
 
 
-    #region Private Field Variables
+    #region Public Field Variables
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Values for resource management (settable in Inspector for tweeking - values below are guesses)
@@ -177,32 +180,33 @@ public class AvatarAccounting : MonoBehaviour
     private float maxHeartRatePerMinute = 200;  // Abnormal pulse, can't go higher (not doing heart attacks in this game)
 
     private float baseRespirationRatePerMinute = 20.0f;  // Default value
-    private float minRespirationRatePerMinute = 10.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
+    private float minRespirationRatePerMinute = 20.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
     private float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
 
-    private float baseRespirationBurnRatePerMinute = 60.0f;  // Default value
-    private float minRespirationBurnRatePerMinute = 0.0f;    // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
-    private float maxRespirationBurnRatePerMinute = 180.0f;  // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+    private float baseRespirationBurnRatePerMinute = 1200.0f;  // Default value
+    private float minRespirationBurnRatePerMinute = 0.0f;      // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
+    private float maxRespirationBurnRatePerMinute = 3600.0f;   // Hard to imagine being able to physically inhale\exhale this much, but it's a game
 
     private float baseSuitIntegrityPercentage = 100.0f;  // Default value
     private float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
     private float maxSuitIntegrityPercentage = 100.0f;   // Suit starts at 100%
 
     private float minJetBurnRatePerSecond = 0.0f;
-    private float maxJetBurnRatePerSecond = 2000.0f;
+    private float maxJetBurnRatePerSecond = 1000.0f;
 
     private float baseOxygenBurnRatePerSecond = 20.0f;   // Default value
     private float minOxygenBurnRatePerSecond = 20.0f;    // Represents normal respiration rate
-    private float maxOxygenBurnRatePerSecond = 2000.0f;  // Cry havok!  And let loose the dogs of war!
+    private float maxOxygenBurnRatePerSecond = 1000.0f;  // Cry havok!  And let loose the dogs of war!
 
     private float baseOxygenTankContent = 6000.0f;       // Default value, full tank
     private float minOxygenTankContent = 0.0f;           // Out of air...
     private float maxOxygenTankContent = 6000.0f;        // This is actually days worth of air...without using jets
-    private float fullOxygenPonyBottle = 1000.0f;        // This is a buff that expires, can only have one at a time
+    private float minOxygenPonyBottle = 0.0f;            // This is a buff that expires, goes away at 0...
+    private float maxOxygenPonyBottle = 1000.0f;         // Default value.  This is a buff that expires, can only have one at a time
 
     private float baseBloodOxygenPercent = 95.0f;        // Default
     private float minBloodOxygenPercent = 80.0f;         // Min level (brain death occurs below this point)
-    private float maxBloodOxygenPercent = 98.0f;         // High level
+    private float maxBloodOxygenPercent = 115.0f;        // High level
 
     // How much Oxygen per second does respiration burn?
     private float oxygenCostRespirationHeatbeatBase = 1.0f;        // Multipler of base burn rate = How much does it cost to breath with normal pulse?
@@ -214,19 +218,19 @@ public class AvatarAccounting : MonoBehaviour
 
     // How does damage to the spacesuit affect oxygen use?
     // Suit Integrity cost is calculated using the closest value, multiplied against actual damage (see calc)
-    private float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 200.0f;   // This much damage caused by a minor leak
-    private float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 300.0f;   // Getting sloppy bub
-    private float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 450.0f;   // Dying is starting to sound like an option
-    private float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 650.0f;   // WTF dude, stop running into walls
-    private float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 900.0f;   // Ok, you are just hitting walls to see what happens, right?
-    private float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 1200.0f;  // Doh!
-    private float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 1550.0f;  // This isn't fun anymore...
-    private float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 1800.0f;  // That next step is a loser
-    private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 2000.0f;  // Wow!  You're fucked!
+    private float oxygenCostPerMinuteSuitIntegrityMinus10Percent = 100.0f;   // This much damage caused by a minor leak
+    private float oxygenCostPerMinuteSuitIntegrityMinus20Percent = 150.0f;   // Getting sloppy bub
+    private float oxygenCostPerMinuteSuitIntegrityMinus30Percent = 225.0f;   // Dying is starting to sound like an option
+    private float oxygenCostPerMinuteSuitIntegrityMinus40Percent = 325.0f;   // WTF dude, stop running into walls
+    private float oxygenCostPerMinuteSuitIntegrityMinus50Percent = 450.0f;   // Ok, you are just hitting walls to see what happens, right?
+    private float oxygenCostPerMinuteSuitIntegrityMinus60Percent = 600.0f;   // Doh!
+    private float oxygenCostPerMinuteSuitIntegrityMinus70Percent = 725.0f;   // This isn't fun anymore...
+    private float oxygenCostPerMinuteSuitIntegrityMinus80Percent = 900.0f;   // That next step is a loser
+    private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 1000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
-    private float oxygenCostPerSecondUsingMainThruster = 250.0f;             // Litres per second - it adds up quick!
-    private float oxygenCostPerSecondUsingAttitudeJet = 125.0f;              // 50% power used by attitude thrusters
+    private float oxygenCostPerSecondUsingMainThruster = 200.0f;             // Litres per second - it adds up quick!
+    private float oxygenCostPerSecondUsingAttitudeJet = 100.0f;              // 50% power used by attitude thrusters
 
     // What happens when the player is "injured"?
     private float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
@@ -251,6 +255,9 @@ public class AvatarAccounting : MonoBehaviour
 
     // Auto repair costs
     private float oxygenCostPerSecondAutoRepairingSuit = 50.0f;                 // Litres per second - it adds up quick!
+
+    // Forced Avatar stabilization costs
+    private float oxygenCostStabilizeAvatar = 500f;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,6 +305,8 @@ public class AvatarAccounting : MonoBehaviour
     private void FixedUpdate()
     {
         this.ProcessCurrentOxygenBurn();
+
+        this.SetGaugeValues();
     }
 
     private void Update()
@@ -558,7 +567,7 @@ public class AvatarAccounting : MonoBehaviour
         private set
         {
             // When tank is empty, expire the buff and remove the extra tank
-            if (value <= 0)
+            if (value <= 0f)
             {
                 this.buffPresentExtraTank = false;
                 this.currentOxygenPonyBottleContent = 0f;
@@ -567,8 +576,8 @@ public class AvatarAccounting : MonoBehaviour
             // Can only set this value if the buff is present (unless wiping out, as above, then who cares)
             else if (this.buffPresentExtraTank)
 
-                // Can't "refil" a pony bottle, they are used until empty and discarded
-                if ((value <= this.fullOxygenPonyBottle) && (value <= this.currentOxygenPonyBottleContent))
+                // Can't "refill" a pony bottle, they are used until empty and discarded
+                if ((value <= this.maxOxygenPonyBottle) && (value <= this.currentOxygenPonyBottleContent))
 
                     // But value can change as air is used (lower value only)
                     this.currentOxygenPonyBottleContent = value;
@@ -761,10 +770,21 @@ public class AvatarAccounting : MonoBehaviour
 
         // Store cost for tracking and termination (on button up, etc.)
         this.currentJetBurnRateSpecificJet[JetType.MainThruster] = 0f;
+        this.currentJetBurnRateSpecificJet[JetType.AttitideJetReverse] = 0f;
         this.currentJetBurnRateSpecificJet[JetType.AttitudeJetDown] = 0f;
         this.currentJetBurnRateSpecificJet[JetType.AttitudeJetLeft] = 0f;
         this.currentJetBurnRateSpecificJet[JetType.AttitudeJetRight] = 0f;
         this.currentJetBurnRateSpecificJet[JetType.AttitudeJetUp] = 0f;
+    }
+
+    public void FireAllJetsToStabilizeAvatar()
+    {
+        // Limit stabilization cost to every five seconds incase they spam the button
+        if ((Time.time - this.timeAvatarLastStabilized) >= this.timeIntervalForAvatarStabilization)
+        {
+            this.UseOxygen(oxygenCostStabilizeAvatar);
+            this.timeAvatarLastStabilized = Time.time;
+        }
     }
 
     #endregion Public Methods - Jets
@@ -848,7 +868,7 @@ public class AvatarAccounting : MonoBehaviour
         if (!this.buffPresentExtraTank)
         {
             this.buffPresentExtraTank = true;
-            this.currentOxygenPonyBottleContent = this.fullOxygenPonyBottle;
+            this.currentOxygenPonyBottleContent = this.maxOxygenPonyBottle;
         }
     }
 
@@ -1033,6 +1053,102 @@ public class AvatarAccounting : MonoBehaviour
     }
 
     #endregion Public Methods - Space Suit Maintenance
+
+
+    #region Gauge Management
+
+    // OxygenTank Gauge: Assign a Gauge "pointer" in the Inspector to rotate around
+    public GameObject GaugePointer_OxygenTank;
+    public float GaugePointerMin_OxygenTank;
+    public float GaugePointerMax_OxygenTank;
+
+    // OxygenTankExtra Gauge: Assign a Gauge "pointer" in the Inspector to rotate around
+    public GameObject GaugePointer_OxygenTankExtra;
+    public float GaugePointerMin_OxygenTankExtra;
+    public float GaugePointerMax_OxygenTankExtra;
+
+    // OxygenTankExtra Gauge: Assign a Gauge "pointer" in the Inspector to rotate around
+    public GameObject GaugePointer_OxygenBurnRate;
+    public float GaugePointerMin_OxygenBurnRate;
+    public float GaugePointerMax_OxygenBurnRate;
+
+    // OxygenTankExtra Gauge: Assign a Gauge "pointer" in the Inspector to rotate around
+    public GameObject GaugePointer_BloodOxygen;
+    public float GaugePointerMin_BloodOxygen;
+    public float GaugePointerMax_BloodOxygen;
+
+    // HeartBeat Gauge: Assign a Gauge "pointer" in the Inspector to rotate around
+    public GameObject HeartBeatGauge;
+    public float HeartBeatGaugeMinBPM;
+    public float HeartBeatGaugeMaxBPM;
+
+    private void SetGaugeValue(GameObject gaugePointer, float value, float valueMin, float valueMax, float gaugePointerMin, float gaugePointerMax)
+    {
+        if (gaugePointer != null)
+        {
+            // Needle cannot move past min\max values
+            if (value < valueMin) value = valueMin;
+            if (value > valueMax) value = valueMax;
+
+            // Calculate the "range" (max-min) for the value and the pointer
+            float valueRange = (valueMax - valueMin);
+            float pointerRange = (gaugePointerMax - gaugePointerMin);
+
+            // Calculate the point in "range" where target "value" belongs (in percentage)
+            float valuePercentageOfRange = (value / valueRange);
+
+            // Assign the pointer's "rotation" to the percentage of the pointerRange that matches the value percentage
+            float newPointerRotation = ((pointerRange * valuePercentageOfRange) + gaugePointerMin);
+            gaugePointer.transform.localRotation = Quaternion.Euler(0, newPointerRotation, 0);
+
+            print(this.CurrentOxygenTankContent);
+        }
+    }
+    
+    private void SetGaugeValues()
+    {
+        SetGaugeValue(
+                  GaugePointer_OxygenTank
+                , this.CurrentOxygenTankContent
+                , this.minOxygenTankContent
+                , this.maxOxygenTankContent
+                , GaugePointerMin_OxygenTank
+                , GaugePointerMax_OxygenTank
+            );
+
+        SetGaugeValue(
+                  GaugePointer_OxygenTankExtra
+                , this.CurrentOxygenPonyBottleContent
+                , this.minOxygenPonyBottle
+                , this.maxOxygenPonyBottle
+                , GaugePointerMin_OxygenTankExtra
+                , GaugePointerMax_OxygenTankExtra
+            );
+
+        SetGaugeValue(
+                  GaugePointer_OxygenBurnRate
+                , this.CurrentOxygenBurnRatePerSecond
+                , this.minOxygenBurnRatePerSecond
+                , this.maxOxygenBurnRatePerSecond
+                , this.GaugePointerMin_OxygenBurnRate
+                , this.GaugePointerMax_OxygenBurnRate
+            );
+
+        SetGaugeValue(
+                  GaugePointer_BloodOxygen
+                , this.CurrentBloodOxygenPercent
+                , this.minBloodOxygenPercent
+                , this.maxBloodOxygenPercent
+                , this.GaugePointerMin_BloodOxygen
+                , this.GaugePointerMax_BloodOxygen
+            );
+
+
+        // Set Heartbeat...
+
+    }
+
+    #endregion Gauge Management
 }
 
 
