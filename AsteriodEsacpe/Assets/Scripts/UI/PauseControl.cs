@@ -17,7 +17,7 @@ public class PauseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightShift))
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             isPaused = !isPaused;
         }
@@ -43,6 +43,7 @@ public class PauseControl : MonoBehaviour
     {
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
-        
+        Cursor.lockState = CursorLockMode.Locked;
+
     }
 }

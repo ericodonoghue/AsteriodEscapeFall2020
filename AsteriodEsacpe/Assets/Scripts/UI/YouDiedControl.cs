@@ -30,6 +30,7 @@ public class YouDiedControl : MonoBehaviour
         if (isDead)
         {
             SetYouDiedeMenuActive();
+            Cursor.lockState = CursorLockMode.Confined;
         }
         else
         {
@@ -42,15 +43,12 @@ public class YouDiedControl : MonoBehaviour
         Time.timeScale = 0;
         youDiedMenu.SetActive(true);
         redPanel.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
     public void SetYouDiedeMenuDeactive()
     {
-        Time.timeScale = 1;
         youDiedMenu.SetActive(false);
         redPanel.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }
