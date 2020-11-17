@@ -98,6 +98,7 @@ public class Movement2 : MonoBehaviour
             else
             {
                 player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
+                
             }
 
         }
@@ -112,7 +113,11 @@ public class Movement2 : MonoBehaviour
             {
                 spinOut = false;
                 rotationSpeed = 1;
+                //playerRB.angularVelocity = Vector3.zero;
+                //playerRB.rotation = Quaternion.Euler(0f, 0f, 0f);
+                //player.transform.rotation = Quaternion.Slerp
             }
+
         }
     }
     private void OnCollisionEnter(Collision c)
