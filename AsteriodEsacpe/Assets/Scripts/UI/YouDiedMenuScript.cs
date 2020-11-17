@@ -27,6 +27,6 @@ public class YouDiedMenuScript : MonoBehaviour
 
     public void RestartPressed()
     {
-        SceneManager.LoadScene("CollisionTestingScene");
+        SceneManager.LoadScene("LevelOneScene");
     }
 }

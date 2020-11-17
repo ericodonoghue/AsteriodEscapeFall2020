@@ -54,127 +54,131 @@ public class SettingsButtonControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
+        if (settingsControl.isActive)
         {
-            if (Input.GetKey(vKey))
+            foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
             {
-                foreach (string keyInput in keyInputs.Keys)
+                if (Input.GetKey(vKey))
                 {
-                    if (keyInputs[keyInput] == vKey)
+                    foreach (string keyInput in keyInputs.Keys)
                     {
-                        return;
+                        if (keyInputs[keyInput] == vKey)
+                        {
+                            return;
+                        }
                     }
-                }
-                if (keyDetect[UpKeyDetect])
-                {
-                    keyInputs["up"] = vKey;
+                    if (keyDetect[UpKeyDetect])
+                    {
+                        keyInputs["up"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("UpButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Up: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("UpButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Up: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[UpKeyDetect] = false;
+                        keyDetect[UpKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
-                }
-                else if (keyDetect[DownKeyDetect])
-                {
-                    keyInputs["down"] = vKey;
+                        keyInputButtonPressed = false;
+                    }
+                    else if (keyDetect[DownKeyDetect])
+                    {
+                        keyInputs["down"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("DownButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Down: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("DownButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Down: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[DownKeyDetect] = false;
+                        keyDetect[DownKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
-                }
-                else if (keyDetect[LeftKeyDetect])
-                {
-                    keyInputs["left"] = vKey;
+                        keyInputButtonPressed = false;
+                    }
+                    else if (keyDetect[LeftKeyDetect])
+                    {
+                        keyInputs["left"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("LeftButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Left: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("LeftButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Left: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[LeftKeyDetect] = false;
+                        keyDetect[LeftKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
-                }
-                else if (keyDetect[RightKeyDetect])
-                {
-                    keyInputs["right"] = vKey;
+                        keyInputButtonPressed = false;
+                    }
+                    else if (keyDetect[RightKeyDetect])
+                    {
+                        keyInputs["right"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("RightButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Right: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("RightButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Right: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[RightKeyDetect] = false;
+                        keyDetect[RightKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
-                }
-                else if (keyDetect[ForwardKeyDetect])
-                {
-                    keyInputs["forward"] = vKey;
+                        keyInputButtonPressed = false;
+                    }
+                    else if (keyDetect[ForwardKeyDetect])
+                    {
+                        keyInputs["forward"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("ForwardButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Forward: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("ForwardButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Forward: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[ForwardKeyDetect] = false;
+                        keyDetect[ForwardKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
-                }
-                else if (keyDetect[ReverseKeyDetect])
-                {
-                    keyInputs["reverse"] = vKey;
+                        keyInputButtonPressed = false;
+                    }
+                    else if (keyDetect[ReverseKeyDetect])
+                    {
+                        keyInputs["reverse"] = vKey;
 
-                    // Set the text of the button
-                    Button button = GameObject.FindGameObjectWithTag("ReverseButton").GetComponent<Button>();
-                    TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
-                    t.text = "Reverse: " + vKey.ToString();
+                        // Set the text of the button
+                        Button button = GameObject.FindGameObjectWithTag("ReverseButton").GetComponent<Button>();
+                        TextMeshProUGUI t = button.GetComponentInChildren<TextMeshProUGUI>();
+                        t.text = "Reverse: " + vKey.ToString();
 
-                    ColorBlock colors = button.colors;
-                    colors.normalColor = Color.clear;
-                    colors.highlightedColor = new Color32(233, 0, 0, 109);
-                    button.colors = colors;
+                        ColorBlock colors = button.colors;
+                        colors.normalColor = Color.clear;
+                        colors.highlightedColor = new Color32(233, 0, 0, 109);
+                        button.colors = colors;
 
-                    keyDetect[ReverseKeyDetect] = false;
+                        keyDetect[ReverseKeyDetect] = false;
 
-                    keyInputButtonPressed = false;
+                        keyInputButtonPressed = false;
+                    }
                 }
             }
         }
+        
     }
 
 

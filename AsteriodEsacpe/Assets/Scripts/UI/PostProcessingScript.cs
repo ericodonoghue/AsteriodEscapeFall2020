@@ -12,8 +12,8 @@ public class PostProcessingScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        volume = GetComponent<PostProcessVolume>();
-        bool temp = volume.sharedProfile.TryGetSettings(out vignette);
+        //volume = GetComponent<PostProcessVolume>();
+        //volume.sharedProfile.TryGetSettings(out vignette);
         avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
     }
 

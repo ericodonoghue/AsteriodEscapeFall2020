@@ -8,28 +8,34 @@ public class PauseControl : MonoBehaviour
 
     private GameObject pauseMenu;
 
+    private YouDiedControl youDied;
+
     // Start is called before the first frame update
     void Start()
     {
         pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
+        youDied = Camera.main.GetComponent<YouDiedControl>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        if (!youDied.isDead)
         {
-            isPaused = !isPaused;
-        }
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                isPaused = !isPaused;
+            }
 
-        if (isPaused)
-        {
-            SetPauseMenuActive();
-        }
-        else
-        {
-            SetPauseMenuDeactive();
-        }
+            if (isPaused)
+            {
+                SetPauseMenuActive();
+            }
+            else
+            {
+                SetPauseMenuDeactive();
+            }
+        }     
     }
 
     public void SetPauseMenuActive()

@@ -11,6 +11,7 @@ public class YouDiedControl : MonoBehaviour
     private GameObject youDiedMenu;
     private GameObject redPanel;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +41,7 @@ public class YouDiedControl : MonoBehaviour
 
     public void SetYouDiedeMenuActive()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         youDiedMenu.SetActive(true);
         redPanel.SetActive(true);
         Cursor.visible = true;

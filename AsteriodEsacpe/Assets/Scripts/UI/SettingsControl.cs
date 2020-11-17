@@ -6,6 +6,7 @@ public class SettingsControl : MonoBehaviour
 {
 
     private GameObject settingsMenu;
+    public bool isActive;
 
 
     // Start is called before the first frame update
@@ -13,6 +14,7 @@ public class SettingsControl : MonoBehaviour
     {
         settingsMenu = GameObject.FindGameObjectWithTag("SettingsMenu");
         this.SetSettingMenuDeactive();
+        isActive = false;
     }
 
     // Update is called once per frame
@@ -24,10 +26,12 @@ public class SettingsControl : MonoBehaviour
     public void SetSettingMenuActive()
     {
         settingsMenu.SetActive(true);
+        isActive = true;
     }
 
     public void SetSettingMenuDeactive()
     {
         settingsMenu.SetActive(false);
+        isActive = false;
     }
 }

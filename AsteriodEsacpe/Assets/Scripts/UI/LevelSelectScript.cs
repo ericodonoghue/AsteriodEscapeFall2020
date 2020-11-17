@@ -15,7 +15,7 @@ public class LevelSelectScript : MonoBehaviour
     void Start()
     {
         this.controller = Camera.main.GetComponent<LevelSelectController>();
-        currentLevel = controller.LoadCurrentLevel();
+        currentLevel = 1; // controller.LoadCurrentLevel();
     }
 
     // Update is called once per frame
@@ -34,7 +34,7 @@ public class LevelSelectScript : MonoBehaviour
         // TODO: change to load level 1
         if (currentLevel >= 1)
         {
-            SceneManager.LoadScene("CollisionTestingScene");
+            SceneManager.LoadScene("LevelOneScene");
         }
     }
     
