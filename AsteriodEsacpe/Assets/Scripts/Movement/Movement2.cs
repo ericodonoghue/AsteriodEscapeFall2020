@@ -29,6 +29,9 @@ public class Movement2 : MonoBehaviour
     private Vector3 CamRot;
 
 
+    public AudioSource jetSound;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -222,31 +225,55 @@ public class Movement2 : MonoBehaviour
                 {
                     force.x = strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
                 if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("left")))
                 {
                     force.x = -strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
                 if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("down")))
                 {
                     force.y = -vertThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
                 if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("up")))
                 {
                     force.y = vertThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
                 if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("forward")))
                 {
                     force.z = forwardThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
                 if (Input.GetKeyDown(settingsButtonControl.GetKeyCodeMappedToDirection("reverse")))
                 {
                     force.z = -strafeThrust;
                     //MW: CollOxScript.fuelRate += fuelRateValue;
+                    if (!jetSound.isPlaying)
+                    {
+                        jetSound.Play();
+                    }
                 }
 
             }
@@ -318,31 +345,37 @@ public class Movement2 : MonoBehaviour
         {
             force.x = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
         if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("left")))
         {
             force.x = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
         if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("down")))
         {
             force.y = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
         if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("up")))
         {
             force.y = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
         if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("forward")))
         {
             force.z = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
         if (Input.GetKeyUp(settingsButtonControl.GetKeyCodeMappedToDirection("reverse")))
         {
             force.z = 0;
             //MW: CollOxScript.fuelRate -= fuelRateValue;
+            jetSound.Stop();
         }
     }
 
