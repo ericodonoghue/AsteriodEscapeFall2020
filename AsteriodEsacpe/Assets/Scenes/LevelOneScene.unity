@@ -7278,8 +7278,8 @@ MonoBehaviour:
   force: {x: 0, y: 0, z: 0}
   rotate: {x: 0, y: 0, z: 0}
   forwardThrust: 1
-  vertThrust: 0.5
-  strafeThrust: 0.5
+  vertThrust: 1
+  strafeThrust: 1
   vertRot: 0
   spinOut: 0
   jetSound: {fileID: 1787901188}
