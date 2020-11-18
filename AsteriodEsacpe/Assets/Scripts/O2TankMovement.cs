@@ -25,12 +25,12 @@ public class O2TankMovement : MonoBehaviour
             ponyBottles[i] = PoneyBottleParentObj.transform.GetChild(i).gameObject;
         }
             
-        foreach (GameObject bottle in ponyBottles)
+        /*foreach (GameObject bottle in ponyBottles)
         {
             Rigidbody bottleRB = bottle.GetComponent<Rigidbody>();
             bottleRB.AddForce(force * intialV);
             bottleRB.AddTorque(rotate * intialT);
-        }
+        }*/
     }
 
     // Update is called once per frame
@@ -42,5 +42,15 @@ public class O2TankMovement : MonoBehaviour
             bottleRB.AddForce(force * intialV);
             bottleRB.AddTorque(rotate * intialT);
        }*/
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        /*foreach (GameObject bottle in ponyBottles)
+        {
+            Rigidbody bottleRB = bottle.GetComponent<Rigidbody>();
+            bottleRB.AddForce(force * intialV);
+            bottleRB.AddTorque(rotate * intialT);
+        }*/
     }
 }

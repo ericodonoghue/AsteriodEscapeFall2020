@@ -40,7 +40,7 @@ public class PauseButtonControl : MonoBehaviour
 
     public void RestartPressed()
     {
-        SceneManager.LoadScene("CollisionTestingScene");
+        SceneManager.LoadScene("LevelOneScene");
     }
 
     public void QuitPressed()

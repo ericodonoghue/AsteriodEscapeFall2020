@@ -30,6 +30,7 @@ TagManager:
   - Bulb
   - EndLevel
   - InProgressScreen
+  - ControlScreen
   layers:
   - Default
   - TransparentFX
