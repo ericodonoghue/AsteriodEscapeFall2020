@@ -194,8 +194,8 @@ public class AvatarAccounting : MonoBehaviour
     private float minJetBurnRatePerSecond = 0.0f;
     private float maxJetBurnRatePerSecond = 1000.0f;
 
-    private float baseOxygenBurnRatePerSecond = 20.0f;   // Default value
-    private float minOxygenBurnRatePerSecond = 20.0f;    // Represents normal respiration rate
+    private float baseOxygenBurnRatePerSecond = 0.0f;    // Default value
+    private float minOxygenBurnRatePerSecond = 0.0f;     // Represents normal respiration rate
     private float maxOxygenBurnRatePerSecond = 1000.0f;  // Cry havok!  And let loose the dogs of war!
 
     private float baseOxygenTankContent = 6000.0f;       // Default value, full tank
@@ -229,8 +229,8 @@ public class AvatarAccounting : MonoBehaviour
     private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 1000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
-    private float oxygenCostPerSecondUsingMainThruster = 0; //150.0f;             // Litres per second - it adds up quick!
-    private float oxygenCostPerSecondUsingAttitudeJet = 0; //75.0f;               // 50% power used by attitude thrusters
+    private float oxygenCostPerSecondUsingMainThruster = 50; //150.0f;             // Litres per second - it adds up quick!
+    private float oxygenCostPerSecondUsingAttitudeJet = 50; //75.0f;               // 50% power used by attitude thrusters
 
     // What happens when the player is "injured"?
     private float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
@@ -576,11 +576,8 @@ public class AvatarAccounting : MonoBehaviour
             // Can only set this value if the buff is present (unless wiping out, as above, then who cares)
             else if (this.buffPresentExtraTank)
 
-                // Can't "refill" a pony bottle, they are used until empty and discarded
-                if ((value <= this.maxOxygenPonyBottle) && (value <= this.currentOxygenPonyBottleContent))
-
-                    // But value can change as air is used (lower value only)
-                    this.currentOxygenPonyBottleContent = value;
+                // Picking up another pony bottle resets pony bottle tank to full, but does not add a bottle
+                this.currentOxygenPonyBottleContent = this.maxOxygenPonyBottle;
         }
     }
 
