@@ -577,7 +577,9 @@ public class AvatarAccounting : MonoBehaviour
             else if (this.buffPresentExtraTank)
 
                 // Picking up another pony bottle resets pony bottle tank to full, but does not add a bottle
-                this.currentOxygenPonyBottleContent = this.maxOxygenPonyBottle;
+                // if incoming value is less than currnent, that's ok - this check prevents "adding" O2 this way
+                if ((value == this.maxOxygenPonyBottle) || (value < this.currentOxygenPonyBottleContent))
+                    this.currentOxygenPonyBottleContent = value;
         }
     }
 
