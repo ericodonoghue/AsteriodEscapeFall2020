@@ -627,6 +627,9 @@ public class AvatarAccounting : MonoBehaviour
                 this.currentSuitIntegrityInPercentage = this.minSuitIntegrityPercentage;
             else
                 this.currentSuitIntegrityInPercentage = value;
+
+            // When damage reaches 0, player dies
+            if (this.currentSuitIntegrityInPercentage < 1) this.PlayerBlackout = true;
         }
     }
 
