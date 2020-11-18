@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // Local reference to the central AvatarAccounting object (held by main camera)
     private AvatarAccounting avatarAccounting;
 
-    private float resetButtonCost = 1000f;
+    private float resetButtonCost = 500f;
 
     [Header("Set in Inspector")]
     public string GameSceneName;

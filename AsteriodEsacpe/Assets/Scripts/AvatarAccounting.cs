@@ -229,8 +229,8 @@ public class AvatarAccounting : MonoBehaviour
     private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 1000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
-    private float oxygenCostPerSecondUsingMainThruster = 200.0f;             // Litres per second - it adds up quick!
-    private float oxygenCostPerSecondUsingAttitudeJet = 100.0f;              // 50% power used by attitude thrusters
+    private float oxygenCostPerSecondUsingMainThruster = 150.0f;             // Litres per second - it adds up quick!
+    private float oxygenCostPerSecondUsingAttitudeJet = 75.0f;               // 50% power used by attitude thrusters
 
     // What happens when the player is "injured"?
     private float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
