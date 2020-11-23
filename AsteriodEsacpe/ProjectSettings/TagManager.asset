@@ -31,6 +31,7 @@ TagManager:
   - EndLevel
   - InProgressScreen
   - ControlScreen
+  - YouWonMenu
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ public class LevelSelectController : MonoBehaviour
     void Start()
     {
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame

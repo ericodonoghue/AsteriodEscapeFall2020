@@ -68,11 +68,11 @@ public class O2TankMovement : MonoBehaviour
         }*/
 
         //Vector3 forceVector = new Vector3(rb.velocity.x * -50, rb.velocity.y * -100f, 0f);
-        Vector3 forceVector = new Vector3(Random.Range(-2f, 2f) * initialV, Random.Range(-2f, 2f) * initialV, 0);
+        //Vector3 forceVector = new Vector3(Random.Range(-2f, 2f) * initialV, Random.Range(-2f, 2f) * initialV, 0);
 
-        Vector3 f = rb.velocity.normalized * force;
-        rb.AddForce(f);
-        rb.velocity = f;
-        dir = -dir;
+        //Vector3 f = rb.velocity.normalized * force;
+        //rb.AddForce(f);
+        //rb.velocity = f;
+        //dir = -dir;
     }
 }
