@@ -8,7 +8,7 @@ public class ScoreTracker : MonoBehaviour
     public int collisionsCount;
     public float timeToComplete;
     public float oxygenUsed;
-    public int nearMissCounter;
+    public int nearMissCount;
 
     // Start is called before the first frame update
     void Start()

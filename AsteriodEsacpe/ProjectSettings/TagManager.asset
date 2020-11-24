@@ -32,6 +32,8 @@ TagManager:
   - InProgressScreen
   - ControlScreen
   - YouWonMenu
+  - ScoreTracker
+  - TimeLabel
   layers:
   - Default
   - TransparentFX
