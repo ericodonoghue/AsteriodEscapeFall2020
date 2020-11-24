@@ -16,7 +16,7 @@ public class ScoreTracker : MonoBehaviour
         collisionsCount = 0;
         timeToComplete = 0;
         oxygenUsed = 0;
-        nearMissCounter = 0;
+        nearMissCount = 0;
     }
 
     // Update is called once per frame

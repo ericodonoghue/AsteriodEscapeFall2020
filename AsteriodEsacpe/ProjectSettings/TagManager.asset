@@ -34,6 +34,7 @@ TagManager:
   - YouWonMenu
   - ScoreTracker
   - TimeLabel
+  - CollisionsLabel
   layers:
   - Default
   - TransparentFX

@@ -22,6 +22,8 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     private float cdValue;
 
+    private ScoreTracker scoreTracker;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +40,8 @@ public class PlayerCollisionO2 : MonoBehaviour
 
         TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
         t.text = "";
+
+        scoreTracker = GameObject.FindGameObjectWithTag("ScoreTracker").GetComponent<ScoreTracker>();
     }
 
 
@@ -90,6 +94,7 @@ public class PlayerCollisionO2 : MonoBehaviour
         switch (collided.tag)
         {
             case "Cave":
+                scoreTracker.collisionsCount++;
                 //avatarAccounting.AddInjury(InjuryType.WallStrikeDirect);
                // UnityEngine.Debug.Log("In CollisionO2 Script");
 

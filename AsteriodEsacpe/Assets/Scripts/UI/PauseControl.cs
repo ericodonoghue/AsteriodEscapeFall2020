@@ -10,13 +10,15 @@ public class PauseControl : MonoBehaviour
 
     private YouDiedControl youDied;
     private YouWinControl youWin;
+    private GameObject youWonMenu;
 
     // Start is called before the first frame update
     void Start()
     {
-        pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
+        
         youDied = Camera.main.GetComponent<YouDiedControl>();
         youWin = Camera.main.GetComponent<YouWinControl>();
+        SetPauseMenuDeactive();
     }
 
     // Update is called once per frame
@@ -27,17 +29,22 @@ public class PauseControl : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.BackQuote))
             {
                 isPaused = !isPaused;
-            }
+                if (isPaused)
+                {
+                    SetPauseMenuActive();
+                }
+                else
+                {
+                    SetPauseMenuDeactive();
+                }
+            }          
+        }
+    }
 
-            if (isPaused)
-            {
-                SetPauseMenuActive();
-            }
-            else
-            {
-                SetPauseMenuDeactive();
-            }
-        }     
+    private void Awake()
+    {
+        youWonMenu = GameObject.FindGameObjectWithTag("YouWonMenu");
+        pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
     }
 
     public void SetPauseMenuActive()
@@ -52,6 +59,5 @@ public class PauseControl : MonoBehaviour
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-
     }
 }

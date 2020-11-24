@@ -13,7 +13,7 @@ public class YouWinControl : MonoBehaviour
 
     private ScoreTracker scoreTracker;
 
-    public bool won = false;
+    public bool won;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +21,7 @@ public class YouWinControl : MonoBehaviour
         
         scoreTracker = GameObject.FindGameObjectWithTag("ScoreTracker").GetComponent<ScoreTracker>();
         youWonMenu.SetActive(false);
+        won = false;
     }
 
     // Update is called once per frame
@@ -39,6 +40,7 @@ public class YouWinControl : MonoBehaviour
         //TODO: you win stuff
 
         won = true;
+        Debug.Log(won);
         SetYouWinMenuActive();
     }
 
@@ -48,19 +50,20 @@ public class YouWinControl : MonoBehaviour
         Debug.Log("You Win");
         Debug.Log(scoreTracker.timeToComplete);
         Cursor.lockState = CursorLockMode.Confined;
+        youWonMenu.SetActive(true);
 
-        //TextMeshProUGUI timeLabel = GameObject.FindGameObjectWithTag("TimeLabel").GetComponent<TextMeshProUGUI>();
-        //timeLabel.text = "Time to complete: " + scoreTracker.timeToComplete + " seconds";
+        TextMeshProUGUI timeLabel = GameObject.FindGameObjectWithTag("TimeLabel").GetComponent<TextMeshProUGUI>();
+        timeLabel.text = "Time to complete: " + System.Math.Round(scoreTracker.timeToComplete, 2) + " seconds";
 
-        /*TextMeshProUGUI collisionsLabel = GameObject.FindGameObjectWithTag("CollisionsLabel").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI collisionsLabel = GameObject.FindGameObjectWithTag("CollisionsLabel").GetComponent<TextMeshProUGUI>();
         collisionsLabel.text = "Collisions: " + scoreTracker.collisionsCount;
 
-        TextMeshProUGUI oxygenUsed = GameObject.FindGameObjectWithTag("OxygenUsedLabel").GetComponent<TextMeshProUGUI>();
-        oxygenUsed.text = "Oxygen Used: " + scoreTracker.oxygenUsed;
+        //TextMeshProUGUI oxygenUsed = GameObject.FindGameObjectWithTag("OxygenUsedLabel").GetComponent<TextMeshProUGUI>();
+        //oxygenUsed.text = "Oxygen Used: " + scoreTracker.oxygenUsed;
 
-        TextMeshProUGUI nearMissLabel = GameObject.FindGameObjectWithTag("NearMissLabel").GetComponent<TextMeshProUGUI>();
-        nearMissLabel.text = "Near Misses: " + scoreTracker.oxygenUsed;*/
+        //TextMeshProUGUI nearMissLabel = GameObject.FindGameObjectWithTag("NearMissLabel").GetComponent<TextMeshProUGUI>();
+        //nearMissLabel.text = "Near Misses: " + scoreTracker.oxygenUsed;
 
-        youWonMenu.SetActive(true);
+        
     }
 }
