@@ -35,12 +35,12 @@ public class PlayerSettingsUnitTest : MonoBehaviour
         print(string.Format("'{0}' key was released", key.ToString()));
     }
 
-    private void OnMouseButtonDown(int mouseButton)
+    private void OnMouseButtonDown(MouseButtons mouseButton)
     {
         print(string.Format("Mouse Button '{0}' was pressed", mouseButton.ToString()));
     }
 
-    private void OnMouseButtonUp(int mouseButton)
+    private void OnMouseButtonUp(MouseButtons mouseButton)
     {
         print(string.Format("Mouse Button '{0}' was released", mouseButton.ToString()));
     }

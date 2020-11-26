@@ -7,12 +7,15 @@ public class PauseButtonControl : MonoBehaviour
 {
     private PauseControl pauseControl;
     private SettingsControl settingsControl;
+    private PlayerInputManager playerInputManager;
+
 
     // Start is called before the first frame update
     void Start()
     {
         pauseControl = Camera.main.GetComponent<PauseControl>();
         settingsControl = Camera.main.GetComponent<SettingsControl>();
+        this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
     }
 
     // Update is called once per frame
@@ -26,6 +29,7 @@ public class PauseButtonControl : MonoBehaviour
     {
         pauseControl.SetPauseMenuDeactive();
         Cursor.lockState = CursorLockMode.Locked;
+        this.playerInputManager.ActivatePlayerInputMonitoring = true;
     }
 
     public void SettingsPressed()
@@ -41,6 +45,7 @@ public class PauseButtonControl : MonoBehaviour
     public void RestartPressed()
     {
         SceneManager.LoadScene("LevelOneScene");
+        this.playerInputManager.ActivatePlayerInputMonitoring = true;
     }
 
     public void QuitPressed()

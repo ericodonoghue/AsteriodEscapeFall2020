@@ -4,6 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+/* Update Notes:
+ 
+    Call SetChallengeLevel() to set the player's selected "level", or to "Override" their selected level
+        NOTE: Override is passes a percentage, that should range from 1 to maybe 1.5, which would result in O2
+        costs of 150%.
+  
+
+*/
+
+
 /* Using members of this class from another game object is accomplished by including the following code in the calling module:
 
     // Define a local (unshared) variable to hold a reference to the central AvatarAccounting object (held by main camera)
@@ -121,6 +131,8 @@ public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, Fi
 public enum RepairInjuryAmount { OnePercent, FivePercent, TenPercent }
 public enum Gauges { OxygenTank, OxygenTankExtra, HeartBeat, BloodOxygen, OxygenBurnRate }
 
+public enum ChallengeMode { TooYoungToDie, BringThePain, GaspingForAir, Override }
+
 #endregion Public Enums
 
 
@@ -144,6 +156,10 @@ public class AvatarAccounting : MonoBehaviour
     private float lastTimeSuitWasDamaged = 0f;              // Keep track of how long it's been, this prevents repeated damage from same hit
     private float timeIntervalForAvatarStabilization = 5f;  // Limit stabilization cost to every five seconds incase they spam the button
     private float timeAvatarLastStabilized = 0f;            // Keep track of how long it's been, this prevents repeated cost from spamming
+    private bool jetsCostsOxygen = true;
+    private bool suitDamageCostsOxygen = true;
+    private ChallengeMode curentChallengeMode = ChallengeMode.TooYoungToDie;
+
 
     // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
     private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
@@ -174,7 +190,7 @@ public class AvatarAccounting : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Values for resource management (settable in Inspector for tweeking - values below are guesses)
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    [Header("Set in Inspector")]
+    //[Header("Set in Inspector")]
     private float baseHeartRatePerMinute = 50;  // Default value
     private float minHeartRatePerMinute = 50;   // Normal pulse, can't go lower
     private float maxHeartRatePerMinute = 200;  // Abnormal pulse, can't go higher (not doing heart attacks in this game)
@@ -229,8 +245,8 @@ public class AvatarAccounting : MonoBehaviour
     private float oxygenCostPerMinuteSuitIntegrityMinus90Percent = 1000.0f;  // Wow!  You're fucked!
 
     // How does using the jets affect oxygen use?
-    private float oxygenCostPerSecondUsingMainThruster = 50; //150.0f;             // Litres per second - it adds up quick!
-    private float oxygenCostPerSecondUsingAttitudeJet = 50; //75.0f;               // 50% power used by attitude thrusters
+    private float oxygenCostPerSecondUsingMainThruster = 50;                     // Litres per second - it adds up quick!
+    private float oxygenCostPerSecondUsingAttitudeJet = 50;                      // 50% power used by attitude thrusters
 
     // What happens when the player is "injured"?
     private float injuryEffectWallStrikeGlancingBlow_SuitIntegrityDamage = 5.0f; // Up to 5% Suit Integrity loss (see calculation)
@@ -538,6 +554,28 @@ public class AvatarAccounting : MonoBehaviour
 
     #endregion Public "Rate" Properties used in calculations
 
+    /// <summary>
+    /// Now that we have a mode where jets may or may not use O2, this method has the
+    /// final word on whether jets work, instead of peppering code with checking multiple variables
+    /// </summary>
+    public bool JetsCanFire
+    {
+        get
+        {
+            bool result = false;
+
+            // If current player challenge mode does not use O2 for jets, then of course they can fire
+            if (!this.jetsCostsOxygen)
+                result = true;
+
+            // If jets are using O2, then make sure there's air in the tank, and the avatar isn't blacked out
+            else if ((this.CurrentOxygenAllTanksContent != 0) && (!this.PlayerBlackout))
+                result = true;
+
+            return result;
+        }
+    }
+
     public float CurrentOxygenAllTanksContent
     {
         get { return this.CurrentOxygenTankContent + this.CurrentOxygenPonyBottleContent; }
@@ -637,7 +675,7 @@ public class AvatarAccounting : MonoBehaviour
         // Read-Only
         get
         {
-            return this.currentSuitIntegrityCostPerSecond;
+            return (this.suitDamageCostsOxygen ? this.currentSuitIntegrityCostPerSecond : 0);
         }
     }
 
@@ -699,69 +737,73 @@ public class AvatarAccounting : MonoBehaviour
     public void FireJet(JetType jetType) { this.FireJet(jetType, 0, false); }
     public void FireJet(JetType jetType, float powerLevel, bool overburn)
     {
-        // No juice, no jet
-        if (this.CurrentOxygenAllTanksContent == 0f) return;
-
-        // optional param, can be used to set variable power level applied to jets
-        if (powerLevel <= 0) powerLevel = 1f;   //100%
-                                                //TODO: else need to adjust incoming value for multiplication below
-
-        // Only fire the jet if it IS NOT already burning
-        if (this.currentJetBurnRateSpecificJet[jetType] == 0)
+        // Only worry about O2 if jets are set to burn oxy
+        if (this.JetsCanFire)
         {
-            // Get the cost of jet burn based on the type of jet firing
-            float oxygenCostPerSecond =
-                    (
-                        (jetType == JetType.MainThruster)
-                      ? this.oxygenCostPerSecondUsingMainThruster
-                      : this.oxygenCostPerSecondUsingAttitudeJet
-                    ) * powerLevel;
+            // optional param, can be used to set variable power level applied to jets
+            if (powerLevel <= 0) powerLevel = 1f;   //100%
+                                                    //TODO: else need to adjust incoming value for multiplication below
 
-            // Store cost for display
-            this.CurrentJetBurnRatePerSecond += oxygenCostPerSecond;
+            // Only fire the jet if it IS NOT already burning
+            if (this.currentJetBurnRateSpecificJet[jetType] == 0)
+            {
+                // Get the cost of jet burn based on the type of jet firing
+                float oxygenCostPerSecond =
+                        (
+                            (jetType == JetType.MainThruster)
+                            ? this.oxygenCostPerSecondUsingMainThruster
+                            : this.oxygenCostPerSecondUsingAttitudeJet
+                        ) * powerLevel;
 
-            // Store cost for tracking and termination (on button up, etc.)
-            this.currentJetBurnRateSpecificJet[jetType] = oxygenCostPerSecond;
+                // Store cost for display
+                this.CurrentJetBurnRatePerSecond += oxygenCostPerSecond;
+
+                // Store cost for tracking and termination (on button up, etc.)
+                this.currentJetBurnRateSpecificJet[jetType] = oxygenCostPerSecond;
+            }
+
+
+
+
+
+            // TODO: Until these features are implemented, powerLevel and overburn arguments are igored
+
+            // Adjust power level by jetType (main uses 1-10, but attitude jets are more like 0.1 to 1.0)
+            // Create an editable value for this - the kind of thing that can be tweaked in testing, or to 
+            // increase difficulty, etc. for player level
+
+            // overburn(nice to have: use 2x Oxygen (based on other values) to haul ass away from
+            // scary monsters, escape from this stoney hell before dying, etc.)
         }
-
-
-
-
-
-        // TODO: Until these features are implemented, powerLevel and overburn arguments are igored
-
-        // Adjust power level by jetType (main uses 1-10, but attitude jets are more like 0.1 to 1.0)
-        // Create an editable value for this - the kind of thing that can be tweaked in testing, or to 
-        // increase difficulty, etc. for player level
-
-        // overburn(nice to have: use 2x Oxygen (based on other values) to haul ass away from
-        // scary monsters, escape from this stoney hell before dying, etc.)
-
     }
 
     public void TerminateJet(JetType jetType) { this.TerminateJet(jetType, 0, false); }
     public void TerminateJet(JetType jetType, float powerLevel, bool overburn)
     {
-        // optional param, can be used to set variable power level applied to jets
-        if (powerLevel <= 0) powerLevel = 1f;   //100%
-                                                //TODO: else need to adjust incoming value for multiplication below
-
-        // Only terminate the jet if it IS already burning
-        if (this.currentJetBurnRateSpecificJet[jetType] != 0)
+        // Only shut off oxy burn if the jets are set to burn oxy
+        if (this.jetsCostsOxygen)
         {
-            // Get the cost of jet burn based on the type of jet firing
-            float oxygenCostPerSecond =
-                  (
-                      (jetType == JetType.MainThruster)
-                    ? this.oxygenCostPerSecondUsingMainThruster
-                    : this.oxygenCostPerSecondUsingAttitudeJet
-                  ) * powerLevel;
+            // optional param, can be used to set variable power level applied to jets
+            if (powerLevel <= 0) powerLevel = 1f;   //100%
+                                                    //TODO: else need to adjust incoming value for multiplication below
 
-            // Store cost for display
-            this.CurrentJetBurnRatePerSecond -= oxygenCostPerSecond;
+            // Only terminate the jet if it IS already burning
+            if (this.currentJetBurnRateSpecificJet[jetType] != 0)
+            {
+                // Get the cost of jet burn based on the type of jet firing
+                float oxygenCostPerSecond =
+                      (
+                          (jetType == JetType.MainThruster)
+                        ? this.oxygenCostPerSecondUsingMainThruster
+                        : this.oxygenCostPerSecondUsingAttitudeJet
+                      ) * powerLevel;
 
-            // Store cost for tracking and termination (on button up, etc.)
-            this.currentJetBurnRateSpecificJet[jetType] = 0f;
+                // Store cost for display
+                this.CurrentJetBurnRatePerSecond -= oxygenCostPerSecond;
+
+                // Store cost for tracking and termination (on button up, etc.)
+                this.currentJetBurnRateSpecificJet[jetType] = 0f;
+            }
         }
     }
 
@@ -781,11 +823,15 @@ public class AvatarAccounting : MonoBehaviour
 
     public void FireAllJetsToStabilizeAvatar()
     {
-        // Limit stabilization cost to every five seconds incase they spam the button
-        if ((Time.time - this.timeAvatarLastStabilized) >= this.timeIntervalForAvatarStabilization)
+        // Only costs oxy if jets are using oxygen
+        if (this.JetsCanFire)
         {
-            this.UseOxygen(oxygenCostStabilizeAvatar);
-            this.timeAvatarLastStabilized = Time.time;
+            // Limit stabilization cost to every five seconds incase they spam the button
+            if ((Time.time - this.timeAvatarLastStabilized) >= this.timeIntervalForAvatarStabilization)
+            {
+                this.UseOxygen(oxygenCostStabilizeAvatar);
+                this.timeAvatarLastStabilized = Time.time;
+            }
         }
     }
 
@@ -899,6 +945,116 @@ public class AvatarAccounting : MonoBehaviour
 
 
     // YOU ARE HERE
+    
+
+    public void SetChallengeLevel(ChallengeMode challengeMode, float overrideChallengeModeByPercentage = 0f)
+    {
+        // Store for UI presentation, and reset after using "Override" method
+        if (challengeMode != ChallengeMode.Override)
+            this.curentChallengeMode = challengeMode;
+
+
+        // Set base values
+        switch (challengeMode)
+        {
+            case ChallengeMode.TooYoungToDie:
+
+                // This constant burn for "respiration" needs a better explaination like a bad regulartor
+                // or other permanent leak in the O2 system
+                this.baseRespirationBurnRatePerMinute = 1200.0f;
+                this.maxRespirationBurnRatePerMinute = 3600.0f;
+
+                this.baseOxygenTankContent = 6000.0f;
+                this.maxOxygenTankContent = 6000.0f;
+                this.maxOxygenPonyBottle = 2000.0f;
+
+                // How does using the jets affect oxygen use?
+                this.jetsCostsOxygen = false;
+                this.oxygenCostPerSecondUsingMainThruster = 0f;
+                this.oxygenCostPerSecondUsingAttitudeJet = 0f;
+
+                // Forced Avatar stabilization costs
+                this.oxygenCostStabilizeAvatar = 250f;
+
+                this.suitDamageCostsOxygen = false;
+
+                // Eliminate the "blackout" scene for this challenge level
+                this.oxygenTankEmptyHypoxemiaDamagePerSecond = 15.0f;
+
+                // Should also reduce the amount of suit damage on impact, but that requires actual code
+
+                // Turn on\off "Glancing Blow" and "Near Miss" metrics?
+
+                break;
+
+            case ChallengeMode.BringThePain:
+                this.baseRespirationBurnRatePerMinute = 600.0f;
+                this.maxRespirationBurnRatePerMinute = 1800.0f;
+
+                this.baseOxygenTankContent = 6000.0f;
+                this.maxOxygenTankContent = 6000.0f;
+                this.maxOxygenPonyBottle = 1500.0f;
+
+                // How does using the jets affect oxygen use?
+                this.jetsCostsOxygen = true;
+                this.oxygenCostPerSecondUsingMainThruster = 50.0f;
+                this.oxygenCostPerSecondUsingAttitudeJet = 50.0f;
+
+                // Forced Avatar stabilization costs
+                this.oxygenCostStabilizeAvatar = 500f;
+
+                this.suitDamageCostsOxygen = true;
+
+                // Make the "blackout" scene last 5 seconds
+                this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
+
+                break;
+
+            case ChallengeMode.GaspingForAir:
+                this.baseRespirationBurnRatePerMinute = 600.0f;
+                this.maxRespirationBurnRatePerMinute = 1800.0f;
+
+                this.baseOxygenTankContent = 6000.0f;
+                this.maxOxygenTankContent = 6000.0f;
+                this.maxOxygenPonyBottle = 1000.0f;
+
+                // How does using the jets affect oxygen use?
+                this.jetsCostsOxygen = true;
+                this.oxygenCostPerSecondUsingMainThruster = 100.0f;
+                this.oxygenCostPerSecondUsingAttitudeJet = 100.0f;
+
+                // Forced Avatar stabilization costs
+                this.oxygenCostStabilizeAvatar = 1000f;
+
+                this.suitDamageCostsOxygen = true;
+
+                // Make the "blackout" scene last 5 seconds
+                this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
+
+                break;
+
+            case ChallengeMode.Override:
+
+                // This constant burn for "respiration" needs a better explaination like a bad regulartor
+                // or other permanent leak in the O2 system
+                this.baseRespirationBurnRatePerMinute *= overrideChallengeModeByPercentage;
+                this.maxRespirationBurnRatePerMinute *= overrideChallengeModeByPercentage;
+
+                this.baseOxygenTankContent = 6000.0f;
+                this.maxOxygenTankContent = 6000.0f;
+                this.maxOxygenPonyBottle = 2000.0f;
+
+                // How does using the jets affect oxygen use?
+                this.oxygenCostPerSecondUsingMainThruster *= overrideChallengeModeByPercentage;
+                this.oxygenCostPerSecondUsingAttitudeJet *= overrideChallengeModeByPercentage;
+
+                // Forced Avatar stabilization costs
+                this.oxygenCostStabilizeAvatar *= overrideChallengeModeByPercentage;
+
+                break;
+        }
+    }
+
 
     #region Public Methods - Space Suit Maintenance
 
