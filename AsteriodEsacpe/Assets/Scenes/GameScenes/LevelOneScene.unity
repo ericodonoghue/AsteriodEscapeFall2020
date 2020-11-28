@@ -537,9 +537,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 657829683}
-        m_TargetAssemblyTypeName: SettingsButtonControl, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1782048214}
+        m_TargetAssemblyTypeName: MessageButtonControl, Assembly-CSharp
+        m_MethodName: MessagesButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8037,9 +8037,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 657829683}
-        m_TargetAssemblyTypeName: SettingsButtonControl, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1782048214}
+        m_TargetAssemblyTypeName: MessageButtonControl, Assembly-CSharp
+        m_MethodName: BackButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16952,8 +16952,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279105012
+  m_fontColor: {r: 0.95676553, g: 0.9622642, b: 0.049928807, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -16976,7 +16976,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 4
+  m_fontStyle: 5
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -19137,7 +19137,7 @@ GameObject:
   - component: {fileID: 1327296295}
   - component: {fileID: 1327296294}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: CloseMessageButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19206,9 +19206,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 657829683}
-        m_TargetAssemblyTypeName: SettingsButtonControl, Assembly-CSharp
-        m_MethodName: BackPressed
+      - m_Target: {fileID: 1886062992}
+        m_TargetAssemblyTypeName: MessageButtonControl, Assembly-CSharp
+        m_MethodName: CloseMessagesButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21900,9 +21900,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1297703849}
-        m_TargetAssemblyTypeName: PauseButtonControl, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1297703851}
+        m_TargetAssemblyTypeName: GameMenuButtonControl, Assembly-CSharp
+        m_MethodName: OrientationPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25665,8 +25665,8 @@ GameObject:
   - component: {fileID: 1782048215}
   - component: {fileID: 1782048214}
   m_Layer: 5
-  m_Name: Orientation
-  m_TagString: GameMenu
+  m_Name: OrientationMessage
+  m_TagString: OrientationMessage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25704,7 +25704,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1782048212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab2301e46b480a04284c0ee7b9de1efb, type: 3}
+  m_Script: {fileID: 11500000, guid: 839dd2cd5b6860e4f8fc191d31cdb6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1782048215
@@ -27723,7 +27723,7 @@ GameObject:
   - component: {fileID: 1886062992}
   m_Layer: 5
   m_Name: UrgentMessage
-  m_TagString: GameMenu
+  m_TagString: UrgentMessage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27760,7 +27760,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886062990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab2301e46b480a04284c0ee7b9de1efb, type: 3}
+  m_Script: {fileID: 11500000, guid: 839dd2cd5b6860e4f8fc191d31cdb6ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1886062993

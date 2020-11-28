@@ -40,6 +40,8 @@ TagManager:
   - StabilizeButton
   - GameMenu
   - GameMenuButton
+  - UrgentMessage
+  - OrientationMessage
   layers:
   - Default
   - TransparentFX
