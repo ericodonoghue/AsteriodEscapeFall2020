@@ -36,6 +36,10 @@ TagManager:
   - ScoreTracker
   - TimeLabel
   - CollisionsLabel
+  - PauseMenuButton
+  - StabilizeButton
+  - GameMenu
+  - GameMenuButton
   layers:
   - Default
   - TransparentFX

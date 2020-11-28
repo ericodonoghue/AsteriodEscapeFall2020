@@ -28,7 +28,7 @@ public class SettingsButtonControl : MonoBehaviour
             ,{ PlayerInput.MoveUp, "Up" }
             ,{ PlayerInput.PauseGame, "PauseMenu" }
             ,{ PlayerInput.StabilizeAvatar, "Stabilize" }
-            //,{ PlayerInput.GameMenu, "GameMenu" }
+            ,{ PlayerInput.GameMenu, "GameMenu" }
         };
 
     #endregion Private Fields
@@ -154,12 +154,12 @@ public class SettingsButtonControl : MonoBehaviour
 
     public void GameMenuInput()
     {
-        //this.ActivateButtonForMapping(PlayerInput.GameMenu);
+        this.ActivateButtonForMapping(PlayerInput.GameMenu);
     }
 
     public void BackPressed()
     {
-        settingsControl.SetSettingMenuDeactive();
+        settingsControl.SetSettingMenuInactive();
     }
 
     #endregion Event Handlers for UI Button OnClick

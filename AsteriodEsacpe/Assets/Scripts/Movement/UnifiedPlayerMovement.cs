@@ -4,14 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-
-
-// Rename PlayerMovement to PlayerMovement_Obsolete and put under Deprecated folder
-
-// Rename Movement2 to Movement2_Obsolete and put under Deprecated folder
-
-
-
 public class UnifiedPlayerMovement : MonoBehaviour
 {
     #region Private Fields

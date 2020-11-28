@@ -11,7 +11,6 @@ public class PauseControl : MonoBehaviour
     private GameObject pauseMenu;
     private YouDiedControl youDied;
     private YouWinControl youWin;
-    private GameObject youWonMenu;
     private PlayerInputManager playerInputManager;
 
 
@@ -20,12 +19,11 @@ public class PauseControl : MonoBehaviour
     {
         youDied = Camera.main.GetComponent<YouDiedControl>();
         youWin = Camera.main.GetComponent<YouWinControl>();
-        SetPauseMenuDeactive();
+        SetPauseMenuInactive();
     }
 
     private void Awake()
     {
-        youWonMenu = GameObject.FindGameObjectWithTag("YouWonMenu");
         pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu");
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
 
@@ -36,20 +34,18 @@ public class PauseControl : MonoBehaviour
         }
         else
         {
-            SetPauseMenuDeactive();
+            SetPauseMenuInactive();
         }
 
 
         // Set up event handlers for Player Input Manager to monitor for menu commands
         this.playerInputManager.AssignPlayerInputEventHandler(PlayerInput.PauseGame, PauseGame_Pressed, PauseGame_Released);
-        // TODO: Implement a separate Pause Screen and Game Menu? this.playerInputManager.AssignPlayerInputEventHandler(PlayerInput.GameMenu, GameMenu_Pressed, GameMenu_Released);
     }
 
     private void OnDisable()
     {
         // Tear down event handlers for Player Input Manager to monitor for menu commands
         this.playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.PauseGame, PauseGame_Pressed, PauseGame_Released);
-        // TODO: if we ever implement at game menu, will need this: this.playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.GameMenu, SystemMenu_Pressed, SystemMenu_Released);
     }
 
     public void SetPauseMenuActive()
@@ -60,7 +56,7 @@ public class PauseControl : MonoBehaviour
         this.playerInputManager.ActivatePlayerInputMonitoring = false;
     }
 
-    public void SetPauseMenuDeactive()
+    public void SetPauseMenuInactive()
     {
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
@@ -89,14 +85,11 @@ public class PauseControl : MonoBehaviour
                 }
                 else
                 {
-                    SetPauseMenuDeactive();
+                    SetPauseMenuInactive();
                 }
             }
         }
     }
-
-    private void GameMenu_Pressed() {}
-    private void GameMenu_Released() {}
 
     #endregion PlayerInput Events
 }

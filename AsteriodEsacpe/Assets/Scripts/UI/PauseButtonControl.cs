@@ -18,23 +18,17 @@ public class PauseButtonControl : MonoBehaviour
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
     public void ResumePressed()
     {
-        pauseControl.SetPauseMenuDeactive();
+        pauseControl.SetPauseMenuInactive();
         Cursor.lockState = CursorLockMode.Locked;
         this.playerInputManager.ActivatePlayerInputMonitoring = true;
     }
 
     public void SettingsPressed()
     {
-        settingsControl.SetSettingMenuActive();
+        this.pauseControl.SetPauseMenuInactive();
+        this.settingsControl.SetSettingMenuActive(SettingsControlCalledBy.PauseMenu);
     }
 
     public void LevelSelectPressed()
@@ -50,6 +44,12 @@ public class PauseButtonControl : MonoBehaviour
 
     public void QuitPressed()
     {
-        Application.Quit();
+#if UNITY_EDITOR
+        // Application.Quit() does not work in the editor so
+        // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
     }
 }

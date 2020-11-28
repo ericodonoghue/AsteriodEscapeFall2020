@@ -193,7 +193,7 @@ public enum PlayerInput
     
     , StabilizeAvatar
     , PauseGame            // Are these separate?
-    //, GameMenu
+    , GameMenu
 
     , None                 // Default for variables of type PlayerInput
 
@@ -986,18 +986,9 @@ public class PlayerInputManager : MonoBehaviour
         this.menuInputMappingTable = new Dictionary<PlayerInput, MappedControl>();
 
         // Loop through the mapping table to find inputs mapped to menus, put them in the alt list
-
-        // NOTE: For the time being there is no separate "Game Menu", there likely never will be
-        //foreach (KeyValuePair<PlayerInput, MappedControl> entry in this.playerConfig.InputMappingTable)
-        //    if ((entry.Key == PlayerInput.PauseGame) || (entry.Key == PlayerInput.GameMenu))
-        //        this.menuInputMappingTable.Add(entry.Key, entry.Value);
-
-        // For now, stick with just the Pause menu
-        this.menuInputMappingTable.Add
-            (
-                  PlayerInput.PauseGame
-                , this.playerConfig.InputMappingTable[PlayerInput.PauseGame]
-            );
+        foreach (KeyValuePair<PlayerInput, MappedControl> entry in this.playerConfig.InputMappingTable)
+            if ((entry.Key == PlayerInput.PauseGame) || (entry.Key == PlayerInput.GameMenu))
+                this.menuInputMappingTable.Add(entry.Key, entry.Value);
     }
 
     #region Public Control Mapping "Preset" Methods
@@ -1018,7 +1009,7 @@ public class PlayerInputManager : MonoBehaviour
                     ,{ PlayerInput.StabilizeAvatar, (new KeyboardInputMapping(KeyCode.Tab)) }
                     ,{ PlayerInput.Interact, (new KeyboardInputMapping(KeyCode.F)) }
                     ,{ PlayerInput.PauseGame, (new KeyboardInputMapping(KeyCode.BackQuote)) }
-                    //,{ PlayerInput.GameMenu, (new KeyboardInputMapping(KeyCode.Escape)) }
+                    ,{ PlayerInput.GameMenu, (new KeyboardInputMapping(KeyCode.F1)) }
                 };
 
         // TODO: For the time being (until it can be select in UI) default is Keyboard AND Mouse
@@ -1050,7 +1041,7 @@ public class PlayerInputManager : MonoBehaviour
                     ,{ PlayerInput.StabilizeAvatar, (new KeyboardInputMapping(KeyCode.Tab)) }
                     ,{ PlayerInput.Interact, (new KeyboardInputMapping(KeyCode.F)) }
                     ,{ PlayerInput.PauseGame, (new KeyboardInputMapping(KeyCode.BackQuote)) }
-                    //,{ PlayerInput.GameMenu, (new KeyboardInputMapping(KeyCode.Escape)) }
+                    ,{ PlayerInput.GameMenu, (new KeyboardInputMapping(KeyCode.F1)) }
                 };
 
         this.SetCustomControlMapping(PlayerInputType.KeyboardOnly, "Keyboard Preset A", inputMappingTable);
