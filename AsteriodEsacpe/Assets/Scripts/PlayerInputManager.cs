@@ -397,6 +397,8 @@ public class PlayerConfigurationData
 
     public Dictionary<string, object> PlayerConfigurationDictionary;
 
+    public ChallengeMode PlayerChallengeMode = ChallengeMode.TooYoungToDie;
+
     public PlayerConfigurationData()
     {
         // Current player input type (keyboard, mouse, gamepad)
@@ -419,6 +421,9 @@ public class PlayerConfigurationData
 public class PlayerInputManager : MonoBehaviour
 {
     #region Private Declarations
+
+    // Local reference to the central AvatarAccounting object (held by main camera)
+    private AvatarAccounting avatarAccounting;
 
     // Dictionary to store event handler delegates such that they can be accessed by type (PlayerInput type)
     private Dictionary<PlayerInput, PlayerInputEventSet> playerInputEventDelegates = new Dictionary<PlayerInput, PlayerInputEventSet>();
@@ -515,6 +520,9 @@ public class PlayerInputManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        // Get a reference to the script components from Main Camera
+        this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
+
         this.playerConfigFilePath = Application.persistentDataPath + playerConfigFileName;
 
         this.InitializePlayerInputManager();
@@ -1105,7 +1113,6 @@ public class PlayerInputManager : MonoBehaviour
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(playerConfigFilePath, FileMode.Open);
                 this.playerConfig = (PlayerConfigurationData)bf.Deserialize(file);
-                this.UpdateMenuInputMappingTable();
                 file.Close();
 
                 Debug.Log("Game data loaded!");
@@ -1114,6 +1121,10 @@ public class PlayerInputManager : MonoBehaviour
             {
                 Debug.Log("Game data file is corrupt and could not be loaded!");
             }
+
+            // Update values (whether a file was loaded or not)
+            this.UpdateMenuInputMappingTable();
+            this.avatarAccounting.SetChallengeLevel(playerConfig.PlayerChallengeMode);
         }
         else
             Debug.Log("There is no save data!");

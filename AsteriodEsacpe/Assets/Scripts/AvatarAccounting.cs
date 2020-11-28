@@ -7,9 +7,19 @@ using UnityEngine.UI;
 /* Update Notes:
  
     Call SetChallengeLevel() to set the player's selected "level", or to "Override" their selected level
-        NOTE: Override is passes a percentage, that should range from 1 to maybe 1.5, which would result in O2
+        NOTE: Override is passed a percentage, that should range from 1 to maybe 1.5, which would result in O2
         costs of 150%.
-  
+
+    Call examples:
+        // default setting (other modes are the same, but with different ChallengeMode argument)
+        this.avatarAccounting.ChallengeMode(ChallengeMode.TooYoungToDie);
+
+        // Override for "challenge" levels within the overall challenge level (this keeps the setting)
+        // This stores the current ChallengeMode so it can return to it later, and sets values to 110%
+        this.avatarAccounting.ChallengeMode(ChallengeMode.OverrideOn, 1.1f);
+
+        // This restores ChallengeMode to the value stored by the call with ChallengeMode.OverrideOn
+        this.avatarAccounting.ChallengeMode(ChallengeMode.OverrideOff);
 
 */
 
@@ -131,7 +141,7 @@ public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, Fi
 public enum RepairInjuryAmount { OnePercent, FivePercent, TenPercent }
 public enum Gauges { OxygenTank, OxygenTankExtra, HeartBeat, BloodOxygen, OxygenBurnRate }
 
-public enum ChallengeMode { TooYoungToDie, BringThePain, GaspingForAir, Override }
+public enum ChallengeMode { TooYoungToDie, BringThePain, GaspingForAir, OverrideOn, OverrideOff }
 
 #endregion Public Enums
 
@@ -168,6 +178,8 @@ public class AvatarAccounting : MonoBehaviour
     private float currentRespirationRatePerMinute = 20.0f;  // Litterally, breathes per minute (permissible range = min to max)
     private float currentRespirationBurnRatePerSecond = 1.0f;   // How much oxygen does the current respiration rate cost
 
+    private float currentGeneralSuitLeakBurnRatePerMinute = 0.0f; // General leak, used by difficulty level system
+
     // How much is suit damage costing?
     private float currentSuitIntegrityInPercentage = 100.0f;    // Base integrity, does not change with damage (starts at 10, but could be buffed to max)
     private float currentSuitIntegrityCostPerSecond = 0.0f;     // Liters per second leaking (usually small enought to call millilitres)
@@ -199,9 +211,13 @@ public class AvatarAccounting : MonoBehaviour
     private float minRespirationRatePerMinute = 20.0f;   // Normal respiration is 16-20 breathes, but we're in space, in a mine, and lost, so 20
     private float maxRespirationRatePerMinute = 50.0f;   // Hard to imagine being able to physically inhale\exhale more than 50 times a minute
 
-    private float baseRespirationBurnRatePerMinute = 1200.0f;  // Default value
-    private float minRespirationBurnRatePerMinute = 0.0f;      // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
-    private float maxRespirationBurnRatePerMinute = 3600.0f;   // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+    private float baseRespirationBurnRatePerMinute = 60.0f;  // Default value
+    private float minRespirationBurnRatePerMinute = 0.0f;    // Normal respiration cost (actually 50, but 60 makes the math simpler, and we're in space)
+    private float maxRespirationBurnRatePerMinute = 120.0f;  // Hard to imagine being able to physically inhale\exhale this much, but it's a game
+
+    private float baseGeneralSuitLeakBurnRatePerMinute = 00.0f;  // These values are used by "Challenge Mode" to establish a general leak instead of ramping up respiration
+    private float minGeneralSuitLeakBurnRatePerMinute = 0.0f;
+    private float maxGeneralSuitLeakBurnRatePerMinute = 0.0f;
 
     private float baseSuitIntegrityPercentage = 100.0f;  // Default value
     private float minSuitIntegrityPercentage = 0.0f;     // Suit destroyed (no oxygen containment)
@@ -210,9 +226,9 @@ public class AvatarAccounting : MonoBehaviour
     private float minJetBurnRatePerSecond = 0.0f;
     private float maxJetBurnRatePerSecond = 1000.0f;
 
-    private float baseOxygenBurnRatePerSecond = 0.0f;    // Default value
-    private float minOxygenBurnRatePerSecond = 0.0f;     // Represents normal respiration rate
-    private float maxOxygenBurnRatePerSecond = 1000.0f;  // Cry havok!  And let loose the dogs of war!
+    private float baseOxygenBurnRatePerMinute = 0.0f;    // Default value
+    private float minOxygenBurnRatePerMinute = 0.0f;     // Represents normal respiration rate
+    private float maxOxygenBurnRatePerMinute = 1000.0f;  // Cry havok!  And let loose the dogs of war!
 
     private float baseOxygenTankContent = 6000.0f;       // Default value, full tank
     private float minOxygenTankContent = 0.0f;           // Out of air...
@@ -300,14 +316,7 @@ public class AvatarAccounting : MonoBehaviour
         // Indicate that the player character is alive (for now)
         this.PlayerBlackout = false;
 
-        // Set internal tracking vars to "base" (default) values
-        this.CurrentHeartRatePerMinute = this.baseHeartRatePerMinute;
-        this.CurrentRespirationRatePerMinute = this.baseRespirationRatePerMinute;
-        this.CurrentRespirationBurnRatePerSecond = this.baseRespirationBurnRatePerMinute;
-        this.CurrentJetBurnRatePerSecond = this.minJetBurnRatePerSecond;
-        this.CurrentSuitIntegrityInPercentage = this.baseSuitIntegrityPercentage;
-        this.CurrentOxygenTankContent = this.baseOxygenTankContent;
-        this.CurrentBloodOxygenPercent = this.baseBloodOxygenPercent;
+        this.InitializeLocals();
 
         // Initialize jet cost tracking
         this.TerminateAllJets();
@@ -343,6 +352,19 @@ public class AvatarAccounting : MonoBehaviour
 
 
     #region Private Methods
+
+    private void InitializeLocals()
+    {
+        // Set internal tracking vars to "base" (default) values
+        this.CurrentHeartRatePerMinute = this.baseHeartRatePerMinute;
+        this.CurrentRespirationRatePerMinute = this.baseRespirationRatePerMinute;
+        this.CurrentRespirationBurnRatePerSecond = this.baseRespirationBurnRatePerMinute;
+        this.CurrentJetBurnRatePerSecond = this.minJetBurnRatePerSecond;
+        this.CurrentSuitIntegrityInPercentage = this.baseSuitIntegrityPercentage;
+        this.CurrentOxygenTankContent = this.baseOxygenTankContent;
+        this.CurrentBloodOxygenPercent = this.baseBloodOxygenPercent;
+        this.CurrentGeneralSuitLeakBurnRatePerMinute = this.baseGeneralSuitLeakBurnRatePerMinute;
+    }
 
     // Calculates oxygen used by jets, suit damage, anything by actually breathing (handled elsewhere)
     // and "uses" the current call's worth.  
@@ -511,10 +533,36 @@ public class AvatarAccounting : MonoBehaviour
             return
               (
                   this.CurrentRespirationBurnRatePerSecond
+
+                // If suit integrity loss is set up to cost oxygen, apply it now  
                 + this.CurrentSuitIntegrityDamageCostPerSecond
+
+                // If Jets are set up to cost oxygen, apply it now  
                 + this.CurrentJetBurnRatePerSecond
+
+                // If there is a "General" leak running, apply it now
+                + this.CurrentGeneralSuitLeakBurnRatePerSecond
               );
         }
+    }
+
+    public float CurrentGeneralSuitLeakBurnRatePerMinute
+    {
+        get { return this.currentGeneralSuitLeakBurnRatePerMinute; }
+        private set
+        {
+            if (value > this.maxGeneralSuitLeakBurnRatePerMinute)
+                this.currentGeneralSuitLeakBurnRatePerMinute = this.maxGeneralSuitLeakBurnRatePerMinute;
+            else if (value < this.minGeneralSuitLeakBurnRatePerMinute)
+                this.currentGeneralSuitLeakBurnRatePerMinute = this.minGeneralSuitLeakBurnRatePerMinute;
+            else
+                this.currentGeneralSuitLeakBurnRatePerMinute = value;
+        }
+    }
+
+    public float CurrentGeneralSuitLeakBurnRatePerSecond
+    {
+        get { return this.CurrentGeneralSuitLeakBurnRatePerMinute / 60f; }
     }
 
     #endregion Public "BurnRate" Properties (actual O2 consumption rates)
@@ -949,8 +997,12 @@ public class AvatarAccounting : MonoBehaviour
 
     public void SetChallengeLevel(ChallengeMode challengeMode, float overrideChallengeModeByPercentage = 0f)
     {
-        // Store for UI presentation, and reset after using "Override" method
-        if (challengeMode != ChallengeMode.Override)
+        // If turning off Override, just re-set to original ChallengeMode
+        if (challengeMode == ChallengeMode.OverrideOff)
+            challengeMode = this.curentChallengeMode;
+
+        // Capture given challengeMode to allow Override to return to normal after (see above)
+        else if (challengeMode != ChallengeMode.OverrideOn)
             this.curentChallengeMode = challengeMode;
 
 
@@ -959,11 +1011,13 @@ public class AvatarAccounting : MonoBehaviour
         {
             case ChallengeMode.TooYoungToDie:
 
-                // This constant burn for "respiration" needs a better explaination like a bad regulartor
-                // or other permanent leak in the O2 system
-                this.baseRespirationBurnRatePerMinute = 1200.0f;
-                this.maxRespirationBurnRatePerMinute = 3600.0f;
+                // This constant O2 burn comes from a bad regulartor or other permanent leak in the O2 system
+                this.baseGeneralSuitLeakBurnRatePerMinute = 1200f;
+                this.minGeneralSuitLeakBurnRatePerMinute = 0f;
+                this.maxGeneralSuitLeakBurnRatePerMinute = 1200f;
+                this.CurrentGeneralSuitLeakBurnRatePerMinute = this.baseGeneralSuitLeakBurnRatePerMinute;
 
+                // Oxygen tanks max content
                 this.baseOxygenTankContent = 6000.0f;
                 this.maxOxygenTankContent = 6000.0f;
                 this.maxOxygenPonyBottle = 2000.0f;
@@ -988,9 +1042,14 @@ public class AvatarAccounting : MonoBehaviour
                 break;
 
             case ChallengeMode.BringThePain:
-                this.baseRespirationBurnRatePerMinute = 600.0f;
-                this.maxRespirationBurnRatePerMinute = 1800.0f;
 
+                // This constant O2 burn comes from a bad regulartor or other permanent leak in the O2 system
+                this.baseGeneralSuitLeakBurnRatePerMinute = 800f;
+                this.minGeneralSuitLeakBurnRatePerMinute = 0f;
+                this.maxGeneralSuitLeakBurnRatePerMinute = 800f;
+                this.CurrentGeneralSuitLeakBurnRatePerMinute = this.baseGeneralSuitLeakBurnRatePerMinute;
+
+                // Oxygen tanks max content
                 this.baseOxygenTankContent = 6000.0f;
                 this.maxOxygenTankContent = 6000.0f;
                 this.maxOxygenPonyBottle = 1500.0f;
@@ -1011,9 +1070,14 @@ public class AvatarAccounting : MonoBehaviour
                 break;
 
             case ChallengeMode.GaspingForAir:
-                this.baseRespirationBurnRatePerMinute = 600.0f;
-                this.maxRespirationBurnRatePerMinute = 1800.0f;
 
+                // This constant O2 burn comes from a bad regulartor or other permanent leak in the O2 system
+                this.baseGeneralSuitLeakBurnRatePerMinute = 500f;
+                this.minGeneralSuitLeakBurnRatePerMinute = 0f;
+                this.maxGeneralSuitLeakBurnRatePerMinute = 500f;
+                this.CurrentGeneralSuitLeakBurnRatePerMinute = this.baseGeneralSuitLeakBurnRatePerMinute;
+
+                // Oxygen tanks max content
                 this.baseOxygenTankContent = 6000.0f;
                 this.maxOxygenTankContent = 6000.0f;
                 this.maxOxygenPonyBottle = 1000.0f;
@@ -1033,16 +1097,16 @@ public class AvatarAccounting : MonoBehaviour
 
                 break;
 
-            case ChallengeMode.Override:
+            case ChallengeMode.OverrideOn:
 
-                // This constant burn for "respiration" needs a better explaination like a bad regulartor
-                // or other permanent leak in the O2 system
-                this.baseRespirationBurnRatePerMinute *= overrideChallengeModeByPercentage;
-                this.maxRespirationBurnRatePerMinute *= overrideChallengeModeByPercentage;
+                // This constant O2 burn comes from a bad regulartor or other permanent leak in the O2 system
+                this.CurrentGeneralSuitLeakBurnRatePerMinute *= overrideChallengeModeByPercentage;
 
                 this.baseOxygenTankContent = 6000.0f;
                 this.maxOxygenTankContent = 6000.0f;
-                this.maxOxygenPonyBottle = 2000.0f;
+
+                this.maxOxygenPonyBottle = ((this.maxOxygenPonyBottle * overrideChallengeModeByPercentage) - this.maxOxygenPonyBottle);
+                
 
                 // How does using the jets affect oxygen use?
                 this.oxygenCostPerSecondUsingMainThruster *= overrideChallengeModeByPercentage;
@@ -1053,6 +1117,10 @@ public class AvatarAccounting : MonoBehaviour
 
                 break;
         }
+
+
+        // Update local properties to behave in accordance with new values
+        this.InitializeLocals();
     }
 
 
@@ -1286,8 +1354,8 @@ public class AvatarAccounting : MonoBehaviour
         SetGaugeValue(
                   GaugePointer_OxygenBurnRate
                 , this.CurrentOxygenBurnRatePerSecond
-                , this.minOxygenBurnRatePerSecond
-                , this.maxOxygenBurnRatePerSecond
+                , this.minOxygenBurnRatePerMinute
+                , this.maxOxygenBurnRatePerMinute
                 , this.GaugePointerMin_OxygenBurnRate
                 , this.GaugePointerMax_OxygenBurnRate
             );
