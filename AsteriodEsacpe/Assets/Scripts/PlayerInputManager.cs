@@ -1113,10 +1113,13 @@ public class PlayerInputManager : MonoBehaviour
                 // Load serialized data from file, right into a deserialized data object
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(playerConfigFilePath, FileMode.Open);
-                this.playerConfig = (PlayerConfigurationData)bf.Deserialize(file);
-                file.Close();
+                if (file != null)
+                {
+                    this.playerConfig = (PlayerConfigurationData)bf.Deserialize(file);
+                    file.Close();
 
-                Debug.Log("Game data loaded!");
+                    Debug.Log("Game data loaded!");
+                }
             }
             catch(Exception ex)
             {
