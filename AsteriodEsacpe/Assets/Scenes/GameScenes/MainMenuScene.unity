@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 988996539}
   - component: {fileID: 988996538}
   - component: {fileID: 988996537}
+  - component: {fileID: 988996545}
   - component: {fileID: 988996542}
   - component: {fileID: 988996541}
   - component: {fileID: 988996540}
@@ -594,6 +595,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844defa88cc398141b5cf3ada0c6a04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &988996545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988996536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e9277e4cca39464f8f160653bcde46e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UX_CurrentHeartRatePerMinuteText: {fileID: 0}
+  UX_CurrentRespirationRatePerMinuteText: {fileID: 0}
+  UX_CurrentJetBurnRatePerSecondText: {fileID: 0}
+  UX_CurrentSuitIntegrityText: {fileID: 0}
+  UX_CurrentOxygenBurnRatePerSecondText: {fileID: 0}
+  UX_CurrentOxygenTankContentText: {fileID: 0}
+  UX_CurrentBloodOxygenPercentText: {fileID: 0}
+  GaugePointer_OxygenTank: {fileID: 0}
+  GaugePointerMin_OxygenTank: 0
+  GaugePointerMax_OxygenTank: 0
+  GaugePointer_OxygenTankExtra: {fileID: 0}
+  GaugePointerMin_OxygenTankExtra: 0
+  GaugePointerMax_OxygenTankExtra: 0
+  GaugePointer_OxygenBurnRate: {fileID: 0}
+  GaugePointerMin_OxygenBurnRate: 0
+  GaugePointerMax_OxygenBurnRate: 0
+  GaugePointer_BloodOxygen: {fileID: 0}
+  GaugePointerMin_BloodOxygen: 0
+  GaugePointerMax_BloodOxygen: 0
+  HeartBeatGauge: {fileID: 0}
+  HeartBeatGaugeMinBPM: 0
+  HeartBeatGaugeMaxBPM: 0
 --- !u!1001 &1347714215
 PrefabInstance:
   m_ObjectHideFlags: 0

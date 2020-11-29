@@ -544,24 +544,30 @@ public class PlayerInputManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        // Monitor for KeyDown\KeyUp events, only if current controls include keys
-        if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardOnly)
+        // If monitoring for player input, then (and only then) capture input
+        if ((this.ActivePlayerInputMonitoring == PlayerInputMonitoring.MonitorGameInputsAndCallMenu)
+        || (this.ActivePlayerInputMonitoring == PlayerInputMonitoring.MonitorCallMenuOnly))
         {
-            CaptureKeyboardInput();
-        }
 
-        // Monitor for KeyDown\KeyUp events, only if current controls include keys
-        // Monitor for Mouse movement\button events, only if current controls include mouse
-        else if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardAndMouse)
-        {
-            CaptureKeyboardInput();
-            CaptureMouseInput();
-        }
+            // Monitor for KeyDown\KeyUp events, only if current controls include keys
+            if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardOnly)
+            {
+                CaptureKeyboardInput();
+            }
 
-        // Monitor for Gamepad events, only if current controls are set to Gamepad
-        else if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.Gamepad)
-        {
-            CaptureGamepadInput();
+            // Monitor for KeyDown\KeyUp events, only if current controls include keys
+            // Monitor for Mouse movement\button events, only if current controls include mouse
+            else if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardAndMouse)
+            {
+                CaptureKeyboardInput();
+                CaptureMouseInput();
+            }
+
+            // Monitor for Gamepad events, only if current controls are set to Gamepad
+            else if (this.playerConfig.SelectedPlayerInputType == PlayerInputType.Gamepad)
+            {
+                CaptureGamepadInput();
+            }
         }
     }
 
@@ -685,6 +691,7 @@ public class PlayerInputManager : MonoBehaviour
             }
         }
     }
+        
 
     private void CaptureMouseInput()
     {
@@ -988,7 +995,6 @@ public class PlayerInputManager : MonoBehaviour
         this.playerConfig.InputMappingTable = inputMappingTable;
         this.UpdateMenuInputMappingTable();
     }
-
 
     private void UpdateMenuInputMappingTable()
     {
