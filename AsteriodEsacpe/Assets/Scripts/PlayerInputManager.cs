@@ -220,6 +220,8 @@ public enum InputAction { Pressed, Released }
 /// </summary>
 public enum MouseButtons {  LMB = 0, RMB = 1, MMB = 2 }
 
+public enum PlayerInputMonitoring { MonitorGameInputsAndCallMenu, MonitorCallMenuOnly, MonitorForMapping, None }
+
 public interface MappedControl
 {
     object Control { get; set; }
@@ -447,13 +449,22 @@ public class PlayerInputManager : MonoBehaviour
     {
         get
         {
-            // Only listen for "in-game" inputs when the game is actually being played
-            if (ActivatePlayerInputMonitoring)
-                return this.playerConfig.InputMappingTable;
+            Dictionary<PlayerInput, MappedControl> result = null;
 
-            // If player is on a menu, only listen for menu-related buttons
-            else
-                return this.menuInputMappingTable;
+            switch (this.ActivePlayerInputMonitoring)
+            {
+                // Only listen for "in-game" inputs when the game is actually being played
+                case PlayerInputMonitoring.MonitorGameInputsAndCallMenu:
+                    result = this.playerConfig.InputMappingTable;
+                    break;
+
+                // If player is on a menu, only listen for menu-related buttons
+                case PlayerInputMonitoring.MonitorCallMenuOnly:
+                    result = this.menuInputMappingTable;
+                    break;
+            }
+
+            return result;
         }
     }
 
@@ -462,15 +473,15 @@ public class PlayerInputManager : MonoBehaviour
 
     #region Public Fields
 
-    // Set this from a calling procedure to be able to detect WHICH keys or buttons the player is using
-    // This should only be used by the Setting UX to allow player to set which key\button they want to
-    // map to a specific control function (MoveUp, CameraRight, etc.)
-    public bool ActivateOpenInputMonitoring = false;
 
-
-    // Set this from code that "starts" gameplay so input monitoring does not take place while player is
-    // on a menu or other screen.  Only when actually playing.
-    public bool ActivatePlayerInputMonitoring = true;  // On by default because game starts playing immediately
+    // Keep track of which "mode" PlayerInput is operating.  It can support in-game controls (which
+    // listens only for mapped inputs), menu-based control mapping (which listens to any input),
+    // and while on menus, it can be used to listen only for menu call buttons (call Game\Pause Menu)
+    public PlayerInputMonitoring ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
+        // MonitorGameInputsAndCallMenu is used to monitor all mapped keys during gameplay
+        // MonitorCallMenuOnly is used for menus to prevent mouse\key\gamepad input other than menu actions
+        // MonitorForMapping is used to capture any input, during mapping selected input to a control
+        // None is used when you just want PlayerInputManager to just shut up and stop listening
 
 
     // Set in Unity Inspector to run in debug mode (warning, this will display output in the host scene)
@@ -557,7 +568,7 @@ public class PlayerInputManager : MonoBehaviour
 
     private void OnGUI()
     {
-        if (ActivateOpenInputMonitoring)
+        if (this.ActivePlayerInputMonitoring == PlayerInputMonitoring.MonitorForMapping)
         {
             if ((this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardOnly)
             || (this.playerConfig.SelectedPlayerInputType == PlayerInputType.KeyboardAndMouse))
@@ -1115,7 +1126,7 @@ public class PlayerInputManager : MonoBehaviour
 
             // Update values (whether a file was loaded or not)
             this.UpdateMenuInputMappingTable();
-            this.avatarAccounting.SetChallengeLevel(playerConfig.PlayerChallengeMode);
+            this.avatarAccounting.SetPlayerChallengeMode(this.playerConfig.PlayerChallengeMode);
         }
         else
             Debug.Log("There is no save data!");

@@ -48,7 +48,7 @@ public class MessageControl : MonoBehaviour
         Time.timeScale = 0;
         this.orientationMessage.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        this.playerInputManager.ActivatePlayerInputMonitoring = false;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.None;
 
         // Keep track of which message is actively displayed
         this.currentMessageDisplayed = MessageDisplayed.OrientationMessage;
@@ -58,9 +58,8 @@ public class MessageControl : MonoBehaviour
     public void SetOrientationMessageInactive(bool calledInternally = false)
     {
         Time.timeScale = 1;
-        this.orientationMessage.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        this.orientationMessage.SetActive(false);
 
         // Return to caller (but not if being called internally)
         if ((!calledInternally) && (this.calledExternally))
@@ -70,9 +69,9 @@ public class MessageControl : MonoBehaviour
     public void SetUrgentMessageActive()
     {
         Time.timeScale = 0;
-        this.urgentMessage.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        this.playerInputManager.ActivatePlayerInputMonitoring = false;
+        this.urgentMessage.SetActive(true);
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.None;
     }
 
     public void SetUrgentMessageInactive()
@@ -80,7 +79,6 @@ public class MessageControl : MonoBehaviour
         Time.timeScale = 1;
         this.urgentMessage.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
     }
 
     #endregion Public Methods

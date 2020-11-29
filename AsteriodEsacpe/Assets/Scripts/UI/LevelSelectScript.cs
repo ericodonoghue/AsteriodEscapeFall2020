@@ -11,7 +11,6 @@ public class LevelSelectScript : MonoBehaviour
     private LevelSelectController controller;
 
     private GameObject progress;
-    private GameObject controls;
     private int currentLevel;
 
     // Start is called before the first frame update
@@ -19,7 +18,6 @@ public class LevelSelectScript : MonoBehaviour
     {
         
         progress.SetActive(false);
-        controls.SetActive(false);
         currentLevel = 1; // controller.LoadCurrentLevel();
     }
 
@@ -27,7 +25,6 @@ public class LevelSelectScript : MonoBehaviour
     {
         this.controller = Camera.main.GetComponent<LevelSelectController>();
         this.progress = GameObject.FindGameObjectWithTag("InProgressScreen");
-        this.controls = GameObject.FindGameObjectWithTag("ControlScreen");
     }
 
     // Update is called once per frame
@@ -44,7 +41,6 @@ public class LevelSelectScript : MonoBehaviour
     public void Back2Button()
     {
         progress.SetActive(false);
-        controls.SetActive(false);
     }
 
     public void SelectLevel1 ()
@@ -104,10 +100,4 @@ public class LevelSelectScript : MonoBehaviour
             progress.SetActive(true);
         }
     }
-
-    public void ControlButtonPressed()
-    {
-        controls.SetActive(true);
-    }
-
 }

@@ -10,6 +10,7 @@ public class GameMenuButtonControl : MonoBehaviour
     private GameMenuControl gameMenuControl;
     private SettingsControl settingsControl;
     private MessageControl messageControl;
+    private ChallengeModeControl challengeModeControl;
     private PlayerInputManager playerInputManager;
 
     #endregion Private Fields
@@ -23,6 +24,7 @@ public class GameMenuButtonControl : MonoBehaviour
         this.gameMenuControl = Camera.main.GetComponent<GameMenuControl>();
         this.settingsControl = Camera.main.GetComponent<SettingsControl>();
         this.messageControl = Camera.main.GetComponent<MessageControl>();
+        this.challengeModeControl = Camera.main.GetComponent<ChallengeModeControl>();
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
     }
 
@@ -38,7 +40,7 @@ public class GameMenuButtonControl : MonoBehaviour
 
         SceneManager.LoadScene("LevelOneScene");
 
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
     public void LevelSelectPressed()
@@ -59,10 +61,10 @@ public class GameMenuButtonControl : MonoBehaviour
         this.settingsControl.SetSettingMenuActive(SettingsControlCalledBy.GameMenu);
     }
 
-    public void DifficultyLevelPressed()
+    public void ChallengeModePressed()
     {
         this.gameMenuControl.SetGameMenuInactive();
-
+        this.challengeModeControl.SetChallengeModeActive();
     }
 
     public void QuitPressed()

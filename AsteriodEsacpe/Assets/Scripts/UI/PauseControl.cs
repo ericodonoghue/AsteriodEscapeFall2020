@@ -53,7 +53,7 @@ public class PauseControl : MonoBehaviour
         Time.timeScale = 0;
         pauseMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        this.playerInputManager.ActivatePlayerInputMonitoring = false;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorCallMenuOnly;
     }
 
     public void SetPauseMenuInactive()
@@ -61,7 +61,7 @@ public class PauseControl : MonoBehaviour
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
 

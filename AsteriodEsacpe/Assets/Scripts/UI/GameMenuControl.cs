@@ -19,7 +19,8 @@ public class GameMenuControl : MonoBehaviour
 
     public bool isPaused = false;
     public bool isListening = true;
-
+    public bool isMainMenuInstance = false;
+    
     #endregion Public Fields
 
 
@@ -33,24 +34,32 @@ public class GameMenuControl : MonoBehaviour
         this.youWin = Camera.main.GetComponent<YouWinControl>();
 
 
-        if (this.isPaused)
-        {
+        // Only use Input Manager to bring up this menu if NOT on the MAIN MENU where it is static
+        if (!this.isMainMenuInstance)
+
+            // Set up event handlers for Player Input Manager to monitor for menu commands
+            this.playerInputManager.AssignPlayerInputEventHandler(PlayerInput.GameMenu, GameMenu_Pressed, GameMenu_Released);
+    }
+
+    private void Start()
+    {
+        // Initialize (NOTE: On the Main Menu scene, this HAS TO FIRE AFTER initialization
+        // of all child components including SettingsControl, MessageControl, etc. or else
+        // the mouse gets locked by other components "disabling" themselves.  All such init
+        // should be done by local Awake() handlers so that this code is executed afterwards.
+        if (this.isPaused || this.isMainMenuInstance)
             this.SetGameMenuActive();
-        }
         else
-        {
             this.SetGameMenuInactive();
-        }
-
-
-        // Set up event handlers for Player Input Manager to monitor for menu commands
-        this.playerInputManager.AssignPlayerInputEventHandler(PlayerInput.GameMenu, GameMenu_Pressed, GameMenu_Released);
     }
 
     private void OnDisable()
     {
-        // Tear down event handlers for Player Input Manager to monitor for menu commands
-        this.playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.GameMenu, GameMenu_Pressed, GameMenu_Released);
+        // Only use Input Manager to bring up this menu if NOT on the MAIN MENU where it is static
+        if (!this.isMainMenuInstance)
+
+            // Tear down event handlers for Player Input Manager to monitor for menu commands
+            this.playerInputManager.UnassignPlayerInputEventHandler(PlayerInput.GameMenu, GameMenu_Pressed, GameMenu_Released);
     }
 
     #endregion Unity Events
@@ -61,17 +70,25 @@ public class GameMenuControl : MonoBehaviour
     public void SetGameMenuActive()
     {
         Time.timeScale = 0;
-        this.gameMenu.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
-        this.playerInputManager.ActivatePlayerInputMonitoring = false;
+        this.gameMenu.SetActive(true);
+
+        if (this.isMainMenuInstance)
+            this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.None;
+        else
+            this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorCallMenuOnly;
     }
 
     public void SetGameMenuInactive()
     {
         Time.timeScale = 1;
-        gameMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        gameMenu.SetActive(false);
+
+        if (this.isMainMenuInstance)
+            this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.None;
+        else
+            this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
     #endregion Public Methods
@@ -92,13 +109,9 @@ public class GameMenuControl : MonoBehaviour
             {
                 this.isPaused = !this.isPaused;
                 if (this.isPaused)
-                {
                     this.SetGameMenuActive();
-                }
                 else
-                {
                     this.SetGameMenuInactive();
-                }
             }
         }
     }

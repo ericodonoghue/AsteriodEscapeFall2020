@@ -42,6 +42,10 @@ TagManager:
   - GameMenuButton
   - UrgentMessage
   - OrientationMessage
+  - ChallengeMode
+  - ChallengeMode1Button
+  - ChallengeMode2Button
+  - ChallengeMode3Button
   layers:
   - Default
   - TransparentFX

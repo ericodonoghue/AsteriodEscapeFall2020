@@ -26,14 +26,13 @@ public class SettingsControl : MonoBehaviour
         this.settingsButtonControl = settingsMenu.GetComponent<SettingsButtonControl>();
 
         this.SetSettingMenuInactive();
-        this.isActive = false;
     }
 
     public void SetSettingMenuActive(SettingsControlCalledBy settingsCalledBy)
     {
-        // Shut down listening on pause menu until settings closes
-        this.pauseControl.isListening = false;
-        this.gameMenuControl.isListening = false;
+        // Shut down listening on pause and\or game menus until settings closes
+        if (this.pauseControl != null) this.pauseControl.isListening = false;
+        if (this.gameMenuControl != null) this.gameMenuControl.isListening = false;
 
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.Confined;
@@ -51,18 +50,19 @@ public class SettingsControl : MonoBehaviour
         this.settingsButtonControl.DeactivateInputMonitoring();
         this.isActive = false;
 
-        // Reactivate listening on pause menu until settings closes
-        this.pauseControl.isListening = true;
-        this.gameMenuControl.isListening = true;
+        // Reactivate listening on pause and\or game menu until settings closes
+        if (this.pauseControl != null) this.pauseControl.isListening = true;
+        if (this.gameMenuControl != null) this.gameMenuControl.isListening = true;
+
 
         // Finally, reactivate the form that called the SettingsControl
         switch (this.settingsCalledBy)
         {
             case SettingsControlCalledBy.GameMenu:
-                gameMenuControl.SetGameMenuActive();
+                if (this.gameMenuControl != null) gameMenuControl.SetGameMenuActive();
                 break;
             case SettingsControlCalledBy.PauseMenu:
-                pauseControl.SetPauseMenuActive();
+                if (this.pauseControl != null) pauseControl.SetPauseMenuActive();
                 break;
         }
     }

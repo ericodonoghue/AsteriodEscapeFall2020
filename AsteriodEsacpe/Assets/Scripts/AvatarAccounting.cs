@@ -993,9 +993,8 @@ public class AvatarAccounting : MonoBehaviour
 
 
     // YOU ARE HERE
-    
 
-    public void SetChallengeLevel(ChallengeMode challengeMode, float overrideChallengeModeByPercentage = 0f)
+    public void SetPlayerChallengeMode(ChallengeMode challengeMode, float overrideChallengeModeByPercentage = 0f)
     {
         // If turning off Override, just re-set to original ChallengeMode
         if (challengeMode == ChallengeMode.OverrideOff)

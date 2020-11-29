@@ -37,7 +37,7 @@ public class MessageButtonControl : MonoBehaviour
     public void MessagesButtonPressed()
     {
         // Deactivate the Orientation message form
-        this.messageControl.SetOrientationMessageInactive();
+        this.messageControl.SetOrientationMessageInactive(true);
 
         // Activate the Urgent message popup
         this.messageControl.SetUrgentMessageActive();

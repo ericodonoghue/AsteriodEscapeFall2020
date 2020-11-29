@@ -22,7 +22,7 @@ public class PauseButtonControl : MonoBehaviour
     {
         pauseControl.SetPauseMenuInactive();
         Cursor.lockState = CursorLockMode.Locked;
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
     public void SettingsPressed()
@@ -39,7 +39,7 @@ public class PauseButtonControl : MonoBehaviour
     public void RestartPressed()
     {
         SceneManager.LoadScene("LevelOneScene");
-        this.playerInputManager.ActivatePlayerInputMonitoring = true;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
     public void QuitPressed()

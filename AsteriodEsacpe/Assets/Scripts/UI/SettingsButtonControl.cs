@@ -336,8 +336,8 @@ public class SettingsButtonControl : MonoBehaviour
         this.LoadSettings();
 
 
-        // Activate General key input monitoring in PlayerInputManager
-        this.playerInputManager.ActivateOpenInputMonitoring = true;
+        // Activate input monitoring in PlayerInputManager
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorForMapping;
 
 
         // Allow key\mouse button\gamepad button input for input mapping UI
@@ -355,8 +355,7 @@ public class SettingsButtonControl : MonoBehaviour
 
 
         // Deactivate General key input monitoring in PlayerInputManager
-        this.playerInputManager.ActivateOpenInputMonitoring = false;
-
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
 
         if (!cancel) this.SaveSettings();
     }
