@@ -72,8 +72,8 @@ using UnityEngine.UI;
     // Public Properties (read only)
     //
 
-    // Monitor this boolean property to know when the avatar blacks out (as good as dead)
-    avatarAccounting.PlayerBlackout
+    // Monitor this enum property to know when the avatar blacks out (as good as dead)
+    avatarAccounting.PlayerFailState
 
     // Values used to drive UX gauges, etc.
     avatarAccounting.CurrentBloodOxygenPercent
@@ -140,8 +140,8 @@ public enum CalmingType { ControlBreathing, Rest, MedicalInducement }
 public enum OxygenTankRefillAmount { FivePercent, TenPercent, FullSingleTank, FillBothTanks }
 public enum RepairInjuryAmount { OnePercent, FivePercent, TenPercent }
 public enum Gauges { OxygenTank, OxygenTankExtra, HeartBeat, BloodOxygen, OxygenBurnRate }
-
 public enum ChallengeMode { TooYoungToDie, BringThePain, GaspingForAir, OverrideOn, OverrideOff }
+public enum PlayerFailStates { StillKicking, Hypoxemia, Hypothermia, BluntForceTrauma }
 
 #endregion Public Enums
 
@@ -169,7 +169,7 @@ public class AvatarAccounting : MonoBehaviour
     private bool jetsCostsOxygen = true;
     private bool suitDamageCostsOxygen = true;
     private ChallengeMode curentChallengeMode = ChallengeMode.TooYoungToDie;
-
+    private float mostRecentImpactWholeDamage = 0f;
 
     // Heart rate (pulse) increases respiration, aka Oxygen burn rate (see calculation for respiration)
     private float currentHeartRatePerMinute = 65f;          // Player current pulse (permissible range = base to max)
@@ -191,8 +191,10 @@ public class AvatarAccounting : MonoBehaviour
     // Current Blood Oxygen Level (this is character health determinant: 80% = brain death)
     private float currentBloodOxygenPercent = 95.0f;
 
-    // The principal way the player "dies" in this game is to blackout from lack of oxygen, this flag indicates that this has happened
-    private bool playerBlackout = false;
+    // The principal way the player "dies" in this game is to blackout from lack of oxygen, but
+    // they can also freeze to death or die due to brutal impacts.  This field is used to hold
+    // the current state of the Avatar.
+    PlayerFailStates playerFailState = PlayerFailStates.StillKicking;
 
     #endregion Private Variables
 
@@ -314,7 +316,7 @@ public class AvatarAccounting : MonoBehaviour
     private void Start()
     {
         // Indicate that the player character is alive (for now)
-        this.PlayerBlackout = false;
+        this.PlayerFailState = PlayerFailStates.StillKicking;
 
         this.InitializeLocals();
 
@@ -617,7 +619,7 @@ public class AvatarAccounting : MonoBehaviour
                 result = true;
 
             // If jets are using O2, then make sure there's air in the tank, and the avatar isn't blacked out
-            else if ((this.CurrentOxygenAllTanksContent != 0) && (!this.PlayerBlackout))
+            else if ((this.CurrentOxygenAllTanksContent != 0) && (this.PlayerFailState == PlayerFailStates.StillKicking))
                 result = true;
 
             return result;
@@ -679,7 +681,7 @@ public class AvatarAccounting : MonoBehaviour
             else if (value < this.minBloodOxygenPercent)
             {
                 this.currentBloodOxygenPercent = this.minBloodOxygenPercent;
-                this.PlayerBlackout = true;
+                this.PlayerFailState = PlayerFailStates.Hypoxemia;
             }
             else
                 this.currentBloodOxygenPercent = value;
@@ -714,7 +716,16 @@ public class AvatarAccounting : MonoBehaviour
                 this.currentSuitIntegrityInPercentage = value;
 
             // When damage reaches 0, player dies
-            if (this.currentSuitIntegrityInPercentage < 1) this.PlayerBlackout = true;
+            if (this.currentSuitIntegrityInPercentage < 1)
+            {
+                // If player died because of their most recent impact, decide whether it was the
+                // impact (more than 10% in one go), or their suit is just damaged enough that
+                // they finally froze to death.
+                if (this.mostRecentImpactWholeDamage >= 10.0f)
+                    this.PlayerFailState = PlayerFailStates.BluntForceTrauma;
+                else
+                    this.PlayerFailState = PlayerFailStates.Hypothermia;
+            }
         }
     }
 
@@ -727,14 +738,40 @@ public class AvatarAccounting : MonoBehaviour
         }
     }
 
-    public bool PlayerBlackout
+    public PlayerFailStates PlayerFailState
     {
-        get { return this.playerBlackout; }
+        get { return this.playerFailState; }
         private set
         {
-            playerBlackout = value;
+            playerFailState = value;
 
             // Ideally, this would raise an event indicating "Game Over", but I believe this value will have to be monitored externally
+        }
+    }
+
+    public string PlayerFailStateDescription
+    {
+        get
+        {
+            string result = string.Empty;
+
+            switch (this.PlayerFailState)
+            {
+                case PlayerFailStates.StillKicking:
+                    result = "Our intrepid hero still lives.  How boring.";
+                    break;
+                case PlayerFailStates.Hypoxemia:
+                    result = "Blacked out from insufficient Blood Oxygen (SpO2)";
+                    break;
+                case PlayerFailStates.Hypothermia:
+                    result = "You died from hypothermia becuase your suit was too badly damaged";
+                    break;
+                case PlayerFailStates.BluntForceTrauma:
+                    result = "You died from blunt force trauma because you hit too many walls or objects";
+                    break;
+            }
+
+            return result;
         }
     }
 
@@ -1138,6 +1175,7 @@ public class AvatarAccounting : MonoBehaviour
         float newSuitIntegrityDamage = 0.0f;
         float newHeartRateIncrease = damage / 10;//??
         float callTime = Time.time;
+        float mostRecentImpactWholeDamage = damage;
 
         if (damage > 0f) newSuitIntegrityDamage = damage;
         float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);

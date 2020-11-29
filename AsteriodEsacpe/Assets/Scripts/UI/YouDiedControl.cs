@@ -23,7 +23,7 @@ public class YouDiedControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (avatarAccounting.PlayerBlackout)
+        if (avatarAccounting.PlayerFailState != PlayerFailStates.StillKicking)
         {
             isDead = true;
         }
