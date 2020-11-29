@@ -1115,7 +1115,10 @@ public class PlayerInputManager : MonoBehaviour
                 FileStream file = File.Open(playerConfigFilePath, FileMode.Open);
                 if (file != null)
                 {
-                    this.playerConfig = (PlayerConfigurationData)bf.Deserialize(file);
+                    PlayerConfigurationData testInputObjectBeforeOverwritingDefault =
+                        (PlayerConfigurationData)bf.Deserialize(file);
+
+                    this.playerConfig = testInputObjectBeforeOverwritingDefault;
                     file.Close();
 
                     Debug.Log("Game data loaded!");
