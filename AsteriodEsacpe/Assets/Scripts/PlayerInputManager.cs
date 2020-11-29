@@ -528,8 +528,7 @@ public class PlayerInputManager : MonoBehaviour
 
     #region Unity Event Handlers
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         // Get a reference to the script components from Main Camera
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
