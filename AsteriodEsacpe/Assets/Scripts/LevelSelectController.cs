@@ -5,7 +5,6 @@ using UnityEngine;
 public class LevelSelectController : MonoBehaviour
 {
     private PlayerInputManager playerInputManager;
-    int currentLevel;
     
 
     // Start is called before the first frame update
@@ -21,28 +20,31 @@ public class LevelSelectController : MonoBehaviour
         
     }
 
+
     public int LoadCurrentLevel()
     {
+        int level;
+
         object result = this.playerInputManager.GetPlayerConfigurationValue("CurrentLevel");
 
         // when result is null it is the first time the player has loaded the game so set the current level to one then save 
-        if (result == null)
+        if (result == null || (int)result == 0)
         {
-            currentLevel = 1;
-            SaveCurrentLevel();
+            level = 1;
+            SaveCurrentLevel(level);
         }
         else
         {
-            currentLevel = (int)result;
+            level = (int)result;
         }
-        return currentLevel;
+        return level;
     }
 
-    public void SaveCurrentLevel()
+    public void SaveCurrentLevel(int current)
     {
         // Data being stored must be [SERIALIZABLE], all native types (string, int, float, etc.) are.
         // Check PlayerInputManager for example of making your type (class, struct, enum) serializable.
-        this.playerInputManager.SetPlayerConfigurationValue("CurrentLevel", this.currentLevel);
+        this.playerInputManager.SetPlayerConfigurationValue("CurrentLevel", current);
 
          // Values are auto-loaded, but the actual file should be saved after making changes
         this.playerInputManager.SavePlayerConfiguration();

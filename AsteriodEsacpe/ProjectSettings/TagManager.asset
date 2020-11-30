@@ -46,6 +46,12 @@ TagManager:
   - ChallengeMode1Button
   - ChallengeMode2Button
   - ChallengeMode3Button
+  - DeathScreenText
+  - Level1Button
+  - Level2Button
+  - Level3Button
+  - Level4Button
+  - Level5Button
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class YouDiedControl : MonoBehaviour
@@ -18,6 +19,8 @@ public class YouDiedControl : MonoBehaviour
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
         youDiedMenu = GameObject.FindGameObjectWithTag("YouDiedMenu");
         redPanel = GameObject.FindGameObjectWithTag("RedPanel");
+
+        SetYouDiedeMenuDeactive();
     }
 
     // Update is called once per frame
@@ -30,21 +33,21 @@ public class YouDiedControl : MonoBehaviour
 
         if (isDead)
         {
-            SetYouDiedeMenuActive();
+            SetYouDiedeMenuActive(avatarAccounting.PlayerFailStateDescription);
             Cursor.lockState = CursorLockMode.Confined;
         }
-        else
-        {
-            SetYouDiedeMenuDeactive();
-        }
+        
     }
 
-    public void SetYouDiedeMenuActive()
+    public void SetYouDiedeMenuActive(string deathText)
     {
         //Time.timeScale = 0;
         youDiedMenu.SetActive(true);
         redPanel.SetActive(true);
         Cursor.visible = true;
+
+        TextMeshProUGUI deathLabel = GameObject.FindGameObjectWithTag("DeathScreenText").GetComponent<TextMeshProUGUI>();
+        deathLabel.text = deathText;
     }
 
     public void SetYouDiedeMenuDeactive()

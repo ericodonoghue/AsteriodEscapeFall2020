@@ -375,7 +375,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
     /** Rotates the player object according to mouse position on screen */
     void RotatePlayer()
     {
-        if (avatarAccounting.CurrentOxygenAllTanksContent != 0)
+        if (avatarAccounting.CurrentOxygenAllTanksContent != 0 && avatarAccounting.PlayerFailState == PlayerFailStates.StillKicking)
         {
             //Camera.main.transform.Rotate(lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse X"), lookSensitivity * Time.deltaTime * Input.GetAxis("Mouse Y"), 0);
             if (!spinOut)

@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 283822743}
   m_Layer: 5
   m_Name: LevelSelectButton (1)
-  m_TagString: Untagged
+  m_TagString: Level1Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -533,7 +533,7 @@ GameObject:
   - component: {fileID: 434068750}
   m_Layer: 5
   m_Name: LevelSelectButton (5)
-  m_TagString: Untagged
+  m_TagString: Level5Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -759,8 +759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0418a770a1a7d4c90c517c5e1a06c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActivateOpenInputMonitoring: 0
-  ActivatePlayerInputMonitoring: 1
+  ActivePlayerInputMonitoring: 0
   DEBUG: 0
 --- !u!1 &554208701
 GameObject:
@@ -776,7 +775,7 @@ GameObject:
   - component: {fileID: 554208703}
   m_Layer: 5
   m_Name: LevelSelectButton (3)
-  m_TagString: Untagged
+  m_TagString: Level3Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1352,7 +1351,7 @@ GameObject:
   - component: {fileID: 1534479373}
   m_Layer: 5
   m_Name: LevelSelectButton (2)
-  m_TagString: Untagged
+  m_TagString: Level2Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1483,7 +1482,7 @@ GameObject:
   - component: {fileID: 1540586119}
   m_Layer: 5
   m_Name: LevelSelectButton (4)
-  m_TagString: Untagged
+  m_TagString: Level4Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
