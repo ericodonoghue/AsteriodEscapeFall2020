@@ -15,6 +15,10 @@ public class YouWinControl : MonoBehaviour
 
     public bool won;
 
+    public int levelToSave = 2;
+
+    private PlayerInputManager playerInputManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +26,8 @@ public class YouWinControl : MonoBehaviour
         scoreTracker = GameObject.FindGameObjectWithTag("ScoreTracker").GetComponent<ScoreTracker>();
         youWonMenu.SetActive(false);
         won = false;
+
+        this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
     }
 
     // Update is called once per frame
@@ -41,6 +47,9 @@ public class YouWinControl : MonoBehaviour
 
         won = true;
         Debug.Log(won);
+
+        SaveCurrentLevel(levelToSave);
+
         SetYouWinMenuActive();
     }
 
@@ -65,5 +74,15 @@ public class YouWinControl : MonoBehaviour
         //nearMissLabel.text = "Near Misses: " + scoreTracker.oxygenUsed;
 
         
+    }
+
+    public void SaveCurrentLevel(int current)
+    {
+        // Data being stored must be [SERIALIZABLE], all native types (string, int, float, etc.) are.
+        // Check PlayerInputManager for example of making your type (class, struct, enum) serializable.
+        this.playerInputManager.SetPlayerConfigurationValue("CurrentLevel", current);
+
+        // Values are auto-loaded, but the actual file should be saved after making changes
+        this.playerInputManager.SavePlayerConfiguration();
     }
 }
