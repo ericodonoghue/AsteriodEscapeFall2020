@@ -52,6 +52,7 @@ TagManager:
   - Level3Button
   - Level4Button
   - Level5Button
+  - animModel
   layers:
   - Default
   - TransparentFX
