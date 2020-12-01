@@ -6,6 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class UnifiedPlayerMovement : MonoBehaviour
 {
+
+    #region Public Fields
+
+    public Animator anim;
+
+    #endregion Public Fields
+
+
     #region Private Fields
 
     // Local reference to the central AvatarAccounting object (held by main camera)
@@ -24,7 +32,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
         this.avatarAccounting = Camera.main.GetComponent<AvatarAccounting>();
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
         this.soundManager = Camera.main.GetComponent<SoundManager>();
-
+        
 
         // Map a pair of event handlers (OnX_Pressed, OnX_Released) for every supported command (MoveUp, MoveDown, etc.)
         this.EnablePlayerInputEvents();
@@ -87,6 +95,9 @@ public class UnifiedPlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.anim = GameObject.FindGameObjectWithTag("animModel").GetComponent<Animator>();
+        anim.SetBool("Take 001", false);
+
         pauseControl = Camera.main.GetComponent<PauseControl>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerRB = GetComponent<Rigidbody>();
@@ -214,6 +225,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
             force.y = vertThrust;
             this.soundManager.SetSoundState(SoundStates.Start, ScaryNoises.Jet, 1.5f);
+
+            anim.SetBool("Take 001", true);
         }
     }
     private void MoveUp_Released()
@@ -222,6 +235,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
         force.y = 0;
         this.soundManager.SetSoundState(SoundStates.Stop, ScaryNoises.Jet);
+
+        anim.SetBool("Take 001", false);
     }
 
     private void MoveDown_Pressed()
