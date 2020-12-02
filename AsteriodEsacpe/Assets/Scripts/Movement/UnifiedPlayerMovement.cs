@@ -226,7 +226,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
             force.y = vertThrust;
             this.soundManager.SetSoundState(SoundStates.Start, ScaryNoises.Jet, 1.5f);
 
-            anim.SetBool("Take 001", true);
+            anim.SetBool("idle", true);
         }
     }
     private void MoveUp_Released()
@@ -236,7 +236,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
         force.y = 0;
         this.soundManager.SetSoundState(SoundStates.Stop, ScaryNoises.Jet);
 
-        anim.SetBool("Take 001", false);
+        anim.SetBool("idle", false);
     }
 
     private void MoveDown_Pressed()
