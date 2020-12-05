@@ -462,6 +462,11 @@ public class PlayerInputManager : MonoBehaviour
                 case PlayerInputMonitoring.MonitorCallMenuOnly:
                     result = this.menuInputMappingTable;
                     break;
+
+                // This should never be reached, but is the only way to get Unity to quit bitching about the potential null return
+                default:
+                    result = new Dictionary<PlayerInput, MappedControl>();
+                    break;
             }
 
             return result;
@@ -1125,7 +1130,7 @@ public class PlayerInputManager : MonoBehaviour
 
             // Update values (whether a file was loaded or not)
             this.UpdateMenuInputMappingTable();
-            this.avatarAccounting.SetPlayerChallengeMode(this.playerConfig.PlayerChallengeMode);
+            if (this.avatarAccounting != null) this.avatarAccounting.SetPlayerChallengeMode(this.playerConfig.PlayerChallengeMode);
         }
         else
             Debug.Log("There is no save data!");
