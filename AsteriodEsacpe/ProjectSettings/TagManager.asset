@@ -53,6 +53,9 @@ TagManager:
   - Level4Button
   - Level5Button
   - animModel
+  - CaveLights
+  - ScarySound1
+  - LightFlicker1
   layers:
   - Default
   - TransparentFX
