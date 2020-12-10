@@ -13930,6 +13930,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: EndLevel
       objectReference: {fileID: 0}
+    - target: {fileID: 2347225513465497213, guid: f589255bb574a6349a0b7076f533ee08, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5062441862107663697, guid: f589255bb574a6349a0b7076f533ee08, type: 3}
       propertyPath: m_LocalPosition.x
       value: -296.8
@@ -16465,7 +16469,7 @@ Camera:
   m_GameObject: {fileID: 1468149150}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
