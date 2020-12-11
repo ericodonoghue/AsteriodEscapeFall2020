@@ -141,7 +141,7 @@ public class LevelSelectScript : MonoBehaviour
     {
         if (currentLevel >= 2)
         {
-            SceneManager.LoadScene("Level2Scene");
+            SceneManager.LoadScene("LevelTwoScene");
         }
         else
         {
@@ -152,7 +152,7 @@ public class LevelSelectScript : MonoBehaviour
     {
         if (currentLevel >= 3)
         {
-            SceneManager.LoadScene("Level3Scene");
+            SceneManager.LoadScene("Level3Threecene");
         }
         else
         {
@@ -163,7 +163,7 @@ public class LevelSelectScript : MonoBehaviour
     {
         if (currentLevel >= 4)
         {
-            SceneManager.LoadScene("Level4Scene");
+            SceneManager.LoadScene("LevelFourScene");
         }
         else
         {
@@ -174,7 +174,7 @@ public class LevelSelectScript : MonoBehaviour
     {
         if (currentLevel >= 5)
         {
-            SceneManager.LoadScene("Level5Scene");
+            SceneManager.LoadScene("LevelFiveScene");
         }
         else
         {

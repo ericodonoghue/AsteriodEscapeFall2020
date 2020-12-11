@@ -10,6 +10,8 @@ public class PauseButtonControl : MonoBehaviour
     private PlayerInputManager playerInputManager;
 
 
+    public string CurrentLevel = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +40,7 @@ public class PauseButtonControl : MonoBehaviour
 
     public void RestartPressed()
     {
-        SceneManager.LoadScene("LevelOneScene");
+        SceneManager.LoadScene("CurrentLevel");
         this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
