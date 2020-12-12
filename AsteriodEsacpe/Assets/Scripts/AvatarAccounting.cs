@@ -1184,6 +1184,7 @@ public class AvatarAccounting : MonoBehaviour
         {
             this.lastTimeSuitWasDamaged = callTime;
             this.CurrentSuitIntegrityInPercentage -= actualDamage;
+            this.CurrentSuitIntegrityInPercentage -= damage / 4;//modifier for difficulty? 5, 4, 3
             this.currentHeartRatePerMinute += newHeartRateIncrease;
             //calm down after time?
         }
