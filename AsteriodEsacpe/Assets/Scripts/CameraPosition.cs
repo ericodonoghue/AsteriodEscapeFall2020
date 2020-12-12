@@ -20,7 +20,7 @@ public class CameraPosition : MonoBehaviour
     float rotationDamping = 5.0f;
     public float lookSensitivity = 1f;
     public float cameraHeightOffset = 4.0f;
-    public float wallBuffer = .1f;
+    public float wallBuffer = .5f;
 
     private Vector3 CamRot;
 
