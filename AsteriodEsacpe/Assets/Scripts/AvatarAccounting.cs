@@ -191,6 +191,8 @@ public class AvatarAccounting : MonoBehaviour
     // Current Blood Oxygen Level (this is character health determinant: 80% = brain death)
     private float currentBloodOxygenPercent = 95.0f;
 
+    public float damageModifier = 1.0f; //private
+
     // The principal way the player "dies" in this game is to blackout from lack of oxygen, but
     // they can also freeze to death or die due to brutal impacts.  This field is used to hold
     // the current state of the Avatar.
@@ -1072,6 +1074,7 @@ public class AvatarAccounting : MonoBehaviour
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 15.0f;
 
                 // Should also reduce the amount of suit damage on impact, but that requires actual code
+                this.damageModifier = 8.0f;
 
                 // Turn on\off "Glancing Blow" and "Near Miss" metrics?
 
@@ -1103,6 +1106,8 @@ public class AvatarAccounting : MonoBehaviour
                 // Make the "blackout" scene last 5 seconds
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
 
+                this.damageModifier = 4.0f;
+
                 break;
 
             case ChallengeMode.GaspingForAir:
@@ -1130,6 +1135,8 @@ public class AvatarAccounting : MonoBehaviour
 
                 // Make the "blackout" scene last 5 seconds
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
+
+                this.damageModifier = 2.0f;
 
                 break;
 
@@ -1184,7 +1191,7 @@ public class AvatarAccounting : MonoBehaviour
         {
             this.lastTimeSuitWasDamaged = callTime;
             this.CurrentSuitIntegrityInPercentage -= actualDamage;
-            this.CurrentSuitIntegrityInPercentage -= damage / 4;//modifier for difficulty? 5, 4, 3
+            this.CurrentSuitIntegrityInPercentage -= damage / this.damageModifier;//modifier for difficulty: 8, 4, 2
             this.currentHeartRatePerMinute += newHeartRateIncrease;
             //calm down after time?
         }

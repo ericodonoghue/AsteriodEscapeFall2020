@@ -148,7 +148,7 @@ public class PlayerCollisionO2 : MonoBehaviour
                     unifiedPlayerMovement.recoverySpeed = 20f;
                 }
                 //
-
+                UnityEngine.Debug.Log(avatarAccounting.damageModifier);
                 //TODO: add impulse to player depending on speed
                 break;
 
@@ -191,7 +191,7 @@ public class PlayerCollisionO2 : MonoBehaviour
 
         if (collided.tag == "AirTank_PonyBottle")
         {
-            avatarAccounting.AddOxygenExtraTank();
+            avatarAccounting.AddOxygenExtraTank();//chack
             Destroy(collided);
         }
         if (collided.tag == "RefuelStation")
