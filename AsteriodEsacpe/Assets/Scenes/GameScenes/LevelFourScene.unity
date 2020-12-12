@@ -5657,9 +5657,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b066119bcd98d57449d8f1ffa3186e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  cameraBackOffset: 10
   lookSensitivity: 3
   cameraHeightOffset: 2
+  wallBuffer: 0.5
 --- !u!81 &1061193985
 AudioListener:
   m_ObjectHideFlags: 0
@@ -8724,7 +8725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4179261681381596, guid: 4e5232de88a4c22478e1cedbb8a742aa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1929.0652
+      value: -241
       objectReference: {fileID: 0}
     - target: {fileID: 4179261681381596, guid: 4e5232de88a4c22478e1cedbb8a742aa, type: 3}
       propertyPath: m_LocalRotation.x
@@ -11885,7 +11886,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2136583003}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 10.8, y: 1.7, z: 16.6}
+  m_LocalPosition: {x: 4.4, y: 113.2, z: -147.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1057997106}
