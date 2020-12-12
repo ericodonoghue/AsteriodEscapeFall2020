@@ -19,7 +19,8 @@ public class CameraPosition : MonoBehaviour
     float heightDamping = 2.0f;
     float rotationDamping = 5.0f;
     public float lookSensitivity = 1f;
-    public float cameraHeightOffset = 4.0f;    
+    public float cameraHeightOffset = 4.0f;
+    public float wallBuffer = .1f;
 
     private Vector3 CamRot;
 
@@ -58,9 +59,16 @@ public class CameraPosition : MonoBehaviour
             //Calculate and apply local rotation
             transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * lookSensitivity, Space.Self);
             transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * lookSensitivity, Space.Self);
-            
+
             // Set the camera position
-            transform.position = playerT.position + transform.rotation * Vector3.back * distance + transform.rotation * Vector3.up * cameraHeightOffset;
+            if (Physics.Raycast(playerT.position + transform.rotation * Vector3.up * cameraHeightOffset,transform.rotation * Vector3.back, out RaycastHit hit, distance * (1 + wallBuffer)))
+            {
+                transform.position = playerT.position + transform.rotation * Vector3.back * hit.distance / (1 + wallBuffer) + transform.rotation * Vector3.up * cameraHeightOffset;
+            }
+            else
+            {
+                transform.position = playerT.position + transform.rotation * Vector3.back * distance + transform.rotation * Vector3.up * cameraHeightOffset;
+            }
         }
 
         /*
