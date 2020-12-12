@@ -40,7 +40,7 @@ public class PauseButtonControl : MonoBehaviour
 
     public void RestartPressed()
     {
-        SceneManager.LoadScene("CurrentLevel");
+        SceneManager.LoadScene(CurrentLevel);
         this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
