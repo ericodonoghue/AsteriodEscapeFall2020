@@ -1933,7 +1933,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109439876}
   - component: {fileID: 109439877}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ScarySound1
   m_TagString: ScarySound1
   m_Icon: {fileID: 0}
@@ -2881,7 +2881,7 @@ GameObject:
   m_Component:
   - component: {fileID: 189202449}
   - component: {fileID: 189202450}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LightFlicker1
   m_TagString: LightFlicker1
   m_Icon: {fileID: 0}
