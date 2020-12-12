@@ -25,13 +25,13 @@ public class LevelSelectScript : MonoBehaviour
             Button b2 = GameObject.FindGameObjectWithTag("Level2Button").GetComponent<Button>();
             Button b3 = GameObject.FindGameObjectWithTag("Level3Button").GetComponent<Button>();
             Button b4 = GameObject.FindGameObjectWithTag("Level4Button").GetComponent<Button>();
-            Button b5 = GameObject.FindGameObjectWithTag("Level5Button").GetComponent<Button>();
+            //Button b5 = GameObject.FindGameObjectWithTag("Level5Button").GetComponent<Button>();
 
             b1.interactable = false;
             b2.interactable = false;
             b3.interactable = false;
             b4.interactable = false;
-            b5.interactable = false;
+            //b5.interactable = false;
 
             ColorBlock colors = b1.colors;
             colors.normalColor = Color.grey;
@@ -46,12 +46,12 @@ public class LevelSelectScript : MonoBehaviour
             b3.colors = colors;
 
             colors = b4.colors;
-            colors.normalColor = Color.grey;
+            colors.normalColor = new Color(255, 248, 204, 0.5f);
             b4.colors = colors;
 
-            colors = b5.colors;
+            /*colors = b5.colors;
             colors.normalColor = Color.grey;
-            b5.colors = colors;
+            b5.colors = colors;*/
         }
 
         currentLevel = controller.LoadCurrentLevel();
@@ -99,17 +99,17 @@ public class LevelSelectScript : MonoBehaviour
             b4.interactable = true;
 
             ColorBlock colors = b4.colors;
-            colors.normalColor = Color.white;
+            colors.normalColor = new Color(255, 223, 0, 1);
             b4.colors = colors;
         }
         if (currentLevel >= 5)
         {
-            Button b5 = GameObject.FindGameObjectWithTag("Level5Button").GetComponent<Button>();
+            /*Button b5 = GameObject.FindGameObjectWithTag("Level5Button").GetComponent<Button>();
             b5.interactable = true;
 
             ColorBlock colors = b5.colors;
-            colors.normalColor = Color.white;
-            b5.colors = colors;
+            colors.normalColor = new Color(255, 223, 0, 1);
+            b5.colors = colors;*/
         }
 
     }
@@ -152,7 +152,7 @@ public class LevelSelectScript : MonoBehaviour
     {
         if (currentLevel >= 3)
         {
-            SceneManager.LoadScene("Level3Threecene");
+            SceneManager.LoadScene("LevelThreeScene");
         }
         else
         {

@@ -9,7 +9,7 @@ public class PauseButtonControl : MonoBehaviour
     private SettingsControl settingsControl;
     private PlayerInputManager playerInputManager;
 
-    //assign current level as current scene
+
     public string CurrentLevel = "";
 
     // Start is called before the first frame update
@@ -18,7 +18,6 @@ public class PauseButtonControl : MonoBehaviour
         pauseControl = Camera.main.GetComponent<PauseControl>();
         settingsControl = Camera.main.GetComponent<SettingsControl>();
         this.playerInputManager = Camera.main.GetComponent<PlayerInputManager>();
-        CurrentLevel = SceneManager.GetActiveScene().name;
     }
 
     public void ResumePressed()
@@ -41,7 +40,6 @@ public class PauseButtonControl : MonoBehaviour
 
     public void RestartPressed()
     {
-        //CurrentLevel = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(CurrentLevel);
         this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
