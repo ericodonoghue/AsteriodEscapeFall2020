@@ -942,9 +942,13 @@ public class AvatarAccounting : MonoBehaviour
             // more o2 being used than remaining in the pony bottle, adjust to leave some to take from main tanks
             if (howMuch > this.CurrentOxygenPonyBottleContent)
                 howMuch = howMuch - this.CurrentOxygenPonyBottleContent;
+            else
+                howMuch = 0;
 
             this.CurrentOxygenPonyBottleContent -= howMuchRemovedFromPonyBottle;
         }
+
+
 
 
         // if there is still a debt to pay, take it from the main tanks (amount does not matter, property will only go to 0)
