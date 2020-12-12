@@ -8159,9 +8159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b066119bcd98d57449d8f1ffa3186e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  cameraBackOffset: 10
   lookSensitivity: 3
   cameraHeightOffset: 2
+  wallBuffer: 0.5
 --- !u!81 &1401978808
 AudioListener:
   m_ObjectHideFlags: 0
@@ -9085,7 +9086,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1606404498}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 10.8, y: 1.7, z: 16.6}
+  m_LocalPosition: {x: 92.5, y: 174.2, z: 450.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1747084778}
@@ -9908,7 +9909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4092673935770214, guid: 1b033995205e8c44d8810bd8678e56af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2051.8337
+      value: 415
       objectReference: {fileID: 0}
     - target: {fileID: 4092673935770214, guid: 1b033995205e8c44d8810bd8678e56af, type: 3}
       propertyPath: m_LocalRotation.x
