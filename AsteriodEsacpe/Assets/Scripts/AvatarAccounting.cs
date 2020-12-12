@@ -1074,7 +1074,7 @@ public class AvatarAccounting : MonoBehaviour
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 15.0f;
 
                 // Should also reduce the amount of suit damage on impact, but that requires actual code
-                this.damageModifier = 8.0f;
+                this.damageModifier = 4.0f;
 
                 // Turn on\off "Glancing Blow" and "Near Miss" metrics?
 
@@ -1106,7 +1106,7 @@ public class AvatarAccounting : MonoBehaviour
                 // Make the "blackout" scene last 5 seconds
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
 
-                this.damageModifier = 4.0f;
+                this.damageModifier = 2.0f;
 
                 break;
 
@@ -1136,7 +1136,7 @@ public class AvatarAccounting : MonoBehaviour
                 // Make the "blackout" scene last 5 seconds
                 this.oxygenTankEmptyHypoxemiaDamagePerSecond = 3.0f;
 
-                this.damageModifier = 2.0f;
+                this.damageModifier = 1.0f;
 
                 break;
 
@@ -1184,17 +1184,21 @@ public class AvatarAccounting : MonoBehaviour
         float callTime = Time.time;
         float mostRecentImpactWholeDamage = damage;
 
+        UnityEngine.Debug.Log("mod: " + damageModifier);
+        UnityEngine.Debug.Log("damage: " + damage);
+        UnityEngine.Debug.Log("pre-integrity: " + this.currentSuitIntegrityInPercentage);
         if (damage > 0f) newSuitIntegrityDamage = damage;
         float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
 
         if (actualDamage > 0)
         {
             this.lastTimeSuitWasDamaged = callTime;
-            this.CurrentSuitIntegrityInPercentage -= actualDamage;
+            //this.CurrentSuitIntegrityInPercentage -= actualDamage;
             this.CurrentSuitIntegrityInPercentage -= damage / this.damageModifier;//modifier for difficulty: 8, 4, 2
             this.currentHeartRatePerMinute += newHeartRateIncrease;
             //calm down after time?
         }
+        UnityEngine.Debug.Log("post-integrity: " + this.currentSuitIntegrityInPercentage);
     }
     public void AddInjury(InjuryType injuryType, float damagePercentageOverride)
     {
