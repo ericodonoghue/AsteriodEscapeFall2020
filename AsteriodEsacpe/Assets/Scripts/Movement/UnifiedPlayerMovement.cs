@@ -20,6 +20,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
     private AvatarAccounting avatarAccounting;
     private PlayerInputManager playerInputManager;
     private SoundManager soundManager;
+    //
+    //private PlayerCollisionO2 playerCollisionO2;
 
     #endregion Private Fields
 
@@ -74,7 +76,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
     public Vector3 force;
     public Vector3 rotate;
-    float recoverySpeed = 1f;
+    //float recoverySpeed = 1f;
+    public float recoverySpeed = 1f;
     public float forwardThrust = 1f;
     public float vertThrust = 1f;
     public float strafeThrust = 1f;
@@ -83,7 +86,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
     readonly float turnSpeed = 2f;
     public float vertRot = 0f;
     public bool spinOut = false;
-    private float spinOutTime = 0;
+    //private float spinOutTime = 0;
+    public float spinOutTime = 0;
 
     private Vector3 CamRot;
 
@@ -103,6 +107,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
         playerRB = GetComponent<Rigidbody>();
         force = new Vector3(0f, 0f, 0f);
         rotate = new Vector3(0f, 0f, 0f);
+        //
+        //playerCollisionO2 = player.GetComponent<PlayerCollisionO2>();
     }
 
     // Update is called once per frame
@@ -126,7 +132,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
             ApplyTorque();
         }
     }
-
+    //
+    /*
     private void OnCollisionEnter(Collision c)
     {
         GameObject collided = c.gameObject;
@@ -142,7 +149,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
             }
             else break;  // no more parents to bother
         }
-
+        //
         switch (collided.tag)
         {
             case "Cave":
@@ -179,7 +186,8 @@ public class UnifiedPlayerMovement : MonoBehaviour
         }
         recoverySpeed = 20f;
     }
-
+    */
+    //
     #endregion Unity Events
 
     #region PlayerInput Events

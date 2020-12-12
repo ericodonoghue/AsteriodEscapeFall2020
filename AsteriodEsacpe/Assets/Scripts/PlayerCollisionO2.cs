@@ -24,6 +24,8 @@ public class PlayerCollisionO2 : MonoBehaviour
 
     private ScoreTracker scoreTracker;
 
+    //
+    public UnifiedPlayerMovement unifiedPlayerMovement;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +44,9 @@ public class PlayerCollisionO2 : MonoBehaviour
         t.text = "";
 
         scoreTracker = GameObject.FindGameObjectWithTag("ScoreTracker").GetComponent<ScoreTracker>();
+
+        //
+        unifiedPlayerMovement = player.GetComponent<UnifiedPlayerMovement>();
     }
 
 
@@ -124,15 +129,26 @@ public class PlayerCollisionO2 : MonoBehaviour
                 Vector3 cNorm= cPoint.normal;
                 Vector3 vel = playerRB.velocity;//.normalized;
                 Vector3 damage;
-                UnityEngine.Debug.Log("normals: " + cNorm.x + "x, " + cNorm.y +"y, " + cNorm.z + "z");
-                UnityEngine.Debug.Log("velocities: " + vel.x + "x, " + vel.y + "y, " + vel.z + "z");
+                //UnityEngine.Debug.Log("normals: " + cNorm.x + "x, " + cNorm.y +"y, " + cNorm.z + "z");
+                //UnityEngine.Debug.Log("velocities: " + vel.x + "x, " + vel.y + "y, " + vel.z + "z");
                 damage.x = cNorm.x * vel.x;
                 damage.y = cNorm.y * vel.y;
                 damage.z = cNorm.z * vel.z;
-                UnityEngine.Debug.Log("damage: " + damage.x + "x, " + damage.y + "y, " + damage.z + "z");
+                //UnityEngine.Debug.Log("damage: " + damage.x + "x, " + damage.y + "y, " + damage.z + "z");
+
                 UnityEngine.Debug.Log("magnitude: " + damage.magnitude);
 
                 avatarAccounting.AddInjury(damage.magnitude);
+
+                //
+                if(damage.magnitude > 5)
+                {
+                    unifiedPlayerMovement.spinOutTime = Time.time + 1;
+                    unifiedPlayerMovement.spinOut = true;
+                    unifiedPlayerMovement.recoverySpeed = 20f;
+                }
+                //
+
                 //TODO: add impulse to player depending on speed
                 break;
 
