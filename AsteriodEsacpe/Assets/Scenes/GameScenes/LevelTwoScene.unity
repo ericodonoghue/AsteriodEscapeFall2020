@@ -9343,11 +9343,13 @@ MonoBehaviour:
   playerRB: {fileID: 0}
   force: {x: 0, y: 0, z: 0}
   rotate: {x: 0, y: 0, z: 0}
+  recoverySpeed: 1
   forwardThrust: 1
   vertThrust: 1
   strafeThrust: 1
   vertRot: 0
   spinOut: 0
+  spinOutTime: 0
 --- !u!114 &1690407841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9380,6 +9382,7 @@ MonoBehaviour:
   playerRB: {fileID: 0}
   wallCollisionAudio1: {fileID: 1330286603}
   wallCollisionAudio2: {fileID: 248846520}
+  unifiedPlayerMovement: {fileID: 0}
 --- !u!54 &1690407843
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10510,7 +10513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13499d0f4d510164ba92b3c165066f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jetSound: {fileID: 0}
+  jetSound: {fileID: 888480312}
   Heartbeat50bpm: {fileID: 0}
   Heartbeat60bpm: {fileID: 0}
   Heartbeat70bpm: {fileID: 0}
@@ -10733,9 +10736,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b066119bcd98d57449d8f1ffa3186e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 10
+  cameraBackOffset: 10
   lookSensitivity: 3
   cameraHeightOffset: 2
+  wallBuffer: 0.5
 --- !u!81 &1947254782
 AudioListener:
   m_ObjectHideFlags: 0

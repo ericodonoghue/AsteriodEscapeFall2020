@@ -233,7 +233,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
             this.avatarAccounting.FireJet(JetType.AttitudeJetUp);
 
             force.y = vertThrust;
-            this.soundManager.SetSoundState(SoundStates.Start, ScaryNoises.Jet, 1.5f);
+            this.soundManager.SetSoundState(SoundStates.Start, ScaryNoises.Jet, 0.5f);
 
             anim.SetBool("idle", true);
         }
