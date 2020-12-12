@@ -1170,28 +1170,35 @@ public class AvatarAccounting : MonoBehaviour
     #region Public Methods - Space Suit Maintenance
 
     // Add damage to the player's suit, or just scare the shit out of them and increase their heartrate and respiration
-    public void AddInjury(InjuryType injuryType) { this.AddInjury(injuryType, 0);  }
+    public void AddInjury(InjuryType injuryType) { this.AddInjury(injuryType, 0); UnityEngine.Debug.Log("extra damage call?"); }
     public void AddInjury(InjuryType injuryType, float velocity, float angle)
     {
         //// Calculate damage using velocity, angle - this does not account for sharp objects, just walls, etc.
         //float impactDamagePercentage = velocity * angle; // maybe some actual math here...
         //this.AddInjury(injuryType, impactDamagePercentage);
     }
+
+
     public void AddInjury(float damage) 
     {
+        UnityEngine.Debug.Log("IMPACT");
         float newSuitIntegrityDamage = 0.0f;
         float newHeartRateIncrease = damage / 10;//??
         float callTime = Time.time;
-        float mostRecentImpactWholeDamage = damage;
+        //float mostRecentImpactWholeDamage = damage;
 
         UnityEngine.Debug.Log("mod: " + damageModifier);
         UnityEngine.Debug.Log("damage: " + damage);
+
+        UnityEngine.Debug.Log("where tf is this being called??");
+
         UnityEngine.Debug.Log("pre-integrity: " + this.currentSuitIntegrityInPercentage);
         if (damage > 0f) newSuitIntegrityDamage = damage;
+        
         float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
-
         if (actualDamage > 0)
         {
+            UnityEngine.Debug.Log("damage > 0, adding damage: ");
             this.lastTimeSuitWasDamaged = callTime;
             //this.CurrentSuitIntegrityInPercentage -= actualDamage;
             this.CurrentSuitIntegrityInPercentage -= damage / this.damageModifier;//modifier for difficulty: 8, 4, 2
@@ -1200,6 +1207,10 @@ public class AvatarAccounting : MonoBehaviour
         }
         UnityEngine.Debug.Log("post-integrity: " + this.currentSuitIntegrityInPercentage);
     }
+
+
+
+
     public void AddInjury(InjuryType injuryType, float damagePercentageOverride)
     {
         float newSuitIntegrityDamage = 0.0f;
@@ -1255,7 +1266,7 @@ public class AvatarAccounting : MonoBehaviour
             // Suit damage is in percent of current integrity (can't take away 70% of something that only has 30%,
             // but you can take 70% OF THAT 30% since the suit is waving around it is harder to damage what is left)
             float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
-
+            UnityEngine.Debug.Log("this is the second damage application");
             if (actualDamage > 0)
             {
                 // Update the last time the suit took damage to right now!
