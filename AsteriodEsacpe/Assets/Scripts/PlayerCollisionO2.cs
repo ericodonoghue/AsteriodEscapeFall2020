@@ -200,8 +200,7 @@ public class PlayerCollisionO2 : MonoBehaviour
 
             TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
             t.text = "Press F to refill oxygen tanks";
-            StartCoroutine(StartCountdown());
-
+            //StartCoroutine(StartCountdown());
         }
     }
 
@@ -210,6 +209,8 @@ public class PlayerCollisionO2 : MonoBehaviour
         GameObject collided = c.gameObject;
         if (collided.tag == "RefuelStation")
         {
+            TextMeshProUGUI t = GameObject.FindGameObjectWithTag("PressF").GetComponent<TextMeshProUGUI>();
+            t.text = "";
             inRefuelRange = false;
         }
     }
