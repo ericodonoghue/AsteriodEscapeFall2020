@@ -153,7 +153,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
                 break;
             case "Cave_GlancingBlow":
-                spinOutTime = Time.time + 5;
+                spinOutTime = Time.time + 2;
                 break;
                 //case "SharpObject":
                 //    spinOutTime = Time.time + 10;
@@ -418,7 +418,14 @@ public class UnifiedPlayerMovement : MonoBehaviour
             }
             else
             {
-                rotationSpeed += .3f * Time.deltaTime;
+                if (rotationSpeed <= 3)
+                {
+                    rotationSpeed += .3f * Time.deltaTime;
+                    if (rotationSpeed > 3)
+                    {
+                        rotationSpeed = 3;
+                    }
+                }
             }
         }
     }

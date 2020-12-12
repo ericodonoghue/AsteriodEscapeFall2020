@@ -18,7 +18,7 @@ public class CameraPosition : MonoBehaviour
     //float height = 5.0f;
     float heightDamping = 2.0f;
     float rotationDamping = 5.0f;
-    public float lookSensitivity = 1f;
+    public float lookSensitivity = .75f;
     public float cameraHeightOffset = 4.0f;
     public float wallBuffer = .5f;
 
