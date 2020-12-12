@@ -17,8 +17,8 @@ public class CameraPosition : MonoBehaviour
     // the height we want the camera to be above the target
     //float height = 5.0f;
     float heightDamping = 2.0f;
-    float rotationDamping = 3.0f;
-    public float lookSensitivity = 3f;
+    float rotationDamping = 5.0f;
+    public float lookSensitivity = 1f;
     public float cameraHeightOffset = 4.0f;    
 
     private Vector3 CamRot;
@@ -41,7 +41,6 @@ public class CameraPosition : MonoBehaviour
     void Update()
     {
     }
-
     
     private void LateUpdate()
     {
@@ -52,40 +51,16 @@ public class CameraPosition : MonoBehaviour
 
         if (!pauseControl.isPaused)
         {
-            //New camera rotation using a mouse orbit camera. The player should now orient themselves based on the camera.
-            CamRot.x -= Input.GetAxis("Mouse Y") * lookSensitivity;
-            if (CamRot.x <= 90 && CamRot.x >= -90)
-            {
-                CamRot.y += Input.GetAxis("Mouse X") * lookSensitivity;
-            }
-            else
-            {
-                CamRot.y -= Input.GetAxis("Mouse X") * lookSensitivity;
-            }
-            if (CamRot.x >= 180)
-            {
-                CamRot.x -= 360;
-            }
-            if (CamRot.x <= -180)
-            {
-                CamRot.x += 360;
-            }
-            if (CamRot.y >= 180)
-            {
-                CamRot.y -= 360;
-            }
-            if (CamRot.y <= -180)
-            {
-                CamRot.y += 360;
-            }
+            // Old camera code for reference
+            //Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, CamRot.z);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
 
-            double radCamX = CamRot.x * Math.PI / 180   ;
+            //Calculate and apply local rotation
+            transform.Rotate(Vector3.up, Input.GetAxis("Mouse X") * lookSensitivity, Space.Self);
+            transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * lookSensitivity, Space.Self);
             
-            //CamRot.x = Mathf.Clamp(CamRot.x, -90f, 90f);
-            Quaternion newAngle = Quaternion.Euler(CamRot.x, CamRot.y, 0);
-            transform.rotation = Quaternion.Lerp(transform.rotation, newAngle, Time.deltaTime * rotationDamping);
-            transform.position = playerT.position - transform.rotation * Vector3.forward * distance;
-            transform.position = new Vector3(transform.position.x, transform.position.y + cameraHeightOffset * (float)Math.Cos(radCamX), transform.position.z);
+            // Set the camera position
+            transform.position = playerT.position + transform.rotation * Vector3.back * distance + transform.rotation * Vector3.up * cameraHeightOffset;
         }
 
         /*
