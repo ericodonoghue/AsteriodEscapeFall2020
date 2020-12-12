@@ -74,7 +74,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
     public Vector3 force;
     public Vector3 rotate;
-    float rotationSpeed = 1f;
+    float recoverySpeed = 1f;
     public float forwardThrust = 1f;
     public float vertThrust = 1f;
     public float strafeThrust = 1f;
@@ -146,14 +146,14 @@ public class UnifiedPlayerMovement : MonoBehaviour
         switch (collided.tag)
         {
             case "Cave":
-                spinOutTime = Time.time + 7;
+                spinOutTime = Time.time + 1;
                 //Debug.Log("In Movement2 Script");
                 break;
             case "AirTank":
 
                 break;
             case "Cave_GlancingBlow":
-                spinOutTime = Time.time + 2;
+                spinOutTime = Time.time + 1;
                 break;
                 //case "SharpObject":
                 //    spinOutTime = Time.time + 10;
@@ -177,7 +177,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
                 //    break;
         }
-        rotationSpeed = 1;
+        recoverySpeed = 1;
     }
 
     #endregion Unity Events
@@ -400,7 +400,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
             }
             else
             {
-                player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
+                player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, recoverySpeed * Time.deltaTime);
             }
         }
     }
@@ -418,12 +418,12 @@ public class UnifiedPlayerMovement : MonoBehaviour
             }
             else
             {
-                if (rotationSpeed <= 3)
+                if (recoverySpeed <= 3)
                 {
-                    rotationSpeed += .3f * Time.deltaTime;
-                    if (rotationSpeed > 3)
+                    recoverySpeed += .3f * Time.deltaTime;
+                    if (recoverySpeed > 3)
                     {
-                        rotationSpeed = 3;
+                        recoverySpeed = 3;
                     }
                 }
             }
