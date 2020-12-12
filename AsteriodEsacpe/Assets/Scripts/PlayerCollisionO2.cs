@@ -138,7 +138,7 @@ public class PlayerCollisionO2 : MonoBehaviour
 
                 UnityEngine.Debug.Log("collision found: ");
 
-                UnityEngine.Debug.Log("adding damage: ");
+                UnityEngine.Debug.Log("adding damage: " + damage.magnitude);
                 UnityEngine.Debug.Log("pre-damage" + avatarAccounting.CurrentSuitIntegrityInPercentage);
                 avatarAccounting.AddInjury(damage.magnitude);
                 UnityEngine.Debug.Log("post-damage" + avatarAccounting.CurrentSuitIntegrityInPercentage);

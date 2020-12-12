@@ -1005,6 +1005,8 @@ public class AvatarAccounting : MonoBehaviour
             this.buffPresentExtraTank = true;
             this.currentOxygenPonyBottleContent = this.maxOxygenPonyBottle;
         }
+        else
+            this.currentOxygenPonyBottleContent = this.maxOxygenPonyBottle;
     }
 
     // Slow breathing and heartrate through rest, meditation or drugs
@@ -1187,25 +1189,25 @@ public class AvatarAccounting : MonoBehaviour
         float callTime = Time.time;
         //float mostRecentImpactWholeDamage = damage;
 
-        UnityEngine.Debug.Log("mod: " + damageModifier);
-        UnityEngine.Debug.Log("damage: " + damage);
+        //UnityEngine.Debug.Log("mod: " + damageModifier);
+        //UnityEngine.Debug.Log("damage: " + damage);
 
-        UnityEngine.Debug.Log("where tf is this being called??");
+        //UnityEngine.Debug.Log("where tf is this being called??");
 
-        UnityEngine.Debug.Log("pre-integrity: " + this.currentSuitIntegrityInPercentage);
+        //UnityEngine.Debug.Log("pre-integrity: " + this.currentSuitIntegrityInPercentage);
         if (damage > 0f) newSuitIntegrityDamage = damage;
         
         float actualDamage = this.currentSuitIntegrityInPercentage * (newSuitIntegrityDamage / 100);
         if (actualDamage > 0)
         {
-            UnityEngine.Debug.Log("damage > 0, adding damage: ");
+            //UnityEngine.Debug.Log("damage > 0, adding damage: ");
             this.lastTimeSuitWasDamaged = callTime;
             //this.CurrentSuitIntegrityInPercentage -= actualDamage;
             this.CurrentSuitIntegrityInPercentage -= damage / this.damageModifier;//modifier for difficulty: 8, 4, 2
             this.currentHeartRatePerMinute += newHeartRateIncrease;
             //calm down after time?
         }
-        UnityEngine.Debug.Log("post-integrity: " + this.currentSuitIntegrityInPercentage);
+        //UnityEngine.Debug.Log("post-integrity: " + this.currentSuitIntegrityInPercentage);
     }
 
 
