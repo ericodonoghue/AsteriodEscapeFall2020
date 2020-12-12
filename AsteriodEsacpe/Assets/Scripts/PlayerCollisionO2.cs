@@ -136,19 +136,22 @@ public class PlayerCollisionO2 : MonoBehaviour
                 damage.z = cNorm.z * vel.z;
                 //UnityEngine.Debug.Log("damage: " + damage.x + "x, " + damage.y + "y, " + damage.z + "z");
 
-                UnityEngine.Debug.Log("magnitude: " + damage.magnitude);
+                UnityEngine.Debug.Log("collision found: ");
 
+                UnityEngine.Debug.Log("adding damage: ");
+                UnityEngine.Debug.Log("pre-damage" + avatarAccounting.CurrentSuitIntegrityInPercentage);
                 avatarAccounting.AddInjury(damage.magnitude);
+                UnityEngine.Debug.Log("post-damage" + avatarAccounting.CurrentSuitIntegrityInPercentage);
 
                 //
-                if(damage.magnitude > 5)
+                if (damage.magnitude > 5)
                 {
                     unifiedPlayerMovement.spinOutTime = Time.time + 1;
                     unifiedPlayerMovement.spinOut = true;
                     unifiedPlayerMovement.recoverySpeed = 20f;
                 }
                 //
-                UnityEngine.Debug.Log(avatarAccounting.damageModifier);
+                //UnityEngine.Debug.Log(avatarAccounting.damageModifier);
                 //TODO: add impulse to player depending on speed
                 break;
 
