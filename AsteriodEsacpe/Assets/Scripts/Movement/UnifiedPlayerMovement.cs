@@ -177,6 +177,7 @@ public class UnifiedPlayerMovement : MonoBehaviour
 
                 //    break;
         }
+        rotationSpeed = 1;
     }
 
     #endregion Unity Events
@@ -400,27 +401,25 @@ public class UnifiedPlayerMovement : MonoBehaviour
             else
             {
                 player.transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, rotationSpeed * Time.deltaTime);
-
             }
-
         }
-
     }
 
     private void ResetSpinOut()
     {
         if (spinOut)
         {
-            rotationSpeed += 1 * Time.deltaTime;
             if (Time.time >= spinOutTime)
             {
-                spinOut = false;
-                rotationSpeed = 1;
-                //playerRB.angularVelocity = Vector3.zero;
-                //playerRB.rotation = Quaternion.Euler(0f, 0f, 0f);
-                //player.transform.rotation = Quaternion.Slerp
+                if (Vector3.Angle(transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.forward) < 5f || Time.time >= spinOutTime + 15f)
+                {
+                    spinOut = false;
+                }
             }
-
+            else
+            {
+                rotationSpeed += .3f * Time.deltaTime;
+            }
         }
     }
 

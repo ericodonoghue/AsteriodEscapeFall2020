@@ -13,7 +13,7 @@ public class CameraPosition : MonoBehaviour
 
 
     // The distance in the x-z plane to the target
-    public float distance = 10.0f;
+    public float cameraBackOffset = 10.0f;
     // the height we want the camera to be above the target
     //float height = 5.0f;
     float heightDamping = 2.0f;
@@ -61,14 +61,23 @@ public class CameraPosition : MonoBehaviour
             transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * lookSensitivity, Space.Self);
 
             // Set the camera position
-            if (Physics.Raycast(playerT.position + transform.rotation * Vector3.up * cameraHeightOffset,transform.rotation * Vector3.back, out RaycastHit hit, distance * (1 + wallBuffer)))
+            float camdist = cameraBackOffset;
+            float camup = cameraHeightOffset;
+            RaycastHit[] backhits = Physics.RaycastAll(playerT.position, transform.rotation * Vector3.back, cameraBackOffset * (1 + wallBuffer));
+            int backindex = 0;
+            while (backindex < backhits.Length && backhits[backindex].transform.tag == "Player")
             {
-                transform.position = playerT.position + transform.rotation * Vector3.back * hit.distance / (1 + wallBuffer) + transform.rotation * Vector3.up * cameraHeightOffset;
+                backindex++;
             }
-            else
+            if (backindex < backhits.Length)
             {
-                transform.position = playerT.position + transform.rotation * Vector3.back * distance + transform.rotation * Vector3.up * cameraHeightOffset;
+                camdist = backhits[backindex].distance / (1 + wallBuffer);
             }
+            if (Physics.Raycast(playerT.position + transform.rotation * Vector3.back * camdist, transform.rotation * Vector3.up, out RaycastHit uphit, cameraHeightOffset * (1 + wallBuffer)))
+            {
+                camup = uphit.distance / (1 + wallBuffer);
+            }
+            transform.position = playerT.position + transform.rotation * Vector3.back * camdist + transform.rotation * Vector3.up * camup;
         }
 
         /*
