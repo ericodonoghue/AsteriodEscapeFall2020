@@ -77,7 +77,9 @@ public class UnifiedPlayerMovement : MonoBehaviour
     public Vector3 force;
     public Vector3 rotate;
     //float recoverySpeed = 1f;
-    public float recoverySpeed = 1f;
+    public float recoveryRate = 20f;
+    public float recoverySpeed = 0f;
+    public float recoveryThreshold = 1f;
     public float forwardThrust = 1f;
     public float vertThrust = 1f;
     public float strafeThrust = 1f;
@@ -419,12 +421,12 @@ public class UnifiedPlayerMovement : MonoBehaviour
         {
             if (Time.time >= spinOutTime)
             {
-                if (Vector3.Angle(transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.forward) < 1f || Time.time >= spinOutTime + 15f)
+                if (Vector3.Angle(transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.forward) < recoveryThreshold || Time.time >= spinOutTime + 15f)
                 {
                     spinOut = false;
                 }
             }
-            recoverySpeed += 20f * Time.deltaTime;
+            recoverySpeed += recoveryRate * Time.deltaTime;
         }
     }
 

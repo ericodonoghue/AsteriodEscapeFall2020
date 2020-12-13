@@ -148,7 +148,7 @@ public class PlayerCollisionO2 : MonoBehaviour
                 {
                     unifiedPlayerMovement.spinOutTime = Time.time + 1;
                     unifiedPlayerMovement.spinOut = true;
-                    unifiedPlayerMovement.recoverySpeed = 20f;
+                    unifiedPlayerMovement.recoverySpeed = 0;
                 }
                 //
                 //UnityEngine.Debug.Log(avatarAccounting.damageModifier);
