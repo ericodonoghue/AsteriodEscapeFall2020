@@ -41,7 +41,7 @@ public class HeadsUpDisplay : MonoBehaviour
     //SetUXData("JetBurnRate", avatarAccounting.CurrentJetBurnRatePerSecond, " ml\\s");
     SetUXData("SuitIntegrity", avatarAccounting.CurrentSuitIntegrityInPercentage, "%");
     //SetUXData("OxygenBurnRate", avatarAccounting.CurrentOxygenBurnRatePerSecond, " ml\\s");
-    SetUXData("OxygenTank", avatarAccounting.CurrentOxygenAllTanksContent, " L");//o2 tanks instead
+    SetUXData("OxygenTank", avatarAccounting.CurrentOxygenTankContent, " L");//o2 tanks instead
     // SetUXData("BloodOxygen", avatarAccounting.CurrentBloodOxygenPercent, "%");
     SetUXData("PonyBottle", avatarAccounting.CurrentOxygenPonyBottleContent, " L");
     }

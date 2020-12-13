@@ -3152,8 +3152,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 826, y: 25}
-  m_SizeDelta: {x: 100, y: 15}
+  m_AnchoredPosition: {x: 640, y: 165}
+  m_SizeDelta: {x: 50, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &222492888
 MonoBehaviour:
@@ -3188,7 +3188,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 6000
+  m_Text: '2000 L
+
+'
 --- !u!222 &222492889
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9768,7 +9770,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 99.1, y: 30}
+  m_AnchoredPosition: {x: 90, y: 30}
   m_SizeDelta: {x: 100, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &709587994
@@ -9804,7 +9806,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Suit Integrity:'
+  m_Text: Suit Integrity
 --- !u!222 &709587995
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15425,8 +15427,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 590, y: 25}
-  m_SizeDelta: {x: 100, y: 15}
+  m_AnchoredPosition: {x: 610, y: 65}
+  m_SizeDelta: {x: 50, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1079381979
 MonoBehaviour:
@@ -15461,7 +15463,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 6000
+  m_Text: 6000 L
 --- !u!222 &1079381980
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17105,7 +17107,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 503, y: 7.5}
+  m_AnchoredPosition: {x: 500, y: 7.5}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1204222896
@@ -21637,7 +21639,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 680, y: 250}
-  m_SizeDelta: {x: 125, y: 30}
+  m_SizeDelta: {x: 75, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1573930929
 MonoBehaviour:
@@ -24783,7 +24785,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 504.3, y: 30}
+  m_AnchoredPosition: {x: 510, y: 30}
   m_SizeDelta: {x: 110, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1794608416
@@ -25100,7 +25102,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 590, y: 50}
+  m_AnchoredPosition: {x: 600, y: 275}
   m_SizeDelta: {x: 100, y: 15}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1809472491
@@ -25136,7 +25138,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Oxygen Tank:'
+  m_Text: Oxygen
 --- !u!222 &1809472492
 CanvasRenderer:
   m_ObjectHideFlags: 0
