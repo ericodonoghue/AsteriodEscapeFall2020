@@ -19034,7 +19034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5062441862107663697, guid: f589255bb574a6349a0b7076f533ee08, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5062441862107663697, guid: f589255bb574a6349a0b7076f533ee08, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -21864,7 +21864,9 @@ MonoBehaviour:
   playerRB: {fileID: 0}
   force: {x: 0, y: 0, z: 0}
   rotate: {x: 0, y: 0, z: 0}
+  recoveryRate: 20
   recoverySpeed: 1
+  recoveryThreshold: 1
   forwardThrust: 1
   vertThrust: 1
   strafeThrust: 1
@@ -26185,7 +26187,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: -4.475, y: -90, z: 4.475}
 --- !u!1001 &1790001745
 PrefabInstance:
@@ -31964,6 +31966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0dd17c6cfc58f4b8a9683ddde9800f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentLevel: LevelThreeScene
 --- !u!114 &2112337050
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class YouDiedMenuScript : MonoBehaviour
 {
     private YouDiedControl control;
 
+    public string CurrentLevel = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,6 @@ public class YouDiedMenuScript : MonoBehaviour
 
     public void RestartPressed()
     {
-        SceneManager.LoadScene("LevelOneScene");
+        SceneManager.LoadScene(CurrentLevel);
     }
 }

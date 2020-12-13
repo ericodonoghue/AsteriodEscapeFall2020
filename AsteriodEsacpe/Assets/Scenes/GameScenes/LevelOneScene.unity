@@ -9463,7 +9463,9 @@ MonoBehaviour:
   playerRB: {fileID: 0}
   force: {x: 0, y: 0, z: 0}
   rotate: {x: 0, y: 0, z: 0}
+  recoveryRate: 20
   recoverySpeed: 1
+  recoveryThreshold: 1
   forwardThrust: 1
   vertThrust: 1
   strafeThrust: 1
@@ -14191,6 +14193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0dd17c6cfc58f4b8a9683ddde9800f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentLevel: LevelOneScene
 --- !u!114 &997997760
 MonoBehaviour:
   m_ObjectHideFlags: 0
