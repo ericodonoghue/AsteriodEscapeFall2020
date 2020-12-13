@@ -43,7 +43,7 @@ public class HeadsUpDisplay : MonoBehaviour
     //SetUXData("OxygenBurnRate", avatarAccounting.CurrentOxygenBurnRatePerSecond, " ml\\s");
     SetUXData("OxygenTank", avatarAccounting.CurrentOxygenAllTanksContent, " L");//o2 tanks instead
     // SetUXData("BloodOxygen", avatarAccounting.CurrentBloodOxygenPercent, "%");
-    //SetUXData("PonyBottle", avatarAccounting.CurrentOxygenPonyBottleContent, " litres");
+    SetUXData("PonyBottle", avatarAccounting.CurrentOxygenPonyBottleContent, " L");
     }
 
   private void SetUXData(string gameObjectNameBase, float value, string tag = "")//pony bottle tank, slider, value
