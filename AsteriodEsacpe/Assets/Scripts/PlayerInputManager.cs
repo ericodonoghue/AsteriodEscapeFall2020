@@ -1024,7 +1024,7 @@ public class PlayerInputManager : MonoBehaviour
                     ,{ PlayerInput.StabilizeAvatar, (new KeyboardInputMapping(KeyCode.Tab)) }
                     ,{ PlayerInput.Interact, (new KeyboardInputMapping(KeyCode.F)) }
 #if UNITY_EDITOR
-                    ,{ PlayerInput.PauseGame, (new KeyboardInputMapping(KeyCode.BackQuote)) }
+                    ,{ PlayerInput.PauseGame, (new KeyboardInputMapping(KeyCode.Escape)) }
 #else
                     ,{ PlayerInput.PauseGame, (new KeyboardInputMapping(KeyCode.Escape)) }
 #endif
