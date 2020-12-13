@@ -37,22 +37,17 @@ public class GameMenuButtonControl : MonoBehaviour
     {
         // shut down the Game Menu before loading the scene (or it will remain up)
         this.gameMenuControl.SetGameMenuInactive();
-        SceneManager.LoadScene("LevelSelectScene");
 
+        SceneManager.LoadScene("LevelOneScene");
 
-        //// shut down the Game Menu before loading the scene (or it will remain up)
-        //this.gameMenuControl.SetGameMenuInactive();
-
-        //SceneManager.LoadScene("LevelOneScene");
-
-        //this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
+        this.playerInputManager.ActivePlayerInputMonitoring = PlayerInputMonitoring.MonitorGameInputsAndCallMenu;
     }
 
-    //public void LevelSelectPressed()
-    //{
-    //    this.gameMenuControl.SetGameMenuInactive();
-    //    SceneManager.LoadScene("LevelSelectScene");
-    //}
+    public void LevelSelectPressed()
+    {
+        this.gameMenuControl.SetGameMenuInactive();
+        SceneManager.LoadScene("LevelSelectScene");
+    }
 
     public void OrientationPressed()
     {
